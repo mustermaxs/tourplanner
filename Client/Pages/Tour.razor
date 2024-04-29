@@ -1,0 +1,81 @@
+@page "/tour/{TourId}"
+
+@inject NavigationManager NavManager
+@inject TourDetailsPageViewModel TourVM
+
+<PageTitle>Wienerwald Tour</PageTitle>
+
+@if (TourVM.Tour == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="tour-header">
+        <h1>@TourVM.Tour.Name</h1>
+        <p>Tour ID: <span>@TourVM.Tour.Id</span></p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi quis pretium turpis. Nam euismod orci at nulla
+            pellentesque ullamcorper. Nulla lacinia varius sem quis pulvinar. Vestibulum vel mi nunc. Donec gravida
+            fringilla nisl ac tristique.</p>
+    </div>
+
+    <table class="table table-striped">
+        <tr>
+            <td><i class="icon-clock"></i></td>
+            <td>Est. time</td>
+            <td>2h</td>
+        </tr>
+        <tr>
+            <td><i class="icon-location"></i></td>
+            <td>From</td>
+            <td>Some Place</td>
+        </tr>
+        <tr>
+            <td><i class="icon-destination"></i></td>
+            <td>To</td>
+            <td>Some other place</td>
+        </tr>
+        <tr>
+            <td><i class="icon-difficulty"></i></td>
+            <td>Difficulty</td>
+            <td>8/10</td>
+        </tr>
+        <tr>
+            <td><i class="icon-transport"></i></td>
+            <td>Transport type</td>
+            <td>Road bike</td>
+        </tr>
+        <tr>
+            <td><i class="icon-heart"></i></td>
+            <td>Popularity</td>
+            <td>2/10</td>
+        </tr>
+    </table>
+
+    <div class="tour-actions">
+        <button class="btn btn-primary " >Add log</button>
+        <button class="btn btn-primary button-add" @onclick="EditTour">Edit</button>
+
+    </div>
+    <div class="tour-map">
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string TourId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        int id = Convert.ToInt32(TourId);
+
+        await TourVM.InitializeAsync(Convert.ToInt32(TourId));
+    }
+
+    private void EditTour()
+    {
+        NavManager.NavigateTo($"/edit-tour/{TourId}");
+    }
+
+}

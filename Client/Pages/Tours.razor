@@ -1,5 +1,7 @@
 @page "/tours"
 @attribute [StreamRendering]
+@inject ToursViewModel ToursVM
+@inject NavigationManager NavManager
 
 <PageTitle>Tours</PageTitle>
 
@@ -7,13 +9,13 @@
 
 <p>Here are all our available tours:</p>
 
-@if (tours == null)
+@if (ToursVM.Tours == null)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
-    <table class="table">
+    <table class="table table-striped">
         <thead>
             <tr>
                 <th>Name</th>
@@ -22,10 +24,11 @@ else
                 <th>From</th>
                 <th>To</th>
                 <th>Popularity</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var tour in tours)
+            @foreach (var tour in ToursVM.Tours)
             {
                 <tr>
                     <td>@tour.Name</td>
@@ -34,6 +37,9 @@ else
                     <td>@tour.From</td>
                     <td>@tour.To</td>
                     <td>@tour.Popularity</td>
+                    <td>
+                        <button class="btn btn-primary" @onclick="() => EditTour(tour.Id)">Edit</button>
+                    </td>
                 </tr>
             }
         </tbody>
@@ -41,30 +47,13 @@ else
 }
 
 @code {
-    private Tour[]? tours;
-
     protected override async Task OnInitializedAsync()
     {
-        await Task.Delay(500);
-
-        tours = Enumerable.Range(1, 5).Select(index => new Tour
-            {
-                Name = $"Tour {index}",
-                Description = $"Description {index}",
-                TransportType = $"Transport Type {index}",
-                From = $"From {index}",
-                To = $"To {index}",
-                Popularity = index,
-            }).ToArray();
+        await ToursVM.InitializeAsync();
     }
 
-    private class Tour
+    private void EditTour(int tourId)
     {
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public string TransportType { get; set; }
-        public string From { get; set; }
-        public string To { get; set; }
-        public int Popularity { get; set; }
+        NavManager.NavigateTo($"/tour/{tourId}");
     }
 }
