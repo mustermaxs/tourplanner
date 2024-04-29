@@ -7,7 +7,7 @@
 
 <p>Here are all our available tours:</p>
 
-@if (forecasts == null)
+@if (tours == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -16,20 +16,24 @@ else
     <table class="table">
         <thead>
             <tr>
-                <th>Date</th>
-                <th>Temp. (C)</th>
-                <th>Temp. (F)</th>
-                <th>Summary</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Transport Type</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Popularity</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var forecast in forecasts)
+            @foreach (var tour in tours)
             {
                 <tr>
-                    <td>@forecast.Date.ToShortDateString()</td>
-                    <td>@forecast.TemperatureC</td>
-                    <td>@forecast.TemperatureF</td>
-                    <td>@forecast.Summary</td>
+                    <td>@tour.Name</td>
+                    <td>@tour.Description</td>
+                    <td>@tour.TransportType</td>
+                    <td>@tour.From</td>
+                    <td>@tour.To</td>
+                    <td>@tour.Popularity</td>
                 </tr>
             }
         </tbody>
@@ -37,29 +41,30 @@ else
 }
 
 @code {
-    private WeatherForecast[]? forecasts;
+    private Tour[]? tours;
 
     protected override async Task OnInitializedAsync()
     {
-        // Simulate asynchronous loading to demonstrate streaming rendering
         await Task.Delay(500);
 
-        var startDate = DateOnly.FromDateTime(DateTime.Now);
-        var summaries = new[] { "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering",
-"Scorching" };
-        forecasts = Enumerable.Range(1, 5).Select(index => new WeatherForecast
+        tours = Enumerable.Range(1, 5).Select(index => new Tour
             {
-                Date = startDate.AddDays(index),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = summaries[Random.Shared.Next(summaries.Length)]
+                Name = $"Tour {index}",
+                Description = $"Description {index}",
+                TransportType = $"Transport Type {index}",
+                From = $"From {index}",
+                To = $"To {index}",
+                Popularity = index,
             }).ToArray();
     }
 
-    private class WeatherForecast
+    private class Tour
     {
-        public DateOnly Date { get; set; }
-        public int TemperatureC { get; set; }
-        public string? Summary { get; set; }
-        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string TransportType { get; set; }
+        public string From { get; set; }
+        public string To { get; set; }
+        public int Popularity { get; set; }
     }
 }
