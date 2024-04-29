@@ -9,6 +9,7 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.2"/>
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.2" PrivateAssets="all"/>
+        <PackageReference Include="Microsoft.Extensions.Localization" Version="9.0.0-preview.3.24172.13" />
     </ItemGroup>
 
     <ItemGroup>
@@ -36,6 +37,21 @@
       <None Include="wwwroot\Icons\map (1).png" />
       <None Include="wwwroot\Icons\stopwatch.png" />
       <None Include="wwwroot\map.png" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Update="Images.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Images.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Images.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Images.resx</DependentUpon>
+      </Compile>
     </ItemGroup>
 
 </Project>
