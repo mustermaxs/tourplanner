@@ -123,11 +123,29 @@ namespace Client {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to #5E38AA.
+        /// </summary>
+        internal static string primary {
+            get {
+                return ResourceManager.GetString("primary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to route.png.
         /// </summary>
         internal static string route {
             get {
                 return ResourceManager.GetString("route", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to #ffffff.
+        /// </summary>
+        internal static string secondary {
+            get {
+                return ResourceManager.GetString("secondary", resourceCulture);
             }
         }
         

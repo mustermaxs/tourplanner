@@ -30,29 +30,35 @@
     <data name="map" type="System.String">
         <value>map.png</value>
     </data>
-    <data name="log" xml:space="preserve">
+    <data name="log"  type="System.String">
         <value>clipboard.png</value>
     </data>
-    <data name="from">
+    <data name="from" type="System.String">
         <value>location-pin.png</value>
     </data>
-    <data name="to">
+    <data name="to" type="System.String">
         <value>location-pin.png</value>
     </data>
-    <data name="difficulty">
+    <data name="difficulty" type="System.String">
         <value>dumbbell.png</value>
     </data>
-    <data name="edit">
+    <data name="edit" type="System.String">
         <value>edit.png</value>
     </data>
-    <data name="start">
+    <data name="start" type="System.String">
         <value>star.png</value>
     </data>
-    <data name="popularity">
+    <data name="popularity" type="System.String">
         <value>like.png</value>
     </data>
-    <data name="duration">
+    <data name="duration" type="System.String">
         <value>stopwatch.png</value>
     </data>
-
+    <data name="primary" type="System.String">
+        <value>#5E38AA</value>
+    </data>
+    <data name="secondary" type="System.String">
+        <value>#ffffff</value>
+    </data>
+    
 </root>

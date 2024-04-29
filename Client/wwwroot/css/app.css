@@ -112,3 +112,13 @@ code {
     width: 100%;
     height: 100%;
 }
+
+/*COLORS*/
+
+.primary {
+    background: #5E38AA !important;
+}
+
+.secondary {
+    background: white !important;
+}
