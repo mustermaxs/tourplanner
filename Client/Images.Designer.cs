@@ -60,7 +60,52 @@ namespace Client {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Icons/map.png.
+        ///   Looks up a localized string similar to dumbbell.png.
+        /// </summary>
+        internal static string difficulty {
+            get {
+                return ResourceManager.GetString("difficulty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to stopwatch.png.
+        /// </summary>
+        internal static string duration {
+            get {
+                return ResourceManager.GetString("duration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to edit.png.
+        /// </summary>
+        internal static string edit {
+            get {
+                return ResourceManager.GetString("edit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to location-pin.png.
+        /// </summary>
+        internal static string from {
+            get {
+                return ResourceManager.GetString("from", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to clipboard.png.
+        /// </summary>
+        internal static string log {
+            get {
+                return ResourceManager.GetString("log", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to map.png.
         /// </summary>
         internal static string map {
             get {
@@ -69,11 +114,38 @@ namespace Client {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Icons/route.png.
+        ///   Looks up a localized string similar to like.png.
+        /// </summary>
+        internal static string popularity {
+            get {
+                return ResourceManager.GetString("popularity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to route.png.
         /// </summary>
         internal static string route {
             get {
                 return ResourceManager.GetString("route", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to star.png.
+        /// </summary>
+        internal static string start {
+            get {
+                return ResourceManager.GetString("start", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to location-pin.png.
+        /// </summary>
+        internal static string to {
+            get {
+                return ResourceManager.GetString("to", resourceCulture);
             }
         }
     }

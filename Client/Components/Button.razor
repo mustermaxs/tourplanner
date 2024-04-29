@@ -1,0 +1,30 @@
+﻿@using System.Resources
+@using Client.Utils
+
+<button class="tp-button">
+    <div class="bla">
+        <div class="icon-wrapper">
+            <img src="@IconPath" alt="Map"/>
+        </div>
+    </div>
+
+    <div class="tp-button-label">@Label</div>
+</button>
+
+@code {
+
+    [Parameter]
+    public String Label { get; set; } = "Label";
+    
+    private String IconPath
+    {
+        get => StaticResService.GetIconPath(Icon);
+    }
+    
+    [Parameter]
+    public String Icon
+    {
+        private get;
+        set;
+    }
+}
