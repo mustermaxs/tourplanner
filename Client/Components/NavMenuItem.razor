@@ -1,7 +1,10 @@
+@using System.Resources
+@using Client.Utils
+
 <div class="nav-item px-3">
     <div class="nav-item-wrapper">
         <div class="nav-item-img-wrapper">
-            <img src="Icons/route.png" alt="Map"/>
+            <img src="@IconPath" alt="Map"/>
         </div>
         <NavLink class="nav-link" href="@Href" Match="NavLinkMatch.All">
             <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span>
@@ -23,5 +26,17 @@
     {
         get;
         set;
+    }
+
+    [Parameter]
+    public string? Icon
+    {
+        get;
+        set;
+    }
+
+    private String IconPath
+    {
+        get => StaticResService.GetIconPath(Icon);
     }
 }

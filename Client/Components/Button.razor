@@ -1,0 +1,62 @@
+﻿@using System.Resources
+@using Client.Utils
+
+
+<button @onclick="OnClickCallback" class="@_btnClass" disabled="@IsDisabled">
+
+    @if (HasIcon())
+    {
+        <div class="tp-button-icon-wrapper">
+            <div class="icon-wrapper">
+                <img src="@IconPath" alt="@AltText"/>
+            </div>
+        </div>
+    }
+
+    <div class="tp-button-label">@Label</div>
+</button>
+
+
+@code {
+    private string _btnClass;
+    private String? _IconPath = String.Empty;
+    private string _backgroundColor = "";
+
+    [Parameter] public bool IsDisabled { get; set; } = false;
+
+    [Parameter] public String ButtonType { get; set; } = "secondary";
+
+    [Parameter] public EventCallback OnClickCallback { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        SetCssClass();
+    }
+    
+    private bool HasIcon() => !String.IsNullOrEmpty(Icon);
+
+    private void SetCssClass()
+    {
+        _btnClass = HasIcon() ? "tp-button icon" : "tp-button";
+    }
+
+    [Parameter] public String? AltText { get; set; } = "undefined";
+
+    [Parameter] public String Label { get; set; } = "Label";
+
+    private String? IconPath
+    {
+        get
+        {
+            if (!String.IsNullOrEmpty(Icon))
+            {
+                return StaticResService.GetIconPath(Icon);
+            }
+
+            return String.Empty;
+        }
+        set => _IconPath = value;
+    }
+
+    [Parameter] public String? Icon { private get; set; }
+}
