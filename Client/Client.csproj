@@ -11,4 +11,31 @@
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.2" PrivateAssets="all"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Assets\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Update="Assets\Icons\icon-192.png">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="wwwroot\icon-192.png" />
+      <None Include="wwwroot\Icons\arrows.png" />
+      <None Include="wwwroot\Icons\bicycle.png" />
+      <None Include="wwwroot\Icons\car.png" />
+      <None Include="wwwroot\Icons\clipboard.png" />
+      <None Include="wwwroot\Icons\delivery.png" />
+      <None Include="wwwroot\Icons\dumbbell.png" />
+      <None Include="wwwroot\Icons\like.png" />
+      <None Include="wwwroot\Icons\lkw.png" />
+      <None Include="wwwroot\Icons\location-pin.png" />
+      <None Include="wwwroot\Icons\map (1).png" />
+      <None Include="wwwroot\Icons\stopwatch.png" />
+      <None Include="wwwroot\map.png" />
+    </ItemGroup>
+
 </Project>
