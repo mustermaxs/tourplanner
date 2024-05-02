@@ -1,0 +1,25 @@
+﻿<div class="tp-page-header">
+    <div class="nav-item-wrapper">
+        <div class="nav-item-img-wrapper">
+            <img src="@IconKey" alt="Map"/>
+        </div>
+    <h3>@PageTitle</h3>
+</div>
+
+@code {
+    [Parameter]
+    public String PageTitle { get; set; }
+    
+    [Parameter]
+    public string? IconPath
+    {
+        get;
+        set;
+    }
+
+    private String IconKey
+    {
+        get => Images.ResourceManager.GetString(IconPath);
+        
+    }
+}
