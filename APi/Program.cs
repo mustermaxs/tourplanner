@@ -1,25 +1,55 @@
-var builder = WebApplication.CreateBuilder(args);
+namespace Tourplanner;
 
-// Add services to the container.
+using Tourplanner.Infrastructure;
+using Tourplanner.Entities.Tour;
+using Microsoft.EntityFrameworkCore;
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+#nullable disable warnings
 
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+internal class Program
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    private static WebApplicationBuilder? builder;
+    private static WebApplication? app;
+
+    
+    static void Main(string[] args)
+    {
+        builder = WebApplication.CreateBuilder(args);
+        app = builder.Build();
+
+        RegisterServices(builder.Services);
+
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI();
+        }
+
+        app.UseHttpsRedirection();
+
+        app.UseAuthorization();
+
+        app.MapControllers();
+
+        app.Run();
+    }
+
+    private static void RegisterServices(IServiceCollection services)
+    {
+
+        builder.Services.AddDbContext<TourDbContext>(opts => {
+            // postgres
+            opts.UseNpgsql(
+            builder.Configuration["ConnectionStrings:PostgresConnection"]);
+        });
+
+        
+
+        services.AddControllers();
+        services.AddEndpointsApiExplorer();
+        services.AddSwaggerGen();
+
+        services.AddScoped<ICommandHandler, GetTourCommandHandler>();
+        services.AddSingleton<IMediator, Mediator>();
+    }
 }
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
