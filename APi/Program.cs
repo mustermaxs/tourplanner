@@ -21,25 +21,10 @@ internal class Program
 
     static void Main(string[] args)
     {
+
         var host = CreateHostBuilder(args).Build();
-
         CreateDbIfNotExists(host);
-
         builder = WebApplication.CreateBuilder(args);
-        RegisterServices(builder.Services);
-        app = builder.Build();
-
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseSwagger();
-            app.UseSwaggerUI();
-        }
-
-        app.UseHttpsRedirection();
-        app.UseAuthorization();
-        app.MapControllers();
-    
-        Console.WriteLine("Mapped controllers"); // Moved this line here
 
         host.Run();
     }
@@ -62,20 +47,6 @@ internal class Program
                 logger.LogError(ex, "An error occurred creating the DB.");
             }
         }
-    }
-
-    private static void RegisterServices(IServiceCollection services)
-    {
-        services.AddDbContext<TourContext>(options =>
-            options.UseNpgsql("Host=192.168.0.130;Database=tourplanner;Username=tour_admin;Password=tour_admin123"));
-
-        appContext = services.BuildServiceProvider().GetService<TourContext>();
-
-        services.AddControllers();
-        services.AddEndpointsApiExplorer();
-        services.AddSwaggerGen();
-
-        services.AddSingleton<IMediator, Mediator>();
     }
 
     

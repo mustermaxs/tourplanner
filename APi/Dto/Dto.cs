@@ -1,3 +1,5 @@
 namespace Tourplanner.DTOs;
-
-public interface Dto {}
+using Microsoft.AspNetCore.Mvc;
+using Tourplanner.Infrastructure;
+public interface IDto : IResponse, IRequest 
+{} 

@@ -1,6 +1,6 @@
 namespace Tourplanner.Infrastructure;
 
-public interface ICommand
+public interface IRequest
 {
     
 }

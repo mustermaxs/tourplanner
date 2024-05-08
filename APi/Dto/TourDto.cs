@@ -15,7 +15,7 @@ namespace Tourplanner.DTOs
             Enum transportType,
             double distance,
             TimeSpan timespan,
-            int popularity,
+            float popularity,
             double childfriendliness,
             string routeImage
         )
@@ -40,7 +40,7 @@ namespace Tourplanner.DTOs
         public Enum TransportType { get; protected set; }
         public double Distance { get; protected set; }
         public TimeSpan EstimatedTime { get; protected set; }
-        public int Popularity { get; protected set; }
+        public float Popularity { get; protected set; }
         public double Childfriendliness { get; protected set; }
         public string RouteImage { get; protected set; }
     }

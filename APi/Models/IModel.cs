@@ -2,8 +2,9 @@ namespace Tourplanner.Models;
 using Tourplanner.DTOs;
 
 // OBSOLETE ?
-public abstract class Model
+public interface IEntity
 {
+    
 }
 
 // TODO in jedes Model file extension method schreiben
