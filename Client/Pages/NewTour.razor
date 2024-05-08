@@ -9,50 +9,62 @@
 
 
 <form>
-    @* Tour name *@
-    <div class="form-group">
-        <label for="name">Name</label>
-        <input type="text" class="form-control" id="name" placeholder="Enter name" @bind="AddTourVM.Tour.Name">
+    <div class="form-group mt-3">
+        <div class="row">
+            @* Tour name *@
+            <div class="col">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" id="name" placeholder="Enter name" @bind="AddTourVM.Tour.Name">
+            </div>
+            @* Transport Type *@
+            <div class="col">
+                <label for="transporttype">Transport Type</label>
+                <input type="text" class="form-control" id="transporttype" placeholder="Enter transport type"
+                    @bind="AddTourVM.Tour.TransportType">
+            </div>
+        </div>
     </div>
 
-    @* Transport Type *@
-    <div class="form-group">
-        <label for="transporttype">Transport Type</label>
-        <input type="text" class="form-control" id="transporttype" placeholder="Enter transport type"
-            @bind="AddTourVM.Tour.TransportType">
+    <div class="form-group mt-3">
+        <div class="row">
+            @* From *@
+            <div class="col">
+                <label for="from">From</label>
+                <input type="text" class="form-control" id="from" placeholder="Enter start" @bind="AddTourVM.Tour.From">
+            </div>
+            @* To *@
+            <div class="col">
+                <label for="to">To</label>
+                <input type="text" class="form-control" id="to" placeholder="Enter destination"
+                    @bind="AddTourVM.Tour.To">
+            </div>
+        </div>
     </div>
 
-    @* From *@
-    <div class="form-group">
-        <label for="from">From</label>
-        <input type="text" class="form-control" id="from" placeholder="Enter from" @bind="AddTourVM.Tour.From">
-    </div>
-
-    @* To *@
-    <div class="form-group">
-        <label for="to">To</label>
-        <input type="text" class="form-control" id="to" placeholder="Enter to" @bind="AddTourVM.Tour.To">
-    </div>
-
-    @* Estimated Time *@
-    <div class="form-group">
-        <label for="estimatedtime">Estimated Time</label>
-        <input type="text" class="form-control" id="estimatedtime" placeholder="Enter estimated time"
-            @bind="AddTourVM.Tour.EstimatedTime">
-    </div>
-
-    @* difficulty *@
-    <div class="form-group">
-        <label for="difficulty">Difficulty</label>
-        <input type="text" class="form-control" id="difficulty" placeholder="Enter difficulty"
-            @bind="AddTourVM.Tour.Difficulty">
+    <div class="form-group mt-3">
+        <div class="row">
+            @* Estimated Time *@
+            <div class="col">
+                <label for="estimatedtime">Estimated Time</label>
+                <input type="text" class="form-control" id="estimatedtime" placeholder="Enter estimated time"
+                    @bind="AddTourVM.Tour.EstimatedTime">
+            </div>
+            @* difficulty *@
+            <div class="col">
+                <label for="difficulty">Difficulty</label>
+                <input type="text" class="form-control" id="difficulty" placeholder="Enter difficulty"
+                    @bind="AddTourVM.Tour.Difficulty">
+            </div>
+        </div>
     </div>
 
     @* Description *@
-    <div class="form-group">
+    <div class="form-group mt-3">
         <label for="description">Description</label>
         <textarea class="form-control" id="description" placeholder="Enter description"
             @bind="AddTourVM.Tour.Description"></textarea>
     </div>
+
+    <button type="submit" class="btn btn-primary mt-3" @onclick="AddTourVM.AddTour">Submit</button>
 
 </form>
