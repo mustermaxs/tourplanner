@@ -8,12 +8,11 @@ public abstract class IMediator
 
     public virtual object Send(ICommand command)
     {
-        var commandName = nameof(command);
+        var commandName = command.GetType().Name;
         if (!_CommandCommandHandlerMapping.TryGetValue(commandName, out ICommandHandler? commandHandler))
         {
             throw new Exception($"Command {commandName} unkown");
         }
-
         return commandHandler.Handle(command);
     }
     public virtual bool Register<TCommand, TCommandHandler>()

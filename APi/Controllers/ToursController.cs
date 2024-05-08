@@ -8,8 +8,8 @@ using Tourplanner.DTOs;
 
 namespace Api.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class ToursController : ControllerBase
     {
 
@@ -20,81 +20,87 @@ namespace Api.Controllers
             _mediator = mediator;
         }
 
-        // GET: api/<ToursController>
         [HttpGet]
-        public async Task<ActionResult> Get()
+        public string Get()
         {
-            try {
-            
-                var command = new GetTourCommand();
-                
-                var result = await _mediator.Send(command);
-
-                return Ok(result);
-
-            } catch (Exception e) { 
-                    return BadRequest(e.Message);
-            }
+            return "OK";
         }
 
-        // GET api/<ToursController>/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult> Get([FromRoute] int id)
-        {
-            try {
-                var command = new GetTourCommand(id);
-                var result = await _mediator.Send(command);
-
-                return Ok(result);
-            }
-            catch (Exception e) {
-                return BadRequest(e.Message);
-            }
-        }
-
-        // POST api/<ToursController>
-        [HttpPost]
-        public async Task<ActionResult> Post([FromBody] string value)
-        {
-            try {
-                var command = new CreateTourCommand(value);
-                var result = _mediator.Send(command);
-
-                return Ok(result);
-            }
-            catch (Exception e) {
-                return BadRequest(e.Message);
-            }
-        }
-
-        // PUT api/<ToursController>/5
-        [HttpPut("{id}")]
-        public async Task<ActionResult> Put([FromRoute] int id, [FromBody] string value)
-        {
-            try {
-                var command = new UpdateTourCommand(id, value);
-                var result = await _mediator.Send(command);
-
-                return Ok(result);
-            }
-            catch (Exception e) {
-                return BadRequest(e.Message);
-            }
-        }
-
-        // DELETE api/<ToursController>/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete([FromRoute] int id)
-        {
-            try {
-                var command = new DeleteTourCommand(id);
-                var result = await _mediator.Send(command);
-
-                return Ok(result);
-            }
-            catch (Exception e) {
-                return BadRequest(e.Message);
-            }
-        }
+        // // GET: api/<ToursController>
+        // [HttpGet]
+        // public async Task<ActionResult> Get()
+        // {
+        //     try {
+        //     
+        //         var command = new GetTourCommand();
+        //         
+        //         var result = await _mediator.Send(command);
+        //
+        //         return Ok(result);
+        //
+        //     } catch (Exception e) { 
+        //             return BadRequest(e.Message);
+        //     }
+        // }
+        //
+        // // GET api/<ToursController>/5
+        // [HttpGet("{id}")]
+        // public async Task<ActionResult> Get([FromRoute] int id)
+        // {
+        //     try {
+        //         var command = new GetTourCommand(id);
+        //         var result = await _mediator.Send(command);
+        //
+        //         return Ok(result);
+        //     }
+        //     catch (Exception e) {
+        //         return BadRequest(e.Message);
+        //     }
+        // }
+        //
+        // // POST api/<ToursController>
+        // [HttpPost]
+        // public async Task<ActionResult> Post([FromBody] string value)
+        // {
+        //     try {
+        //         var command = new CreateTourCommand(value);
+        //         var result = _mediator.Send(command);
+        //
+        //         return Ok(result);
+        //     }
+        //     catch (Exception e) {
+        //         return BadRequest(e.Message);
+        //     }
+        // }
+        //
+        // // PUT api/<ToursController>/5
+        // [HttpPut("{id}")]
+        // public async Task<ActionResult> Put([FromRoute] int id, [FromBody] string value)
+        // {
+        //     try {
+        //         var command = new UpdateTourCommand(id, value);
+        //         var result = await _mediator.Send(command);
+        //
+        //         return Ok(result);
+        //     }
+        //     catch (Exception e) {
+        //         return BadRequest(e.Message);
+        //     }
+        // }
+        //
+        // // DELETE api/<ToursController>/5
+        // [HttpDelete("{id}")]
+        // public async Task<ActionResult> Delete([FromRoute] int id)
+        // {
+        //     try {
+        //         var command = new DeleteTourCommand(id);
+        //         var result = await _mediator.Send(command);
+        //
+        //         return Ok(result);
+        //     }
+        //     catch (Exception e) {
+        //         return BadRequest(e.Message);
+        //     }
+        // }
     }
 }

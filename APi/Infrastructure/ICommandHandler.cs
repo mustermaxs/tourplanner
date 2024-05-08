@@ -4,7 +4,7 @@ using Tourplanner.DTOs;
 
 public abstract class ICommandHandler
 {
-    public virtual async Task<TDto> Handle<TDto>(ICommand command) where TDto : Dto
+    public virtual async Task<Dto> Handle(ICommand command)
     {
         throw new NotImplementedException();
     }
