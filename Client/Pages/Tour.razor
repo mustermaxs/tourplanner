@@ -12,12 +12,12 @@
 else
 {
     <div class="tour-header">
-        <h1>@TourVM.Tour.Name</h1>
-        <p>Tour ID: <span>@TourVM.Tour.Id</span></p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi quis pretium turpis. Nam euismod orci at nulla
-            pellentesque ullamcorper. Nulla lacinia varius sem quis pulvinar. Vestibulum vel mi nunc. Donec gravida
-            fringilla nisl ac tristique.</p>
-    </div>
+    <h1>@TourVM.Tour.Name</h1>
+    <p>Tour ID: <span>@TourVM.Tour.Id</span></p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi quis pretium turpis. Nam euismod orci at nulla
+        pellentesque ullamcorper. Nulla lacinia varius sem quis pulvinar. Vestibulum vel mi nunc. Donec gravida
+        fringilla nisl ac tristique.</p>
+</div>
 
     <table class="table table-striped">
         <tr>
@@ -47,18 +47,18 @@ else
         </tr>
         <tr>
             <td><i class="icon-heart"></i></td>
-            <td>Popularity</td>
+            <td>Rating</td>
             <td>2/10</td>
         </tr>
     </table>
 
     <div class="tour-actions">
-        <button class="btn btn-primary " >Add log</button>
+        <button class="btn btn-primary ">Add log</button>
         <button class="btn btn-primary button-add" @onclick="EditTour">Edit</button>
 
     </div>
     <div class="tour-map">
-    </div>
+</div>
 }
 
 @code {

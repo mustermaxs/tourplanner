@@ -9,5 +9,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddScoped<ToursViewModel>();
 builder.Services.AddScoped<TourDetailsPageViewModel>();
+builder.Services.AddScoped<TourAddPageViewModel>();
+
 
 await builder.Build().RunAsync();
