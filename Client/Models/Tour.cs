@@ -2,9 +2,12 @@ public class Tour
 {
     public int Id { get; set; }
     public string Name { get; set; }
+    public String From { get; set; }
+    public String To { get; set; }
+    public double EstimatedTime { get; set; }
     public string Description { get; set; }
     public string TransportType { get; set; }
-    public string From { get; set; }
-    public string To { get; set; }
-    public int Popularity { get; set; }
+    public int Difficulty { get; set; }
+
+    public int Rating { get; set; }
 }

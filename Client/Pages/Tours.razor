@@ -7,8 +7,9 @@
 
 <h1>Tours</h1>
 
-<p>Here are all our available tours:</p>
-
+<button class="btn btn-primary float-right" @onclick="AddTour">
+    + Add Tour
+</button>
 @if (ToursVM.Tours == null)
 {
     <p><em>Loading...</em></p>
@@ -16,19 +17,19 @@
 else
 {
     <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Transport Type</th>
-                <th>From</th>
-                <th>To</th>
-                <th>Popularity</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var tour in ToursVM.Tours)
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Transport Type</th>
+            <th>From</th>
+            <th>To</th>
+            <th>Rating</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var tour in ToursVM.Tours)
             {
                 <tr>
                     <td>@tour.Name</td>
@@ -36,7 +37,7 @@ else
                     <td>@tour.TransportType</td>
                     <td>@tour.From</td>
                     <td>@tour.To</td>
-                    <td>@tour.Popularity</td>
+                    <td>@tour.Rating</td>
                     <td>
                         <button class="btn btn-primary" @onclick="() => EditTour(tour.Id)">Edit</button>
                     </td>
@@ -50,6 +51,11 @@ else
     protected override async Task OnInitializedAsync()
     {
         await ToursVM.InitializeAsync();
+    }
+
+    private void AddTour()
+    {
+        NavManager.NavigateTo("/new");
     }
 
     private void EditTour(int tourId)
