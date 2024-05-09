@@ -1,0 +1,83 @@
+@page "/edit/{TourId}"
+@attribute [StreamRendering]
+@inject TourEditPageViewModel EditTourVM
+
+
+<PageTitle>Edit Tour</PageTitle>
+
+<h1>Edit Tour</h1>
+
+
+<form>
+    <div class="form-group mt-3">
+        <div class="row">
+            @* Tour name *@
+            <div class="col">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" id="name" placeholder="Enter name" @bind="EditTourVM.Tour.Name">
+            </div>
+            @* Transport Type *@
+            <div class="col">
+                <label for="transporttype">Transport Type</label>
+                <input type="text" class="form-control" id="transporttype" placeholder="Enter transport type"
+                    @bind="EditTourVM.Tour.TransportType">
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group mt-3">
+        <div class="row">
+            @* From *@
+            <div class="col">
+                <label for="from">From</label>
+                <input type="text" class="form-control" id="from" placeholder="Enter start" @bind="EditTourVM.Tour.From">
+            </div>
+            @* To *@
+            <div class="col">
+                <label for="to">To</label>
+                <input type="text" class="form-control" id="to" placeholder="Enter destination"
+                    @bind="EditTourVM.Tour.To">
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group mt-3">
+        <div class="row">
+            @* Estimated Time *@
+            <div class="col">
+                <label for="estimatedtime">Estimated Time (min)</label>
+                <input type="number" class="form-control" id="estimatedtime" placeholder="Enter estimated time"
+                    @bind="EditTourVM.Tour.EstimatedTime">
+            </div>
+            @* difficulty *@
+            <div class="col">
+                <label for="difficulty">Difficulty</label>
+                <input type="number" max="10" class="form-control" id="difficulty" placeholder="Enter difficulty"
+                    @bind="EditTourVM.Tour.Difficulty">
+            </div>
+        </div>
+    </div>
+
+    @* Description *@
+    <div class="form-group mt-3">
+        <label for="description">Description</label>
+        <textarea class="form-control" id="description" placeholder="Enter description"
+            @bind="EditTourVM.Tour.Description"></textarea>
+    </div>
+
+    <button class="btn btn-primary mt-3" @onclick="EditTourVM.UpdateTour">Update</button>
+
+</form>
+
+@code {
+    [Parameter]
+    public string TourId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        await EditTourVM.InitializeAsync(Convert.ToInt32(TourId));
+    }
+
+
+}
