@@ -3,9 +3,9 @@
 @inject TourAddPageViewModel AddTourVM
 
 
-<PageTitle>New Tour</PageTitle>
+<PageTitle>Add Tour</PageTitle>
 
-<h1>New Tour</h1>
+<h1>Add Tour</h1>
 
 
 <form>
@@ -45,14 +45,14 @@
         <div class="row">
             @* Estimated Time *@
             <div class="col">
-                <label for="estimatedtime">Estimated Time</label>
-                <input type="text" class="form-control" id="estimatedtime" placeholder="Enter estimated time"
+                <label for="estimatedtime">Estimated Time (min)</label>
+                <input type="number" class="form-control" id="estimatedtime" placeholder="Enter estimated time"
                     @bind="AddTourVM.Tour.EstimatedTime">
             </div>
             @* difficulty *@
             <div class="col">
                 <label for="difficulty">Difficulty</label>
-                <input type="text" class="form-control" id="difficulty" placeholder="Enter difficulty"
+                <input type="number" max="10" class="form-control" id="difficulty" placeholder="Enter difficulty"
                     @bind="AddTourVM.Tour.Difficulty">
             </div>
         </div>
