@@ -5,46 +5,49 @@
 
 <PageTitle>Tours</PageTitle>
 
-<h1>Tours</h1>
+<div class="d-flex justify-content-between align-items-center">
+    <h1>Tours</h1>
 
-<button class="btn btn-primary float-right" @onclick="AddTour">
-    + Add Tour
-</button>
+    <button class="btn btn-primary" @onclick="AddTour">
+        + Add Tour
+    </button>
+</div>
 @if (ToursVM.Tours == null)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
-    <table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Transport Type</th>
-            <th>From</th>
-            <th>To</th>
-            <th>Rating</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var tour in ToursVM.Tours)
-            {
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
                 <tr>
-                    <td>@tour.Name</td>
-                    <td>@tour.Description</td>
-                    <td>@tour.TransportType</td>
-                    <td>@tour.From</td>
-                    <td>@tour.To</td>
-                    <td>@tour.Rating</td>
-                    <td>
-                        <button class="btn btn-primary" @onclick="() => EditTour(tour.Id)">Edit</button>
-                    </td>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Transport Type</th>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Rating</th>
+                    <th></th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var tour in ToursVM.Tours)
+                {
+                    <tr>
+                        <td>
+                            <a class="link" style="cursor:pointer" @onclick="() => EditTour(tour.Id)">@tour.Name</a>
+                        </td>
+                        <td>@tour.Description</td>
+                        <td>@tour.TransportType</td>
+                        <td>@tour.From</td>
+                        <td>@tour.To</td>
+                        <td>@tour.Rating</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 }
 
 @code {
