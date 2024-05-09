@@ -10,6 +10,7 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 builder.Services.AddScoped<ToursViewModel>();
 builder.Services.AddScoped<TourDetailsPageViewModel>();
 builder.Services.AddScoped<TourAddPageViewModel>();
+builder.Services.AddScoped<TourEditPageViewModel>();
 
 
 await builder.Build().RunAsync();
