@@ -12,43 +12,43 @@
 else
 {
     <div class="tour-header">
-    <h1>@TourVM.Tour.Name</h1>
-    <p>Tour ID: <span>@TourVM.Tour.Id</span></p>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi quis pretium turpis. Nam euismod orci at nulla
-        pellentesque ullamcorper. Nulla lacinia varius sem quis pulvinar. Vestibulum vel mi nunc. Donec gravida
-        fringilla nisl ac tristique.</p>
-</div>
+        <h1>@TourVM.Tour.Name</h1>
+        <p>Tour ID: <span>@TourVM.Tour.Id</span></p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi quis pretium turpis. Nam euismod orci at nulla
+            pellentesque ullamcorper. Nulla lacinia varius sem quis pulvinar. Vestibulum vel mi nunc. Donec gravida
+            fringilla nisl ac tristique.</p>
+    </div>
 
     <table class="table table-striped">
         <tr>
             <td><i class="icon-clock"></i></td>
             <td>Est. time</td>
-            <td>2h</td>
+            <td>@TourVM.Tour.EstimatedTime</td>
         </tr>
         <tr>
             <td><i class="icon-location"></i></td>
             <td>From</td>
-            <td>Some Place</td>
+            <td>@TourVM.Tour.From</td>
         </tr>
         <tr>
             <td><i class="icon-destination"></i></td>
             <td>To</td>
-            <td>Some other place</td>
+            <td>@TourVM.Tour.To</td>
         </tr>
         <tr>
             <td><i class="icon-difficulty"></i></td>
             <td>Difficulty</td>
-            <td>8/10</td>
+            <td>@TourVM.Tour.Difficulty</td>
         </tr>
         <tr>
             <td><i class="icon-transport"></i></td>
             <td>Transport type</td>
-            <td>Road bike</td>
+            <td>@TourVM.Tour.TransportType</td>
         </tr>
         <tr>
             <td><i class="icon-heart"></i></td>
             <td>Rating</td>
-            <td>2/10</td>
+            <td>@TourVM.Tour.Rating/10</td>
         </tr>
     </table>
 
@@ -58,7 +58,7 @@ else
 
     </div>
     <div class="tour-map">
-</div>
+    </div>
 }
 
 @code {
@@ -72,7 +72,6 @@ else
 
         await TourVM.InitializeAsync(Convert.ToInt32(TourId));
     }
-
     private void EditTour()
     {
         NavManager.NavigateTo($"/edit-tour/{TourId}");
