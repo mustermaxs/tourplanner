@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.OpenApi.Extensions;
 using Tourplanner.DTOs;
 using Tourplanner.Models;
 using Tourplanner.Infrastructure;
@@ -30,7 +31,7 @@ namespace Tourplanner.Entities.Tour
                         tour.Name,
                         tour.From,
                         tour.To,
-                        TransportType.Car,
+                        tour.TransportType,
                         tour.Distance,
                         tour.EstimatedTime,
                         tour.Popularity,

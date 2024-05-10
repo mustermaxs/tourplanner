@@ -12,7 +12,7 @@ namespace Tourplanner.DTOs
             string description,
             string from,
             string to,
-            Enum transportType,
+            TransportType transportType,
             double distance,
             TimeSpan timespan,
             float popularity,
@@ -37,7 +37,7 @@ namespace Tourplanner.DTOs
         public string Description { get; protected set; }
         public string From { get; protected set; }
         public string To { get; protected set; }
-        public Enum TransportType { get; protected set; }
+        public TransportType TransportType { get; protected set; }
         public double Distance { get; protected set; }
         public TimeSpan EstimatedTime { get; protected set; }
         public float Popularity { get; protected set; }

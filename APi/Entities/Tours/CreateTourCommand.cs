@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Tourplanner.DTOs;
 using Tourplanner.Infrastructure;
+using Tourplanner.Models;
+using Tourplanner.Repositories;
 
 namespace Tourplanner.Entities.Tour
 {
@@ -10,26 +12,20 @@ namespace Tourplanner.Entities.Tour
         string Description,
         string From,
         string To,
-        float Distance,
-        float EstimatedTime,
-        string ImagePath
+        TransportType TransportType
     ): IRequest;
 
-    public class CreateTourCommandHandler(TourContext ctx) : RequestHandler<CreateTourCommand, Task>(ctx)
+    public class CreateTourCommandHandler(TourContext ctx, TourRepository tourRepository) : RequestHandler<CreateTourCommand, Task>(ctx)
     {
         public override async Task<Task> Handle(CreateTourCommand request)
         {
             var tour = new Tour();
             tour.Name = request.Name;
             tour.Description = request.Description;
-            tour.Distance = request.Distance;
             tour.From = request.From;
             tour.To = request.To;
-            tour.ImagePath = request.ImagePath;
-            tour.EstimatedTime = TimeSpan.FromHours(request.EstimatedTime);
 
-            await ctx.AddAsync(tour);
-            
+            await tourRepository.Create(tour);
             return Task.CompletedTask;
         }
     }

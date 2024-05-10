@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Tourplanner.DTOs;
 using Tourplanner.Entities.Tour;
@@ -25,7 +26,8 @@ public class Startup
         {
             options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));
         });
-        services.AddControllers();
+        services.AddControllers().AddJsonOptions(x =>{
+            x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());});
 
         services.AddTransient<DbContext, TourContext>();
         services.AddTransient<IServiceProvider, ServiceProvider>();
@@ -57,6 +59,8 @@ public class Startup
         // }
         services.AddScoped<ICommandHandler, GetToursCommandHandler>();
         services.AddScoped<ICommandHandler, GetTourByIdCommandHandler>();
+        services.AddScoped<ICommandHandler, CreateTourCommandHandler>();
+        services.AddScoped<ICommandHandler, UpdateTourCommandHandler>();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

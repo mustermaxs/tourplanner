@@ -40,5 +40,6 @@ public class Tour
     [Precision(5,3)]
     public float ChildFriendliness { get; set; }
     public IEnumerable<TourLog> TourLogs { get; set; }
+    public TransportType TransportType { get; set; }
     
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Tourplanner.Entities.Tour;
 using Tourplanner.Entities.TourLog;
+using Tourplanner.Models;
 
 namespace Tourplanner;
 
@@ -29,7 +30,8 @@ public class TourContext : DbContext
                     EstimatedTime = TimeSpan.FromHours(2),
                     ImagePath = "example1.jpg",
                     Popularity = 4.5f,
-                    ChildFriendliness = 4.0f
+                    ChildFriendliness = 4.0f,
+                    TransportType = TransportType.Car
                 }
             );
         modelBuilder.Entity<TourLog>()
@@ -43,6 +45,10 @@ public class TourContext : DbContext
                     Comment = "This was a great tour!",
                     TourId = 1
                 });
+
+        modelBuilder.Entity<Tour>()
+            .Property(t => t.TransportType)
+            .HasConversion<int>();
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

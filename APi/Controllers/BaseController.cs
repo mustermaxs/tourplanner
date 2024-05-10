@@ -1,6 +1,7 @@
 ﻿using System.Windows.Input;
 using Microsoft.AspNetCore.Mvc;
 using Tourplanner;
+using Tourplanner.Exceptions;
 using Tourplanner.Infrastructure;
 
 namespace Api.Controllers;
@@ -19,14 +20,17 @@ public abstract class BaseController : ControllerBase
         try
         {
             var responseObj = await Mediator.Send(command);
-            
+
             if (responseObj is null)
             {
                 return NotFound();
             }
-
-            // return responseObj.IsOk ? Ok(responseObj) : BadRequest();
             return Ok(responseObj);
+        }
+        catch (ResourceNotFoundException rex)
+        {
+            Console.WriteLine(rex);
+            return BadRequest(rex.Message);
         }
         catch (Exception e)
         {

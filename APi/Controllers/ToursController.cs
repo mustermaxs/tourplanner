@@ -32,5 +32,21 @@ namespace Api.Controllers
         {
             return await ResponseAsync(createTourCommand);
         }
+
+        [HttpPut("{tourid}")]
+        public async Task<ActionResult<IResponse>> UpdateTour([FromBody] UpdateTourDto updateTourDto,
+            [FromRoute] int tourid)
+        {
+            var command = new UpdateTourCommand(
+                tourid,
+                updateTourDto.Name,
+                updateTourDto.Description,
+                updateTourDto.From,
+                updateTourDto.To,
+                updateTourDto.TransportType
+            );
+
+            return await ResponseAsync(command);
+        }
     }
 }

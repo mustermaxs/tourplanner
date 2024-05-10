@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Tourplanner.DTOs;
+using Tourplanner.Exceptions;
 using Tourplanner.Models;
 using Tourplanner.Repositories;
 using Tourplanner.Infrastructure;
@@ -13,12 +14,15 @@ namespace Tourplanner.Entities.Tour
         TourRepository tourRepository)
         : RequestHandler<GetTourByIdRequest, TourDto>(ctx)
     {
-        private TourRepository _tourRepository;
-
         public override async Task<TourDto> Handle(GetTourByIdRequest request)
         {
             var tour = await tourRepository.Get(request.Id);
 
+            if (tour is null)
+            {
+                throw new ResourceNotFoundException($"Tour {request.Id} doesn't seem to exist.");
+            }
+            
             return await Task.FromResult(new TourDto(
                 tour.TourId,
                 tour.Description,
@@ -31,6 +35,7 @@ namespace Tourplanner.Entities.Tour
                 tour.Popularity,
                 tour.ChildFriendliness,
                 tour.ImagePath));
+            
         }
     }
 }

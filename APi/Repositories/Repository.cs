@@ -51,6 +51,12 @@ where TEntity : class
         await SaveAsync();
     }
 
+    public virtual async Task UpdateAsync(TEntity entity)
+    {
+        dbSet.Update(entity);
+        await SaveAsync();
+    }
+
     public void Dispose()
     {
         Dispose(true);
