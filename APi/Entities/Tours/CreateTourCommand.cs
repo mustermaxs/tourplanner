@@ -24,6 +24,7 @@ namespace Tourplanner.Entities.Tour
             tour.Description = request.Description;
             tour.From = request.From;
             tour.To = request.To;
+            tour.TransportType = request.TransportType;
 
             await tourRepository.Create(tour);
             return Task.CompletedTask;
