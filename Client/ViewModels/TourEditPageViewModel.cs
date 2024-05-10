@@ -24,7 +24,7 @@ public class TourEditPageViewModel
             To = "To " + id,
             EstimatedTime = id * 1.5,
             Description = "Description " + id,
-            TransportType = "TransportType " + id,
+            TransportType = TransportType.Car,
             Difficulty = id % 5,
             Rating = id % 5
         };

@@ -16,5 +16,5 @@ public class Tour
     public string Description { get; set; } = "";
     public float Difficulty { get; set; } = 0;
     public float Rating { get; set; } = 0;
-    public TransportType Transport { get; set; } = TransportType.Car;
+    public TransportType TransportType { get; set; } = TransportType.Car;
 }
