@@ -33,6 +33,13 @@ namespace Api.Controllers
             return await ResponseAsync(createTourCommand);
         }
 
+        [HttpDelete("{tourid}")]
+        public async Task<ActionResult<IResponse>> DeleteTour(int tourid)
+        {
+            var command = new DeleteTourCommand(tourid);
+            return await ResponseAsync(command);
+        }
+
         [HttpPut("{tourid}")]
         public async Task<ActionResult<IResponse>> UpdateTour([FromBody] UpdateTourDto updateTourDto,
             [FromRoute] int tourid)

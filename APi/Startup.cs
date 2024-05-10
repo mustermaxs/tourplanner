@@ -61,6 +61,7 @@ public class Startup
         services.AddScoped<ICommandHandler, GetTourByIdCommandHandler>();
         services.AddScoped<ICommandHandler, CreateTourCommandHandler>();
         services.AddScoped<ICommandHandler, UpdateTourCommandHandler>();
+        services.AddScoped<ICommandHandler, DeleteTourCommandHandler>();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
