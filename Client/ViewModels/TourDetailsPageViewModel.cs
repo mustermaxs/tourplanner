@@ -6,13 +6,13 @@ public class TourDetailsPageViewModel
 {
     public Tour Tour { get; private set; }
     public List<TourLog> TourLogs { get; private set; } = [
-        new TourLog { Id = 1, Date = new DateTime(2024, 6, 1), Comment = "Nice tour", Difficulty = 3, TotalDistance = 100, TotalTime = new TimeSpan(1, 30, 0), Rating = 4},
-        new TourLog { Id = 2, Date = new DateTime(2024, 6, 2), Comment = "Great tour", Difficulty = 4, TotalDistance = 120, TotalTime = new TimeSpan(2, 0, 0), Rating = 5},
-        new TourLog { Id = 3, Date = new DateTime(2024, 6, 3), Comment = "Awesome tour", Difficulty = 5, TotalDistance = 150, TotalTime = new TimeSpan(2, 30, 0), Rating = 5},
-        new TourLog { Id = 4, Date = new DateTime(2024, 6, 4), Comment = "Nice tour", Difficulty = 3, TotalDistance = 100, TotalTime = new TimeSpan(1, 30, 0), Rating = 4 },
-        new TourLog { Id = 5, Date = new DateTime(2024, 6, 5), Comment = "Great tour", Difficulty = 4, TotalDistance = 120, TotalTime = new TimeSpan(2, 0, 0), Rating = 5},
-        new TourLog { Id = 6, Date = new DateTime(2024, 6, 6), Comment = "Awesome tour", Difficulty = 5, TotalDistance = 150, TotalTime = new TimeSpan(2, 30, 0), Rating = 5},
-        new TourLog { Id = 7, Date = new DateTime(2024, 6, 7), Comment = "Nice tour", Difficulty = 3, TotalDistance = 100, TotalTime = new TimeSpan(1, 30, 0), Rating = 4},
+        new TourLog { Id = 1, Date = new DateTime(2024, 6, 1), Comment = "Nice tour", Difficulty = 3, TotalDistance = 100, TotalTime = 2f, Rating = 4},
+        new TourLog { Id = 2, Date = new DateTime(2024, 6, 2), Comment = "Great tour", Difficulty = 4, TotalDistance = 120, TotalTime = 3f, Rating = 5},
+        new TourLog { Id = 3, Date = new DateTime(2024, 6, 3), Comment = "Awesome tour", Difficulty = 5, TotalDistance = 150, TotalTime = 9f, Rating = 5},
+        new TourLog { Id = 4, Date = new DateTime(2024, 6, 4), Comment = "Nice tour", Difficulty = 3, TotalDistance = 100, TotalTime = 2f, Rating = 4 },
+        new TourLog { Id = 5, Date = new DateTime(2024, 6, 5), Comment = "Great tour", Difficulty = 4, TotalDistance = 120, TotalTime = 1f, Rating = 5},
+        new TourLog { Id = 6, Date = new DateTime(2024, 6, 6), Comment = "Awesome tour", Difficulty = 5, TotalDistance = 150, TotalTime = 5f, Rating = 5},
+        new TourLog { Id = 7, Date = new DateTime(2024, 6, 7), Comment = "Nice tour", Difficulty = 3, TotalDistance = 100, TotalTime = 4f, Rating = 4},
     ];
 
     private readonly Tour[] Tours = new Tour[]
