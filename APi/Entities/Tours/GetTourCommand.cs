@@ -29,7 +29,7 @@ namespace Tourplanner.Entities.Tour
                 tour.Name,
                 tour.From,
                 tour.To,
-                TransportType.Car,
+                tour.TransportType,
                 tour.Distance,
                 tour.EstimatedTime,
                 tour.Popularity,

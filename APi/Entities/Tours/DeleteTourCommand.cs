@@ -1,17 +1,17 @@
-// namespace Tourplanner.Entities.Tour;
-//
-// using Tourplanner.Infrastructure;
-//
-// public record DeleteTourCommand : ICommand
-// {
-//     public int TourId {get; set;}
-//     public int UserId {get; set;}
-// }
-//
-// public class DeleteTourCommandHandler : ICommandHandler
-// {
-//     public override async Task<object> Handle(ICommand command)
-//     {
-//         throw new NotImplementedException();
-//     }
-// }
+using Tourplanner.Repositories;
+
+namespace Tourplanner.Entities.Tour;
+
+using Tourplanner.Infrastructure;
+
+public record DeleteTourCommand(int Id) : IRequest;
+
+public class DeleteTourCommandHandler(TourContext ctx, TourRepository tourRepository)
+    : RequestHandler<DeleteTourCommand, Task>(ctx)
+{
+    public override async Task<Task> Handle(DeleteTourCommand command)
+    {
+        await tourRepository.DeleteById(command.Id);
+        return Task.CompletedTask;
+    }
+}

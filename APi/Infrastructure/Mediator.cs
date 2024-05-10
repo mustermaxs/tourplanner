@@ -75,6 +75,7 @@ public class Mediator : IMediator
         Register<GetTourByIdRequest, GetTourByIdCommandHandler>();
         Register<CreateTourCommand, CreateTourCommandHandler>();
         Register<UpdateTourCommand, UpdateTourCommandHandler>();
+        Register<DeleteTourCommand, DeleteTourCommandHandler>();
     }
 
     public void DiscoverPublishers()
