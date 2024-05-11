@@ -7,7 +7,7 @@ namespace Tourplanner.DTOs
     public class TourDto
     {
         public TourDto(
-            int tourId,
+            int id,
             string name,
             string description,
             string from,
@@ -20,7 +20,7 @@ namespace Tourplanner.DTOs
             string routeImage
         )
         {
-            TourId = tourId;
+            Id = id;
             Name = name;
             Description = description;
             From = from;
@@ -32,7 +32,7 @@ namespace Tourplanner.DTOs
             Childfriendliness = childfriendliness;
             RouteImage = routeImage;
         }
-        public int TourId { get; protected set; }
+        public int Id { get; protected set; }
         public string Name { get; protected set; }
         public string Description { get; protected set; }
         public string From { get; protected set; }
