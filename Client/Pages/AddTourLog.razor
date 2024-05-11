@@ -1,0 +1,47 @@
+@page "/tour/{TourId}/add-log"
+@attribute [StreamRendering]
+@inject TourLogAddPageViewModel AddLogVM
+@inject NavigationManager NavManager
+
+<PageTitle>Add Tour Log</PageTitle>
+
+<h1>Add New Log</h1>
+
+@if (AddLogVM.TourLog == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <h5>Tour: @AddLogVM.TourLog.Tour.Name</h5>
+
+        <div class="row">
+            <div class="col mt-3">
+                <label for="date">Date</label>
+                <input type="datetime-local" class="form-control" id="date" @bind="AddLogVM.TourLog.Date">
+            </div>
+            <div class="col mt-3">
+                <label for="difficulty">Difficulty</label>
+                <input type="number" max="10" class="form-control" id="difficulty" @bind="AddLogVM.TourLog.Difficulty">
+            </div>
+            <div class="col mt-3">
+                <label for="rating">Rating</label>
+                <input type="number" max="10" class="form-control" id="rating" @bind="AddLogVM.TourLog.Rating">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group mt-3">
+                <label for="comment">Comment</label>
+                <textarea class="form-control" id="comment" rows="3" @bind="AddLogVM.TourLog.Comment"></textarea>
+            </div>
+        </div>
+
+        <button class="btn btn-primary mt-3" @onclick="AddLogVM.AddLog">Add Log</button>
+}
+
+@code {
+    [Parameter]
+    public string TourId { get; set; }
+
+}

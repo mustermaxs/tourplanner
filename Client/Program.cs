@@ -11,6 +11,7 @@ builder.Services.AddScoped<ToursViewModel>();
 builder.Services.AddScoped<TourDetailsPageViewModel>();
 builder.Services.AddScoped<TourAddPageViewModel>();
 builder.Services.AddScoped<TourEditPageViewModel>();
-
+builder.Services.AddScoped<TourLogPageViewModel>();
+builder.Services.AddScoped<TourLogAddPageViewModel>();
 
 await builder.Build().RunAsync();

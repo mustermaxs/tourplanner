@@ -16,7 +16,7 @@ public class TourAddPageViewModel
     {
         try
         {
-
+            Console.WriteLine($"Adding new tour: {JsonSerializer.Serialize(Tour)}");
         }
         catch (Exception ex)
         {
