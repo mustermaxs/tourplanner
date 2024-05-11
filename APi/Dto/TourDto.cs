@@ -14,7 +14,7 @@ namespace Tourplanner.DTOs
             string to,
             TransportType transportType,
             double distance,
-            TimeSpan timespan,
+            float timespan,
             float popularity,
             double childfriendliness,
             string routeImage
@@ -39,7 +39,7 @@ namespace Tourplanner.DTOs
         public string To { get; protected set; }
         public TransportType TransportType { get; protected set; }
         public double Distance { get; protected set; }
-        public TimeSpan EstimatedTime { get; protected set; }
+        public float EstimatedTime { get; protected set; }
         public float Popularity { get; protected set; }
         public double Childfriendliness { get; protected set; }
         public string RouteImage { get; protected set; }

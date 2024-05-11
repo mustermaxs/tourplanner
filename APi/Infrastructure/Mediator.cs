@@ -2,6 +2,7 @@ using System.Reflection;
 using Tourplanner.Entities.Tour;
 using Microsoft.EntityFrameworkCore;
 using Tourplanner.DTOs;
+using Tourplanner.Entities.TourLog;
 
 namespace Tourplanner;
 
@@ -76,6 +77,11 @@ public class Mediator : IMediator
         Register<CreateTourCommand, CreateTourCommandHandler>();
         Register<UpdateTourCommand, UpdateTourCommandHandler>();
         Register<DeleteTourCommand, DeleteTourCommandHandler>();
+        Register<GetTourLogsRequest, GetTourLogsRequestHandler>();
+        Register<GetSingleTourLogRequest, GetSingleTourLogRequestHandler>();
+        Register<CreateTourLogCommand, CreateTourLogCommandHandler>();
+        Register<UpdateTourLogCommand, UpdateTourLogCommandHandler>();
+        Register<DeleteTourLogCommand, DeleteTourLogCommandHandler>();
     }
 
     public void DiscoverPublishers()

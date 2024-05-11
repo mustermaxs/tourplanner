@@ -3,6 +3,7 @@ using Tourplanner;
 using Tourplanner.Models;
 using Tourplanner.Entities.Tour;
 using Tourplanner.DTOs;
+using Tourplanner.Entities.TourLog;
 using Tourplanner.Infrastructure;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -52,6 +53,57 @@ namespace Api.Controllers
                 updateTourDto.To,
                 updateTourDto.TransportType
             );
+
+            return await ResponseAsync(command);
+        }
+
+        [HttpGet("{tourid}/logs")]
+        public async Task<ActionResult<IResponse>> GetLogsForTour(int tourid)
+        {
+            var command = new GetTourLogsRequest(tourid);
+            return await ResponseAsync(command);
+        }
+
+        [HttpGet("{tourid}/logs/{logid}")]
+        public async Task<ActionResult<IResponse>> GetLogForTour(int tourid, int logid)
+        {
+            var command = new GetSingleTourLogRequest(tourid, logid);
+            return await ResponseAsync(command);
+        }
+
+        [HttpPost("{tourid}/logs")]
+        public async Task<ActionResult<IResponse>> CreateTourLog([FromBody] CreateTourLogDto createTourLogDto, int tourid)
+        {
+            var command = new CreateTourLogCommand(
+                tourid,
+                DateTime.UtcNow,
+                createTourLogDto.Comment,
+                createTourLogDto.Difficulty,
+                createTourLogDto.TotalTime,
+                createTourLogDto.Rating
+            );
+
+            return await ResponseAsync(command);
+        }
+
+        [HttpPut("logs/{logid}")]
+        public async Task<ActionResult<IResponse>> CreateTourLog([FromBody] UpdateTourLogDto updateTourLogDto, int logid)
+        {
+            var command = new UpdateTourLogCommand(
+                TourLogId: logid,
+                DateTime: DateTime.UtcNow, 
+                Comment: updateTourLogDto.Comment,
+                Difficulty: updateTourLogDto.Difficulty,
+                TotalTime: updateTourLogDto.TotalTime,
+                Rating: updateTourLogDto.Rating);
+
+            return await ResponseAsync(command);
+        }
+
+        [HttpDelete("logs/{logid}")]
+        public async Task<ActionResult<IResponse>> DeleteTourLog([FromBody] DeleteTourLogCommand deleteTourLogCommand, int logid)
+        {
+            var command = new DeleteTourLogCommand(logid);
 
             return await ResponseAsync(command);
         }

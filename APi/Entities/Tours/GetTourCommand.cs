@@ -11,7 +11,7 @@ namespace Tourplanner.Entities.Tour
 
     public class GetTourByIdCommandHandler(
         TourContext ctx,
-        TourRepository tourRepository)
+        ITourRepository tourRepository)
         : RequestHandler<GetTourByIdRequest, TourDto>(ctx)
     {
         public override async Task<TourDto> Handle(GetTourByIdRequest request)
