@@ -24,7 +24,7 @@ public class TourAddPageViewModel
                 from: Tour.From,
                 to: Tour.To,
                 distance: Tour.Distance,
-                estimatedTime: Tour.EstimatedTime,
+                estimatedTime: Tour.EstimatedTime
                 );
             _httpService.Post<CreateTourDto>(createTourDto, "Tours");
         }
