@@ -41,23 +41,6 @@
         </div>
     </div>
 
-    <div class="form-group mt-3">
-        <div class="row">
-            @* Estimated Time *@
-            <div class="col">
-                <label for="estimatedtime">Estimated Time (min)</label>
-                <input type="number" class="form-control" id="estimatedtime" placeholder="Enter estimated time"
-                    @bind="AddTourVM.Tour.EstimatedTime">
-            </div>
-            @* difficulty *@
-            <div class="col">
-                <label for="difficulty">Difficulty</label>
-                <input type="number" max="10" class="form-control" id="difficulty" placeholder="Enter difficulty"
-                    @bind="AddTourVM.Tour.Difficulty">
-            </div>
-        </div>
-    </div>
-
     @* Description *@
     <div class="form-group mt-3">
         <label for="description">Description</label>
