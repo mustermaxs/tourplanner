@@ -8,7 +8,7 @@
             string from,
             string to,
             float distance,
-            float estimatedTime
+            float estimatedTime,
         )
         {
             Name = name;
