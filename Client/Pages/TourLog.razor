@@ -5,14 +5,22 @@
 
 <PageTitle>Edit Tour Log</PageTitle>
 
-<h1>Edit Tour Log</h1>
+
 @if (EditLogVM.TourLog == null)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
-<h5>Tour: @EditLogVM.TourLog.Tour.Name</h5>
+    <div class="d-flex justify-content-between align-items-center">
+    <h1>Edit Tour Log</h1>
+        <div>
+            <button class="btn btn-danger" @onclick="() => EditLogVM.DeleteLog()">
+                Delete
+            </button>
+        </div>
+    </div>
+    <h5>Tour: @EditLogVM.TourLog.Tour.Name</h5>
         <div class="row">
             <div class="col-md-4">
                 <label for="date">Date</label>
@@ -42,7 +50,6 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        EditLogVM = new TourLogPageViewModel(NavManager);
         await EditLogVM.InitializeAsync(Convert.ToInt32(TourLogId));
     }
 }
