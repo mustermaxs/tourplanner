@@ -14,7 +14,9 @@ namespace Tourplanner.Entities.Tour
         TransportType TransportType
     ) : IRequest;
 
-    public class UpdateTourCommandHandler(TourContext ctx, TourRepository tourRepository)
+    public class UpdateTourCommandHandler(
+        TourContext ctx,
+        ITourRepository tourRepository)
         : RequestHandler<UpdateTourCommand, Task>(ctx)
     {
         public override async Task<Task> Handle(UpdateTourCommand command)

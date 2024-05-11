@@ -7,4 +7,5 @@ public interface IRepository<T>
     public Task Delete(T obj);
     public Task Create(T obj);
     public Task SaveAsync();
+    public Task UpdateAsync(T obj);
 }

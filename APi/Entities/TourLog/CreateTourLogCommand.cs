@@ -14,8 +14,8 @@ namespace Tourplanner.Entities.TourLog
     
     public class CreateTourLogCommandHandler(
         TourContext ctx,
-        TourLogRepository tourLogRepository,
-        TourRepository tourRepository) : RequestHandler<CreateTourLogCommand, Task>(ctx)
+        ITourLogRepository tourLogRepository,
+        ITourRepository tourRepository) : RequestHandler<CreateTourLogCommand, Task>(ctx)
     {
         public override async Task<Task> Handle(CreateTourLogCommand request)
         {

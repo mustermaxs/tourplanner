@@ -15,10 +15,9 @@ namespace Tourplanner.Entities.Tour
 
     public class GetToursCommandHandler(
         TourContext ctx,
-        TourRepository tourRepository)
+        ITourRepository tourRepository)
         : RequestHandler<GetToursRequest, IEnumerable<TourDto>>(ctx)
     {
-        private TourRepository _tourRepository;
         
         public override async Task<IEnumerable<TourDto>> Handle(GetToursRequest request)
         {

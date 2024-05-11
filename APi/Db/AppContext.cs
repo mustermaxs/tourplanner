@@ -27,7 +27,7 @@ public class TourContext : DbContext
                     To = "Destination 1",
                     Distance = 100.0f,
                     Description = "This is an example tour 1.",
-                    EstimatedTime = TimeSpan.FromHours(2),
+                    EstimatedTime = 2.0f,
                     ImagePath = "example1.jpg",
                     Popularity = 4.5f,
                     ChildFriendliness = 4.0f,

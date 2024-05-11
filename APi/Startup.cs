@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Tourplanner.DTOs;
 using Tourplanner.Entities.Tour;
+using Tourplanner.Entities.TourLog;
 using Tourplanner.Infrastructure;
 using Tourplanner.Repositories;
 
@@ -32,36 +33,26 @@ public class Startup
         services.AddTransient<DbContext, TourContext>();
         services.AddTransient<IServiceProvider, ServiceProvider>();
         services.AddTransient<IMediator, Mediator>();
-        services.AddScoped<TourRepository>();
+        services.AddScoped<ITourLogRepository, TourLogRepository>();
+        services.AddScoped<ITourRepository, TourRepository>();
+        
         AddCommandHandlers(services);
+        
         // services.AddTransient<ICommandHandler, GetToursCommandHandler>();
     }
 
     protected void AddCommandHandlers(IServiceCollection services)
     {
-        // var type = typeof(ICommandHandler);
-        // var types = Assembly.GetExecutingAssembly()
-        //     .GetTypes().Where(handlerType => handlerType is { IsClass: true, IsAbstract: false } && type.IsAssignableFrom(handlerType)).ToList();
-        //
-        // foreach (var handler in types)
-        // {
-        //     var genericArguments = handler.GetGenericArguments();
-        //     var requestType =
-        //         handler.GetMethod("Handle")!
-        //             .GetParameters()[0]
-        //             .ParameterType;
-        //     var responseType = handler.GetMethod("Handle")!
-        //         .ReturnType;
-        //
-        //     var requestHandlerType = typeof(RequestHandler<,>).MakeGenericType(requestType, responseType);
-        //     services.AddTransient(typeof(ICommandHandler), requestHandlerType);
-        //     // services.BuildServiceProvider();
-        // }
         services.AddScoped<ICommandHandler, GetToursCommandHandler>();
         services.AddScoped<ICommandHandler, GetTourByIdCommandHandler>();
         services.AddScoped<ICommandHandler, CreateTourCommandHandler>();
         services.AddScoped<ICommandHandler, UpdateTourCommandHandler>();
         services.AddScoped<ICommandHandler, DeleteTourCommandHandler>();
+        services.AddScoped<ICommandHandler, GetTourLogsRequestHandler>();
+        services.AddScoped<ICommandHandler, GetSingleTourLogRequestHandler>();
+        services.AddScoped<ICommandHandler, CreateTourLogCommandHandler>();
+        services.AddScoped<ICommandHandler, UpdateTourLogCommandHandler>();
+        services.AddScoped<ICommandHandler, DeleteTourLogCommandHandler>();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

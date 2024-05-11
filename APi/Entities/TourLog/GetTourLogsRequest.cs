@@ -6,7 +6,9 @@ namespace Tourplanner.Entities.TourLog
 {
     public record GetTourLogsRequest(int TourId) : IRequest;
 
-    public class GetTourLogsRequestHandler(TourContext ctx, TourLogRepository tourLogRepository)
+    public class GetTourLogsRequestHandler(
+        TourContext ctx,
+        ITourLogRepository tourLogRepository)
         : RequestHandler<GetTourLogsRequest, IEnumerable<TourLogDto>>(ctx)
     {
         public override async Task<IEnumerable<TourLogDto>> Handle(GetTourLogsRequest request)
