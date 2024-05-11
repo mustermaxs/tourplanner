@@ -12,9 +12,11 @@ public class Tour
     public string Name { get; set; } = "Wanderweg";
     public string From { get; set; } = "";
     public string To { get; set; } = "";
-    public double EstimatedTime { get; set; } = 0;
+    public float EstimatedTime { get; set; } = 0;
     public string Description { get; set; } = "";
-    public float Difficulty { get; set; } = 0;
-    public float Rating { get; set; } = 0;
+    public float Distance { get; set; } = 0;
+    public float Popularity { get; set; } = 0;
     public TransportType TransportType { get; set; } = TransportType.Car;
+    public float ChildFriendliness { get; set; } = 0;
+    public string ImagePath { get; set; } = "";
 }

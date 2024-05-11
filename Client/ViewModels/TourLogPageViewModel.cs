@@ -20,7 +20,7 @@ public class TourLogPageViewModel
             Comment = "Ich liebe diese Tour!",
             Difficulty = 5,
             Rating = 8,
-            Tour = new Tour { Id = 1, Name = "Waldviertel", Description = "Waldviertel Tour", TransportType = TransportType.Bicycle, From = "Wien", To = "Waldviertel", Rating = 5},
+            Tour = new Tour { Id = 1, Name = "Waldviertel", Description = "Waldviertel Tour", TransportType = TransportType.Bicycle, From = "Wien", To = "Waldviertel", Popularity = 5},
         };
     }
 

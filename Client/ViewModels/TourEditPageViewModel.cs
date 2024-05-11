@@ -22,13 +22,10 @@ public class TourEditPageViewModel
             Name = "Tour " + id,
             From = "From " + id,
             To = "To " + id,
-            EstimatedTime = id * 1.5,
+            EstimatedTime = id * 10,
             Description = "Description " + id,
             TransportType = TransportType.Car,
-            Difficulty = id % 5,
-            Rating = id % 5
+            Popularity = id
         };
-
     }
-
 }
