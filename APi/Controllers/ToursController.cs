@@ -15,11 +15,6 @@ namespace Api.Controllers
     [Route("api/[controller]")]
     public class ToursController(IMediator mediator) : BaseController(mediator)
     {
-          JsonSerializerSettings _serializerSettings = new JsonSerializerSettings()
-    {
-        TypeNameHandling = TypeNameHandling.Auto
-    };
-    
         [HttpGet]
 
         public async Task<ActionResult<IResponse>> GetTours()

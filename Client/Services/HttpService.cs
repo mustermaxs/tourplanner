@@ -24,21 +24,6 @@ public class HttpService : IHttpService
 
     }
 
-    // public async Task<TDto> Get<TDto>(string url)
-    // {
-    //     var response = client.GetAsync(baseUrl + url).Result;
-
-    //     if (response.IsSuccessStatusCode)
-    //     {
-    //         var content = await response.Content.ReadAsStringAsync();
-    //         return JsonSerializer.Deserialize<TDto>(content);
-    //     }
-    //     else
-    //     {
-    //         throw new Exception("Something went wrong");
-    //     }
-    // }
-
     public async Task<TDto> Get<TDto>(string url)
     {
         var response = await client.GetAsync(baseUrl + url); // Properly awaited
@@ -46,7 +31,7 @@ public class HttpService : IHttpService
         if (response.IsSuccessStatusCode)
         {
             var content = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<TDto>(content);
+            return JsonSerializer.Deserialize<TDto>(content, options: new JsonSerializerOptions(JsonSerializerDefaults.Web));
         }
         else
         {

@@ -10,6 +10,8 @@ using Tourplanner.Repositories;
 using Tourplanner.Infrastructure;
 using Tourplanner.Entities.Tour;
 using Tourplanner.Entities.TourLog;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 internal class Program
 {
@@ -17,19 +19,18 @@ internal class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        // Add services to the container.
-        builder.Services.AddControllers();     
+        builder.Services.AddControllers();
+
         builder.Services.AddDbContext<TourContext>(options =>
             options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-        // Adding CORS policy
         builder.Services.AddCors(options =>
         {
             options.AddPolicy("AllowAll", policy =>
             {
                 policy.WithOrigins("*")
-                      .AllowAnyHeader()
-                      .AllowAnyMethod();
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
             });
         });
 
@@ -59,7 +60,6 @@ internal class Program
 
     private static void RegisterServices(IServiceCollection services)
     {
-
         services.AddTransient<DbContext, TourContext>();
         services.AddTransient<IServiceProvider, ServiceProvider>();
         services.AddTransient<IMediator, Mediator>();
