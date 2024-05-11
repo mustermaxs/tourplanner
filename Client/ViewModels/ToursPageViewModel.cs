@@ -21,6 +21,7 @@ public async Task GetToursAsync()
         foreach (var tour in Tours)
         {
             Console.WriteLine(tour.Name);
+            Console.WriteLine(tour.TourId);
         }
     }
     catch (Exception ex)

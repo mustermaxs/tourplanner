@@ -14,11 +14,15 @@ else
     <div class="tour-header">
         <div class="d-flex justify-content-between align-items-center">
             <h1>@TourVM.Tour.Name</h1>
-
+        <div>
+            <button class="btn btn-danger" @onclick="() => TourVM.DeleteTour()">
+                Delete
+            </button>
             <button class="btn btn-primary" @onclick="EditTour">
                 Edit
             </button>
         </div>
+    </div>
         <hr>
         @* Description *@
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi quis pretium turpis. Nam euismod orci at nulla

@@ -9,6 +9,7 @@ public enum TransportType
 public class Tour
 {
     public int Id { get; set; }
+    public int TourId { get; set; }
     public string Name { get; set; }
     public string From { get; set; } = "";
     public string To { get; set; } = "";
