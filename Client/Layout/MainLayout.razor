@@ -50,7 +50,7 @@
             return;
 
         var encodedSearchValue = Uri.EscapeDataString(SearchValue);
-        NavManager.NavigateTo($"/tours/search?search={encodedSearchValue}");
+        NavManager.NavigateTo($"/search?search={encodedSearchValue}");
     }
 
     private bool collapseNavMenu = true;

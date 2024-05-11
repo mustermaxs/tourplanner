@@ -1,0 +1,58 @@
+@page "/search"
+@attribute [StreamRendering]
+@inject SearchViewModel SearchVM
+@inject NavigationManager NavManager
+
+
+<PageTitle>Search Results</PageTitle>
+
+<h1>Search Results:</h1>
+
+@if (SearchVM.SearchResults == null)
+{
+    <p><em>Enter a search term and click Search.</em></p>
+}
+else if (SearchVM.SearchResults.Count == 0)
+{
+    <p>No results found.</p>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Transport Type</th>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Popularity</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var result in SearchVM.SearchResults)
+                {
+                    <tr>
+                        <td>@result.Name</td>
+                        <td>@result.Description</td>
+                        <td>@result.TransportType</td>
+                        <td>@result.From</td>
+                        <td>@result.To</td>
+                        <td>@result.Popularity</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@code {
+    private string searchQuery;
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        await SearchVM.SearchTours(searchQuery);
+    }
+}
