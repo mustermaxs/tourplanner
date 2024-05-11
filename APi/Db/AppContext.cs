@@ -40,7 +40,7 @@ public class TourContext : DbContext
                 {
                     TourLogId = 1,
                     Difficulty = 3.5f,
-                    Duration = TimeSpan.FromHours(1),
+                    Duration = 2.0f,
                     Rating = 4.0f,
                     Comment = "This was a great tour!",
                     TourId = 1

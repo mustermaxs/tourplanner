@@ -29,7 +29,7 @@ public class Tour
     [MaxLength(500)]
     public string Description { get; set; }
     
-    public TimeSpan EstimatedTime { get; set; }
+    public float EstimatedTime { get; set; }
 
     [MaxLength(150)] public string ImagePath { get; set; } = string.Empty;
     

@@ -9,7 +9,7 @@ public class TourLog
 {
     public int TourLogId { get; set; }
     public float Difficulty { get; set; }
-    public TimeSpan Duration { get; set; }
+    public float Duration { get; set; }
     public float Rating { get; set; }
     
     [MaxLength(500)]
@@ -18,4 +18,5 @@ public class TourLog
     [Required]
     public int TourId { get; set; }
     public Tour Tour { get; set; }
+    public DateTime Date { get; set; }
 }
