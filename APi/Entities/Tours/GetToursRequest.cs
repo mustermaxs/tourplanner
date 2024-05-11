@@ -10,7 +10,6 @@ namespace Tourplanner.Entities.Tour
 {
     public record GetToursRequest : IRequest
     {
-        public int TourId { get; set; }
     }
 
     public class GetToursCommandHandler(

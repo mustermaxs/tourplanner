@@ -19,8 +19,8 @@ public abstract class BaseController : ControllerBase
     {
         try
         {
+            Console.WriteLine(command.ToString());
             var responseObj = await Mediator.Send(command);
-
             if (responseObj is null)
             {
                 return NotFound();

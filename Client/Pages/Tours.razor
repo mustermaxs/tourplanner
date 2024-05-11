@@ -1,7 +1,9 @@
 @page "/tours"
-@attribute [StreamRendering]
+@attribute [StreamRendering(true)]
 @inject ToursViewModel ToursVM
 @inject NavigationManager NavManager
+
+@using Client.Pages;
 
 <PageTitle>Tours</PageTitle>
 
@@ -53,7 +55,8 @@ else
 @code {
     protected override async Task OnInitializedAsync()
     {
-        await ToursVM.InitializeAsync();
+        await ToursVM.GetToursAsync();
+        StateHasChanged();
     }
 
     private void AddTour()
