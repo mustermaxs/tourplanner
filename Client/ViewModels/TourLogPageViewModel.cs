@@ -3,11 +3,13 @@ using Microsoft.AspNetCore.Components;
 public class TourLogPageViewModel
 {
     public TourLog TourLog { get; set; }
+    private IHttpService _httpService;
     private NavigationManager NavigationManager;
 
-    public TourLogPageViewModel(NavigationManager navigationManager)
+    public TourLogPageViewModel(NavigationManager navigationManager, IHttpService httpServus)
     {
         NavigationManager = navigationManager;
+        _httpService = httpServus;
     }
 
     public async Task InitializeAsync(int logId)
@@ -22,6 +24,12 @@ public class TourLogPageViewModel
             Rating = 8,
             Tour = new Tour { Id = 1, Name = "Waldviertel", Description = "Waldviertel Tour", TransportType = TransportType.Bicycle, From = "Wien", To = "Waldviertel", Popularity = 5},
         };
+    }
+
+    public async Task DeleteLog()
+    {
+        Console.WriteLine("Delete Log!");
+        // await _httpService.Delete($"logs/{TourLog.Id}");
     }
 
     public async Task UpdateLog()
