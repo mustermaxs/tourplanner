@@ -1,7 +1,9 @@
 using Client.Pages;
 public class SearchViewModel
 {
-    public List<Tour> SearchResults { get; set; }
+    public List<Tour> TourResults { get; set; } = new List<Tour>();
+    public List<TourLog> TourLogResults { get; set; } = new List<TourLog>();
+    
 
     public async Task SearchTours(string query)
     {
@@ -10,16 +12,18 @@ public class SearchViewModel
         await Task.Delay(2000);
         Console.WriteLine($"Searching for tours with query: {query}");
 
-        SearchResults = new List<Tour>();
+        TourResults = new List<Tour>();
+        TourLogResults = new List<TourLog>();
 
-        SearchResults.Add(new Tour());
-        SearchResults.Add(new Tour());
-        SearchResults.Add(new Tour());
-    }
 
-    public SearchViewModel()
-    {
-        SearchResults = new List<Tour>();
+        TourResults.Add(new Tour());
+        TourResults.Add(new Tour());
+        TourResults.Add(new Tour());
+
+        TourLogResults.Add(new TourLog());
+        TourLogResults.Add(new TourLog());
+
+
     }
 
 }

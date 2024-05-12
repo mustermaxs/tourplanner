@@ -3,18 +3,19 @@
 @inject SearchViewModel SearchVM
 @inject NavigationManager NavManager
 
-
 <PageTitle>Search Results</PageTitle>
 
 <h1>Search Results:</h1>
 
-@if (SearchVM.SearchResults == null)
+<!-- Tours Table -->
+<h2>Tours</h2>
+@if (SearchVM.TourResults == null)
 {
-    <p><em>Enter a search term and click Search.</em></p>
+    <p><em>Enter a search term for tours and click Search.</em></p>
 }
-else if (SearchVM.SearchResults.Count == 0)
+else if (SearchVM.TourResults.Count == 0)
 {
-    <p>No results found.</p>
+    <p>No tour results found.</p>
 }
 else
 {
@@ -31,15 +32,59 @@ else
                 </tr>
             </thead>
             <tbody>
-                @foreach (var result in SearchVM.SearchResults)
+                @foreach (var tour in SearchVM.TourResults)
                 {
                     <tr>
-                        <td>@result.Name</td>
-                        <td>@result.Description</td>
-                        <td>@result.TransportType</td>
-                        <td>@result.From</td>
-                        <td>@result.To</td>
-                        <td>@result.Popularity</td>
+                        <td>@tour.Name</td>
+                        <td>@tour.Description</td>
+                        <td>@tour.TransportType</td>
+                        <td>@tour.From</td>
+                        <td>@tour.To</td>
+                        <td>@tour.Popularity</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+<!-- TourLogs Table -->
+<h2>Tour Logs</h2>
+@if (SearchVM.TourLogResults == null)
+{
+    <p><em>Enter a search term for tour logs and click Search.</em></p>
+}
+else if (SearchVM.TourLogResults.Count == 0)
+{
+    <p>No tour log results found.</p>
+}
+else
+{
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Log ID</th>
+                    <th>Date</th>
+                    <th>Comment</th>
+                    <th>Difficulty</th>
+                    <th>Duration</th>
+                    <th>Rating</th>
+                    <th>Tour</th>                   
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var log in SearchVM.TourLogResults)
+                {
+                    <tr>
+                        <td>@log.Id</td>
+                        <td>@log.Date</td>
+                        <td>@log.Comment</td>
+                        <td>@log.Difficulty</td>
+                        <td>@log.Duration</td>
+                        <td>@log.Rating</td>
+                        <td>@log.Tour.Name</td>                        
                     </tr>
                 }
             </tbody>
@@ -52,7 +97,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-
-        await SearchVM.SearchTours(searchQuery);
+    
+        await SearchVM.SearchTours(searchQuery); // Assume this also initializes the TourLogs search
     }
 }
