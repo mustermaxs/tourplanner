@@ -16,13 +16,24 @@ public class TourDetailsPageViewModel
 
     public async Task InitializeAsync(int tourId)
     {
-        TourLogs = (List<TourLog>) await _httpService.Get<IEnumerable<TourLog>>($"Tours/{tourId}/logs");
+        TourLogs = (List<TourLog>)await _httpService.Get<IEnumerable<TourLog>>($"Tours/{tourId}/logs");
         Tour = await _httpService.Get<Tour>($"Tours/{tourId}");
     }
 
 
     public async Task DeleteTour()
     {
-        await _httpService.Delete($"Tours/{Tour.Id}");
+
+        bool deleted = await Tour.Delete();
+        
+        if (deleted)
+        {
+            foreach (var log in TourLogs)
+            {
+                await log.Delete();
+            }
+        }
+
     }
+
 }
