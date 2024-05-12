@@ -5,6 +5,7 @@ using Tourplanner.Entities.Tour;
 using Tourplanner.DTOs;
 using Tourplanner.Entities.TourLog;
 using Tourplanner.Infrastructure;
+using Microsoft.AspNetCore.Cors;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -15,6 +16,7 @@ namespace Api.Controllers
     public class ToursController(IMediator mediator) : BaseController(mediator)
     {
         [HttpGet]
+
         public async Task<ActionResult<IResponse>> GetTours()
         {
             var command = new GetToursRequest();
@@ -99,6 +101,7 @@ namespace Api.Controllers
 
             return await ResponseAsync(command);
         }
+
 
         [HttpDelete("logs/{logid}")]
         public async Task<ActionResult<IResponse>> DeleteTourLog([FromBody] DeleteTourLogCommand deleteTourLogCommand, int logid)

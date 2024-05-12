@@ -14,7 +14,7 @@ public class Tour
     }
     public int TourId { get; set; } 
     
-    [MaxLength((30))]
+    [MaxLength((60))]
     public string Name { get; set; }
     
     [MaxLength(150)]

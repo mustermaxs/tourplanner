@@ -62,5 +62,8 @@
     <data name="secondary" type="System.String">
         <value>#ffffff</value>
     </data>
+    <data name="api_base_url" type="System.String">
+        <value>http://localhost:5161/api/</value>
+    </data>
 
 </root>

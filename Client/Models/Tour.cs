@@ -9,7 +9,7 @@ public enum TransportType
 public class Tour
 {
     public int Id { get; set; }
-    public string Name { get; set; } = "Wanderweg";
+    public string Name { get; set; }
     public string From { get; set; } = "";
     public string To { get; set; } = "";
     public float EstimatedTime { get; set; } = 0;

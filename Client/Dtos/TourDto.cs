@@ -1,13 +1,8 @@
-using System;
-
-namespace Tourplanner.DTOs
-{
-    using Tourplanner.Models;
 
     public class TourDto
     {
         public TourDto(
-            int id,
+            int tourId,
             string name,
             string description,
             string from,
@@ -20,7 +15,7 @@ namespace Tourplanner.DTOs
             string routeImage
         )
         {
-            Id = id;
+            TourId = tourId;
             Name = name;
             Description = description;
             From = from;
@@ -32,7 +27,7 @@ namespace Tourplanner.DTOs
             Childfriendliness = childfriendliness;
             RouteImage = routeImage;
         }
-        public int Id { get; protected set; }
+        public int TourId { get; protected set; }
         public string Name { get; protected set; }
         public string Description { get; protected set; }
         public string From { get; protected set; }
@@ -44,4 +39,3 @@ namespace Tourplanner.DTOs
         public double Childfriendliness { get; protected set; }
         public string RouteImage { get; protected set; }
     }
-}

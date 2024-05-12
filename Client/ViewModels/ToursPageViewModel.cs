@@ -1,58 +1,33 @@
+using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 public class ToursViewModel
 {
-    public Tour[] Tours { get; private set; } = [];
-
-    public async Task InitializeAsync()
+    public IEnumerable<Tour> Tours { get; private set; } = new List<Tour>();
+    private IHttpService _httpService;
+    public ToursViewModel(IHttpService httpService)
     {
-        await Task.Delay(500);
-        // statt delay api call an backend
-
-        Tours = new Tour[]
-        {
-            new Tour { Id=1, Name = "Waldviertel", Description = "Waldviertel Tour", TransportType = TransportType.Bicycle, From = "Wien", To = "Waldviertel", Popularity = 5},
-            new Tour { Id=2, Name = "Donauradweg", Description = "Donauradweg Tour", TransportType = TransportType.Bicycle, From = "Passau", To = "Wien", Popularity = 4},
-            new Tour { Id=3, Name = "Alpe Adria", Description = "Alpe Adria Tour", TransportType = TransportType.Bicycle, From = "Salzburg", To = "Adria", Popularity = 3},
-            new Tour { Id=4, Name = "Grossglockner", Description = "Grossglockner Tour", TransportType = TransportType.Bicycle, From = "Salzburg", To = "Grossglockner", Popularity = 2},
-            new Tour { Id=5, Name = "Neusiedlersee", Description = "Neusiedlersee Tour", TransportType = TransportType.Bicycle, From = "Wien", To = "Neusiedlersee", Popularity = 1}
-        };
+        _httpService = httpService;
     }
 
-    public async Task GetToursAsync()
+public async Task GetToursAsync()
+{
+    try
     {
-        await Task.Delay(500);
-        // statt delay api call an backend
+        Tours = await _httpService.Get<IEnumerable<Tour>>("Tours");
 
-        Tours = Enumerable.Range(1, 5).Select(index => new Tour
+        foreach (var tour in Tours)
         {
-            Name = $"Tour {index}",
-            Description = $"Description {index}",
-            TransportType = TransportType.Bicycle,
-            From = $"From {index}",
-            To = $"To {index}",
-            Popularity = index
-        }).ToArray();
+            Console.WriteLine(tour.Id);
+        }
     }
-
-    public async Task GetTourAsync(int id)
+    catch (Exception ex)
     {
-        await Task.Delay(500);
-        // statt delay api call an backend
-
-        var tour = new Tour
-        {
-            Name = $"Tour {id}",
-            Description = $"Description {id}",
-            TransportType = TransportType.Bicycle,
-            From = $"From {id}",
-            To = $"To {id}",
-            Popularity = id
-        };
-
-        // return tour;
+        Console.WriteLine($"Error fetching tours: {ex.Message}");
+        throw;
     }
-
 }
 
+}

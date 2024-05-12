@@ -1,6 +1,4 @@
-﻿namespace Tourplanner.DTOs
-{
-    public class CreateTourDto
+﻿    public class CreateTourDto
     {
         public CreateTourDto(
             string name,
@@ -26,4 +24,3 @@
         public float Distance { get; set; }
         public float EstimatedTime { get; set; }
     }
-}
