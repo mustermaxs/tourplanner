@@ -1,25 +1,26 @@
 namespace Client.Dao
 {
-    public interface IDao<TModel>
+    
+    public interface IDao<TDto>
     {
-        Task Create();
-        Task<TModel> Read(TModel model);
-        Task<IEnumerable<TModel>> ReadMultiple();
-        Task Update();
-        Task Delete();
-        void SetModel(TModel model);
+        Task Create(TDto dto);
+        Task<TDto> Read(TDto tourLog);
+        Task<IEnumerable<TDto>> ReadMultiple();
+        Task Update(TDto dto);
+        Task Delete(TDto dto);
+        void SeTDto(TDto dto);
     }
 
-    public abstract class Dao<TModel> : IDao<TModel> where TModel : class
+    public abstract class Dao<TDto> : IDao<TDto> where TDto : class
     {
-        protected TModel? model;
+        protected TDto? model;
 
-        public abstract Task Create();
-        public abstract Task<TModel> Read(TModel model);
-        public abstract Task<IEnumerable<TModel>> ReadMultiple();
-        public abstract Task Update();
-        public abstract Task Delete();
-        public virtual void SetModel(TModel model)
+        public abstract Task Create(TDto dto);
+        public abstract Task<TDto> Read(TDto tourLog);
+        public abstract Task<IEnumerable<TDto>> ReadMultiple();
+        public abstract Task Update(TDto dto);
+        public abstract Task Delete(TDto dto);
+        public virtual void SeTDto(TDto dto)
         {
             this.model = model;
         }

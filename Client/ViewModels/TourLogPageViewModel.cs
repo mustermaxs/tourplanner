@@ -1,29 +1,26 @@
 using Microsoft.AspNetCore.Components;
-
+using Client.Models;
+using Client.Dto;
+using Client.Dao;
 public class TourLogPageViewModel
 {
     public TourLog TourLog { get; set; }
-    private IHttpService _httpService;
     private NavigationManager NavigationManager;
+    private ITourLogDao tourLogDao;
 
-    public TourLogPageViewModel(NavigationManager navigationManager, IHttpService httpServus)
+    public TourLogPageViewModel(NavigationManager navigationManager, ITourLogDao tourLogDao)
     {
         NavigationManager = navigationManager;
-        _httpService = httpServus;
+        this.tourLogDao = tourLogDao;
     }
 
     public async Task InitializeAsync(int logId)
     {
         await Task.Delay(500);
-        
-        TourLog = new TourLog
-        {
-            Date = DateTime.Now,
-            Comment = "Ich liebe diese Tour!",
-            Difficulty = 5,
-            Rating = 8,
-            Tour = new Tour { Id = 1, Name = "Waldviertel", Description = "Waldviertel Tour", TransportType = TransportType.Bicycle, From = "Wien", To = "Waldviertel", Popularity = 5},
-        };
+
+        TourLog = new TourLog();
+        TourLog.Id = logId;
+        TourLog = await tourLogDao.Read(TourLog);
     }
 
     public async Task DeleteLog()

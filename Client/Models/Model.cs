@@ -26,46 +26,46 @@ namespace Client.Models
     //     public abstract Task Update();
     //     public abstract Task Delete();
     // }
-
-    public interface IModel { }
-
-    public abstract class Model
-    {
-        protected IDao<Model>? dao;
-
-        public int Id { get; set; }
-
-        public Model(IDao<Model> dao)
-        {
-            this.dao = dao;
-            this.dao.SetModel(this);
-        }
-
-        public virtual async Task Create(Model model)
-        {
-            await dao!.Create();
-        }
-
-        public virtual async Task Delete()
-        {
-            await dao!.Delete();
-        }
-
-        public virtual async Task Update()
-        {
-            await dao!.Update();
-        }
-
-        public virtual async Task<Model?> Read()
-        {
-            return await dao!.Read(this);
-        }
-
-        public virtual async Task<IEnumerable<Model>?> ReadMultiple()
-        {
-            return await dao!.ReadMultiple();
-        }
-
-    }
+    //
+    // public interface IModel { }
+    //
+    // public abstract class Model
+    // {
+    //     protected IDao<Model>? dao;
+    //
+    //     public int Id { get; set; }
+    //
+    //     public Model(IDao<Model> dao)
+    //     {
+    //         this.dao = dao;
+    //         this.dao.SetModel(this);
+    //     }
+    //
+    //     public virtual async Task Create(Model model)
+    //     {
+    //         await dao!.Create();
+    //     }
+    //
+    //     public virtual async Task Delete()
+    //     {
+    //         await dao!.Delete();
+    //     }
+    //
+    //     public virtual async Task Update()
+    //     {
+    //         await dao!.Update();
+    //     }
+    //
+    //     public virtual async Task<Model?> Read()
+    //     {
+    //         return await dao!.Read(this);
+    //     }
+    //
+    //     public virtual async Task<IEnumerable<Model>?> ReadMultiple()
+    //     {
+    //         return await dao!.ReadMultiple();
+    //     }
+    //
+    // }
 
 }

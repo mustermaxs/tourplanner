@@ -2,33 +2,36 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Client.Models;
+using Client.Dao;
 
 public class ToursViewModel
 {
+    private ITourDao _tourDao;
     public IEnumerable<Tour> Tours { get; private set; } = new List<Tour>();
     private IHttpService _httpService;
-    public ToursViewModel(IHttpService httpService)
+
+    public ToursViewModel(ITourDao tourDao)
     {
-        _httpService = httpService;
+        _tourDao = tourDao;
     }
 
-public async Task GetToursAsync()
-{
-    try
+    public async Task GetToursAsync()
     {
-        Tours = await _httpService.Get<IEnumerable<Tour>>("Tours");
-
-        foreach (var tour in Tours)
+        try
         {
-                    Console.WriteLine(tour.Name);
-            Console.WriteLine(tour.Id);
+            Tours = await _tourDao.ReadMultiple();
+
+            foreach (var tour in Tours)
+            {
+                Console.WriteLine(tour.Name);
+                Console.WriteLine(tour.Id);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error fetching tours: {ex.Message}");
+            throw;
         }
     }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"Error fetching tours: {ex.Message}");
-        throw;
-    }
-}
-
 }

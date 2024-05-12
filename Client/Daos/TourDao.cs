@@ -1,36 +1,47 @@
-
 using Client.Models;
 
 namespace Client.Dao
 {
-    public interface ITourDao<Tour> : IDao<Tour> where Tour : class { }
-
-    public class TourDao : HttpDao<Tour>, ITourDao<Tour>
+    public interface ITourDao : IDao<Tour>
     {
+    }
 
-        public TourDao(IHttpService http) : base(http) { }
-        public override async Task Create()
+    public class TourDao : HttpDao<Tour>, ITourDao
+    {
+        public TourDao(IHttpService http) : base(http)
+        {
+        }
+
+        public override async Task Create(Tour tour)
         {
             await http.Post<Tour>(this.model!, $"Tours");
         }
-        public override async Task<Tour> Read(Tour _model)
+
+        public override async Task<Tour> Read(Tour tourLog)
         {
-            return await http.Get<Tour>($"Tours/{_model.Id}");
+            return await http.Get<Tour>($"Tours/{tourLog.Id}");
         }
 
-        public override Task<IEnumerable<Tour>> ReadMultiple()
+        public override async Task<IEnumerable<Tour>> ReadMultiple()
         {
-            throw new NotImplementedException();
+            return await http.Get<IEnumerable<Tour>>("Tours");
         }
 
-        public override Task Update()
+        public override async Task Update(Tour tour)
         {
-            throw new NotImplementedException();
+            var updateTourDto = new UpdateTourDto(
+                tour.Name,
+                tour.Description,
+                tour.From,
+                tour.To,
+                tour.TransportType
+            );
+            await http.Put<UpdateTourDto>(updateTourDto, $"Tours/{tour.Id}");
         }
 
-        public override async Task Delete()
+        public override async Task Delete(Tour tour)
         {
-            await http.Delete($"Tours/{model!.Id}");
+            await http.Delete($"Tours/{tour.Id}");
         }
     }
 }

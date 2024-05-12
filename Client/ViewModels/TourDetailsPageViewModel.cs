@@ -1,14 +1,19 @@
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Client.Dao;
+using Client.Models;
+using Client.Dto;
 
 public class TourDetailsPageViewModel
 {
-    private IHttpService _httpService;
+    private ITourDao _tourDao;
+    private ITourLogDao _tourLogDao;
 
-    public TourDetailsPageViewModel(IHttpService httpService)
+    public TourDetailsPageViewModel(ITourDao tourDao, ITourLogDao TourLogDao)
     {
-        _httpService = httpService;
+        _tourDao = tourDao;
+        _tourLogDao = TourLogDao;
     }
 
     public Tour Tour { get; private set; } = new Tour();
@@ -16,24 +21,20 @@ public class TourDetailsPageViewModel
 
     public async Task InitializeAsync(int tourId)
     {
-        TourLogs = (List<TourLog>)await _httpService.Get<IEnumerable<TourLog>>($"Tours/{tourId}/logs");
-        Tour = await _httpService.Get<Tour>($"Tours/{tourId}");
+        TourLogs = (List<TourLog>) await _tourLogDao.ReadMultiple(tourId);
+        Tour = new Tour();
+        Tour.Id = tourId;
+        Tour = await _tourDao.Read(Tour);
     }
 
 
     public async Task DeleteTour()
     {
+        await _tourDao.Delete(Tour);
 
-        bool deleted = await Tour.Delete();
-        
-        if (deleted)
+        foreach (var log in TourLogs)
         {
-            foreach (var log in TourLogs)
-            {
-                await log.Delete();
-            }
+            _tourLogDao.Delete(log);
         }
-
     }
-
 }

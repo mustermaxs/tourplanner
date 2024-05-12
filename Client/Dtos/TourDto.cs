@@ -1,3 +1,4 @@
+using Client.Models;
 
     public class TourDto
     {

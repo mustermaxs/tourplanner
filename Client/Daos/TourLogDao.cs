@@ -3,19 +3,28 @@ using Client.Dto;
 
 namespace Client.Dao
 {
-    public interface ITourLogDao<TourLog> : IDao<TourLog> where TourLog : class { }
+    public interface ITourLogDao : IDao<TourLog>
+    {
+        public Task<IEnumerable<TourLog>> ReadMultiple(int tourid);
+    };
 
-    public class TourLogDao : HttpDao<TourLog>, ITourLogDao<TourLog>
+    public class TourLogDao : HttpDao<TourLog>, ITourLogDao
     {
 
         public TourLogDao(IHttpService http) : base(http) { }
-        public override async Task Create()
+        public override async Task Create(TourLog tourLog)
         {
-            await http.Post<TourLog>(this.model!, $"TourLogs");
+            var createTourLogDto = new CreateTourLogDto(
+                tourLog.Comment,
+                tourLog.Difficulty,
+                tourLog.Duration,
+                tourLog.Rating
+                );
+            await http.Post<CreateTourLogDto>(createTourLogDto, $"Tours/{tourLog.Tour.Id}/logs");
         }
-        public override async Task<TourLog> Read(TourLog _model)
+        public override async Task<TourLog> Read(TourLog tourLog)
         {
-            return await http.Get<TourLog>($"Tours/{_model.Id}");
+            return await http.Get<TourLog>($"Tours/{tourLog.Id}");
         }
 
         public async Task<IEnumerable<TourLog>> ReadMultiple(int tourid)
@@ -28,7 +37,7 @@ namespace Client.Dao
             throw new NotImplementedException();
         }
 
-        public override async Task<HttpResponseMessage> Update()
+        public override async Task<HttpResponseMessage> Update(TourLog tourLog)
         {
 
             UpdateTourLogDto updateTourLogDto = new UpdateTourLogDto(
@@ -42,9 +51,9 @@ namespace Client.Dao
             return await http.Put<UpdateTourLogDto>(updateTourLogDto, $"logs/{updateTourLogDto!.Id}"); 
         }
 
-        public override async Task Delete()
+        public override async Task Delete(TourLog tourLog)
         {
-            await http.Delete($"TourLogs/{model!.Id}");
+            await http.Delete($"TourLogs/{tourLog!.Id}");
         }
     }
 }

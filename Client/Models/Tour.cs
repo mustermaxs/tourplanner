@@ -12,16 +12,8 @@ namespace Client.Models
 
     public class Tour
     {
-        private ITourDao<Tour> dao;
-        public Tour(ITourDao<Tour> dao)
+        public Tour()
         {
-            this.dao = dao;
-            this.dao.SetModel(this);
-        }
-
-        public async Task<Tour> Read()
-        {
-            return await this.dao.Read(this);
         }
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
