@@ -3,12 +3,14 @@ public class UpdateTourLogDto(
     int id,
     string comment,
     float difficulty,
-    float duration,
-    float rating)
+    DateTime dateTime,
+    float rating
+    )
 {
     public int Id { get; private set; } = id;
     public string Comment { get; private set; } = comment;
     public float Difficulty { get; private set; } = difficulty;
-    public float Duration { get; private set; } = duration;
+    public DateTime DateTime { get; private set; } = dateTime;
     public float Rating { get; private set; } = rating;
+    // TODO add total time
 }

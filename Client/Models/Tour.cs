@@ -26,6 +26,7 @@ namespace Client.Models
         public TransportType TransportType { get; set; } = TransportType.Car;
         public float ChildFriendliness { get; set; } = 0;
         public string ImagePath { get; set; } = string.Empty;
+        public string TourName {get; set;} = string.Empty;
     }
 
 }

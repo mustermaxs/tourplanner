@@ -1,4 +1,4 @@
-@page "/log/{TourLogId}"
+@page "/tours/{TourId}/log/{TourLogId}"
 @attribute [StreamRendering]
 @inject TourLogPageViewModel EditLogVM
 @inject NavigationManager NavManager
@@ -24,7 +24,7 @@ else
         <div class="row">
             <div class="col-md-4">
                 <label for="date">Date</label>
-                <input type="datetime-local" class="form-control" id="date" @bind="EditLogVM.TourLog.Date">
+                <input type="datetime-local" class="form-control" id="date" @bind="EditLogVM.TourLog.DateTime">
             </div>
             <div class="col-md-4">
                 <label for="difficulty">Difficulty</label>
@@ -48,8 +48,13 @@ else
     [Parameter]
     public string TourLogId { get; set; }
 
+    [Parameter]
+    public string TourId {get; set;}
+
     protected override async Task OnInitializedAsync()
     {
-        await EditLogVM.InitializeAsync(Convert.ToInt32(TourLogId));
+        await EditLogVM.InitializeAsync(Convert.ToInt32(TourId), Convert.ToInt32(TourLogId));
+        Console.WriteLine(EditLogVM.TourLog.Id);
+        StateHasChanged();
     }
 }

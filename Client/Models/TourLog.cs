@@ -6,8 +6,8 @@ public class TourLog
     public TourLog()
     {
     }
-    public int Id { get; set; } = 0;
-    public DateTime Date { get; set; } = DateTime.Now;
+    public int Id { get; set; }
+    public DateTime DateTime { get; set; }
     public string Comment { get; set; } = "";
     public float Difficulty { get; set; } = 0;
     public float Duration { get; set; } = 0;

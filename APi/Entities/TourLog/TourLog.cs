@@ -18,5 +18,5 @@ public class TourLog
     [Required]
     public int TourId { get; set; }
     public Tour Tour { get; set; }
-    public DateTime Date { get; set; }
+    public DateTime DateTime { get; set; }
 }

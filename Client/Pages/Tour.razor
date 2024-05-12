@@ -115,8 +115,8 @@ else
             @foreach (var log in TourVM.TourLogs)
             {
                 <tr>
-                    <a href="/log/@log.Id">
-                        <td>@log.Date.ToString("yyyy-MM-dd")</td>
+                    <a href="/tours/@TourId/log/@log.Id">
+                        <td>@log.DateTime.ToString("yyyy-MM-dd")</td>
                     </a>
                     <td>@log.Comment</td>
                     <td>@log.Difficulty</td>
