@@ -7,9 +7,9 @@ public class ToursViewModel
 {
     public IEnumerable<Tour> Tours { get; private set; } = new List<Tour>();
     private IHttpService _httpService;
-    public ToursViewModel(IHttpService httpServus)
+    public ToursViewModel(IHttpService httpService)
     {
-        _httpService = httpServus;
+        _httpService = httpService;
     }
 
 public async Task GetToursAsync()
@@ -20,14 +20,14 @@ public async Task GetToursAsync()
 
         foreach (var tour in Tours)
         {
-            Console.WriteLine(tour.Name);
-            Console.WriteLine(tour.TourId);
+                    Console.WriteLine(tour.Name);
+            Console.WriteLine(tour.Id);
         }
     }
     catch (Exception ex)
     {
         Console.WriteLine($"Error fetching tours: {ex.Message}");
-        throw; // Re-throwing exception to make sure it's visible somewhere if not caught.
+        throw;
     }
 }
 
