@@ -22,7 +22,7 @@ namespace Tourplanner.Entities.TourLogs.Commands
         {
             var tourLog = new TourLog();
             tourLog.TourId = request.TourId;
-            tourLog.Date = request.DateTime;
+            tourLog.DateTime = request.DateTime;
             tourLog.Comment = request.Comment;
             tourLog.Difficulty = request.Difficulty;
             tourLog.Duration = request.TotalTime;

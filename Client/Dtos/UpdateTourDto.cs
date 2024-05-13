@@ -1,4 +1,6 @@
-﻿
+﻿using Client.Models;
+
+
 public class UpdateTourDto
 {
     public UpdateTourDto(

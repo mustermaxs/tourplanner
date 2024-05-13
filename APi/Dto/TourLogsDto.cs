@@ -1,5 +1,3 @@
-using System;
-
 namespace Tourplanner.DTOs
 {
     public class TourLogDto
@@ -11,7 +9,9 @@ namespace Tourplanner.DTOs
             string comment,
             float difficulty,
             float totalTime,
-            double rating
+            double rating,
+            string tourName,
+            TourDto tour
         )
         {
             Id = id;
@@ -21,6 +21,8 @@ namespace Tourplanner.DTOs
             Difficulty = difficulty;
             TotalTime = totalTime;
             Rating = rating;
+            TourName = tourName;
+            Tour = tour;
         }
 
         public int Id { get; private set; }
@@ -30,5 +32,7 @@ namespace Tourplanner.DTOs
         public float Difficulty { get; private set; }
         public float TotalTime { get; private set; }
         public double Rating { get; private set; }
+        public string TourName {get; set;}
+        public TourDto Tour {get; set;}
     }
 }

@@ -1,35 +1,28 @@
 using System.Linq;
 using System.Threading.Tasks;
-using Client.Pages;
-
+using Client.Dao;
+using Client.Models;
+using Client.Dto;
 public class TourEditPageViewModel
 {
-    private IHttpService _httpService;
-
-    public TourEditPageViewModel(IHttpService httpService)
+    private ITourDao tourDao;
+    public TourEditPageViewModel(ITourDao tourDao)
     {
-        _httpService = httpService;
+        this.tourDao = tourDao;
     }
 
     public Tour Tour { get; set; } = new Tour();
 
-    public void UpdateTour()
+    public async Task UpdateTour()
     {
         Console.WriteLine("UpdateTour", Tour.Name);
-        _httpService.Put<UpdateTourDto>(
-            new UpdateTourDto(
-                Tour.Name,
-                Tour.Description,
-                Tour.From,
-                Tour.To,
-                Tour.TransportType
-            ),
-            $"tours/{Tour.Id}"
-        );
+        await tourDao.Update(Tour);
     }
 
     public async Task InitializeAsync(int id)
     {
-        Tour = await _httpService.Get<Tour>($"Tours/{id}");
+        var tour = new Tour();
+        tour.Id = id;
+        Tour = await tourDao.Read(tour);
     }
 }

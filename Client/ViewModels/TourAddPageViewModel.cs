@@ -2,6 +2,9 @@ using System;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Components;
+using Client.Dao;
+using Client.Models;
+using Client.Dto;
 
 public class TourAddPageViewModel
 {

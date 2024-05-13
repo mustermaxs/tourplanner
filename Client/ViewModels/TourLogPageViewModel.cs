@@ -1,33 +1,41 @@
 using Microsoft.AspNetCore.Components;
-
+using Client.Models;
+using Client.Dto;
+using Client.Dao;
 public class TourLogPageViewModel
 {
     public TourLog TourLog { get; set; }
     private NavigationManager NavigationManager;
+    private ITourLogDao _tourLogDao;
 
-    public TourLogPageViewModel(NavigationManager navigationManager)
+    public TourLogPageViewModel(NavigationManager navigationManager, ITourLogDao tourLogDao)
     {
         NavigationManager = navigationManager;
+        this._tourLogDao = tourLogDao;
     }
 
-    public async Task InitializeAsync(int logId)
+    public async Task InitializeAsync(int tourId, int logId)
     {
-        await Task.Delay(500);
+        TourLog = new TourLog();
+        TourLog.Id = logId;
+        TourLog.Tour.Id = tourId;
+        TourLog = await _tourLogDao.Read(TourLog);
+    }
+
+    public async Task DeleteLog()
+    {
+    try {
         
-        TourLog = new TourLog
-        {
-            Date = DateTime.Now,
-            Comment = "Ich liebe diese Tour!",
-            Difficulty = 5,
-            Rating = 8,
-            Tour = new Tour { Id = 1, Name = "Waldviertel", Description = "Waldviertel Tour", TransportType = TransportType.Bicycle, From = "Wien", To = "Waldviertel", Popularity = 5},
-        };
+        await _tourLogDao.Delete(TourLog);
+        NavigationManager.NavigateTo($"/tours/{TourLog.Tour.Id}");
+        } catch (Exception e) {
+            Console.WriteLine(e);
+        }
     }
 
     public async Task UpdateLog()
     {
-        await Task.Delay(500);
-        Console.WriteLine("Update successful!");
-        NavigationManager.NavigateTo($"/tour/{TourLog.Tour.Id}");
+        await _tourLogDao.Update(TourLog);
+        NavigationManager.NavigateTo($"/tours/{TourLog.Tour.Id}");
     }
 }
