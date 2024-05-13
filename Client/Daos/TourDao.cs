@@ -14,7 +14,17 @@ namespace Client.Dao
 
         public override async Task Create(Tour tour)
         {
-            await http.Post<Tour>(this.model!, $"Tours");
+            var createTourDto = new CreateTourDto(
+                name: tour.Name,
+                description: tour.Description,
+                from: tour.From,
+                to: tour.To,
+                distance: tour.Distance,
+                estimatedTime: tour.EstimatedTime,
+                transportType: tour.TransportType
+            );
+            
+            await http.Post<CreateTourDto>(createTourDto, $"Tours");
         }
 
         public override async Task<Tour> Read(Tour tourLog)

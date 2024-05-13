@@ -32,8 +32,8 @@ namespace Tourplanner.Entities.Tours
             
             return await Task.FromResult(new TourDto(
                 tour.Id,
-                tour.Description,
                 tour.Name,
+                tour.Description,
                 tour.From,
                 tour.To,
                 tour.TransportType,

@@ -9,7 +9,6 @@ public class ToursViewModel
 {
     private ITourDao _tourDao;
     public IEnumerable<Tour> Tours { get; private set; } = new List<Tour>();
-    private IHttpService _httpService;
 
     public ToursViewModel(ITourDao tourDao)
     {

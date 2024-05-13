@@ -33,7 +33,7 @@ public class TourDetailsPageViewModel
 
         foreach (var log in TourLogs)
         {
-            _tourLogDao.Delete(log);
+            await _tourLogDao.Delete(log);
         }
     }
 }
