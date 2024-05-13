@@ -3,7 +3,7 @@ using Tourplanner.Infrastructure;
 using Tourplanner.Repositories;
 using Tourplanner.Exceptions;
 
-namespace Tourplanner.Entities.TourLog
+namespace Tourplanner.Entities.TourLogs.Commands
 {
     public record GetTourLogsRequest(int TourId) : IRequest;
 
@@ -15,26 +15,29 @@ namespace Tourplanner.Entities.TourLog
     {
         public override async Task<IEnumerable<TourLogDto>> Handle(GetTourLogsRequest request)
         {
-            var tourLogs = tourLogRepository.GetTourLogsForTour(request.TourId);
+            var tourLogs = await tourLogRepository.GetTourLogsForTour(request.TourId);
             var tour = await tourRepository.Get(request.TourId);
 
             if (tourLogs is null || tour is null)
             {
                 throw new ResourceNotFoundException("Cant find tour log / tour");
             }
-            
-            var tourLogDtos = tourLogs.Select(log =>
-                new TourLogDto(
+
+            var tourLogDtos = new List<TourLogDto>();
+
+            foreach (var log in tourLogs)
+            {
+                tourLogDtos.Add(new TourLogDto(
                     id: log.TourLogId,
                     tourId: log.TourId,
-                    dateTime: log.DateTime,
+                    dateTime: log.Date,
                     comment: log.Comment,
                     difficulty: log.Difficulty,
                     totalTime: log.Duration,
                     rating: log.Rating,
                     tourName: tour.Name,
                     tour: new TourDto(
-                        id: tour.TourId,
+                        id: tour.Id,
                         name: tour.Name,
                         description: tour.Description,
                         from: tour.From,
@@ -47,7 +50,7 @@ namespace Tourplanner.Entities.TourLog
                         routeImage: tour.ImagePath
                     )
                 ));
-
+            }
             return await Task.FromResult<IEnumerable<TourLogDto>>(tourLogDtos.ToList());
         }
     }

@@ -63,7 +63,7 @@
         <value>#ffffff</value>
     </data>
     <data name="api_base_url" type="System.String">
-        <value>https://1css5fx6-5161.euw.devtunnels.ms/api/</value>
+        <value>http://localhost:5161/api/</value>
     </data>
 
 </root>

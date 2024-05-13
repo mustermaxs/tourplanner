@@ -4,36 +4,43 @@ using Tourplanner.Exceptions;
 using Tourplanner.Models;
 using Tourplanner.Repositories;
 using Tourplanner.Infrastructure;
+using Tourplanner.Services;
 
-namespace Tourplanner.Entities.Tour
+namespace Tourplanner.Entities.Tours
 {
     public record GetTourByIdRequest(int Id) : IRequest;
 
     public class GetTourByIdCommandHandler(
         TourContext ctx,
-        ITourRepository tourRepository)
+        ITourRepository tourRepository,
+        ITourLogRepository tourLogRepository,
+        IRatingService ratingService,
+        IChildFriendlinessService childFriendlinessService)
         : RequestHandler<GetTourByIdRequest, TourDto>(ctx)
     {
         public override async Task<TourDto> Handle(GetTourByIdRequest request)
         {
-            var tour = await tourRepository.Get(request.Id);
+            var tour = await tourRepository.GetTourWithLogs(request.Id);
 
             if (tour is null)
             {
                 throw new ResourceNotFoundException($"Tour {request.Id} doesn't seem to exist.");
             }
+
+            var childFriendliness = await childFriendlinessService.Calculate(tour.Id);
+            var popularity = ratingService.Calculate(tour.TourLogs);
             
             return await Task.FromResult(new TourDto(
-                tour.TourId,
-                tour.Name,
+                tour.Id,
                 tour.Description,
+                tour.Name,
                 tour.From,
                 tour.To,
                 tour.TransportType,
                 tour.Distance,
                 tour.EstimatedTime,
                 tour.Popularity,
-                tour.ChildFriendliness,
+                childFriendliness,
                 tour.ImagePath));
             
         }

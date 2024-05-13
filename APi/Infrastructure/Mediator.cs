@@ -1,8 +1,10 @@
 using System.Reflection;
-using Tourplanner.Entities.Tour;
+using Tourplanner.Entities.Tours;
 using Microsoft.EntityFrameworkCore;
 using Tourplanner.DTOs;
-using Tourplanner.Entities.TourLog;
+using Tourplanner.Entities;
+using Tourplanner.Entities.TourLogs;
+using Tourplanner.Entities.TourLogs.Commands;
 
 namespace Tourplanner;
 

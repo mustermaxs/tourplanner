@@ -2,7 +2,7 @@
 using Tourplanner.Infrastructure;
 using Tourplanner.Repositories;
 
-namespace Tourplanner.Entities.TourLog
+namespace Tourplanner.Entities.TourLogs.Commands
 {
     public record UpdateTourLogCommand(
         int TourLogId,
@@ -27,7 +27,7 @@ namespace Tourplanner.Entities.TourLog
                 throw new ResourceNotFoundException($"Tour log entry {request.TourLogId} doesn't seem to exist");
             }
             
-            tourLog.DateTime = request.DateTime;
+            tourLog.Date = request.DateTime;
             tourLog.Comment = request.Comment;
             tourLog.Difficulty = request.Difficulty;
             tourLog.Duration = request.TotalTime;

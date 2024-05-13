@@ -2,8 +2,9 @@
 using Tourplanner.Infrastructure;
 using Tourplanner.Models;
 using Tourplanner.Repositories;
+using Tourplanner.Services;
 
-namespace Tourplanner.Entities.Tour
+namespace Tourplanner.Entities.Tours
 {
     public record UpdateTourCommand(
         int Id,
@@ -16,12 +17,14 @@ namespace Tourplanner.Entities.Tour
 
     public class UpdateTourCommandHandler(
         TourContext ctx,
-        ITourRepository tourRepository)
+        ITourRepository tourRepository,
+        IRatingService ratingService,
+        IChildFriendlinessService childFriendlinessService)
         : RequestHandler<UpdateTourCommand, Task>(ctx)
     {
         public override async Task<Task> Handle(UpdateTourCommand command)
         {
-            var entityToUpdate = await tourRepository.Get(command.Id);
+            var entityToUpdate = await tourRepository.GetTourWithLogs(command.Id);
 
             if (entityToUpdate is null)
             {
@@ -32,6 +35,8 @@ namespace Tourplanner.Entities.Tour
             entityToUpdate.Description = command.Description;
             entityToUpdate.From = command.From;
             entityToUpdate.To = command.To;
+            entityToUpdate.Popularity = ratingService.Calculate(entityToUpdate.TourLogs);
+            entityToUpdate.ChildFriendliness = await childFriendlinessService.Calculate(entityToUpdate.Id);
 
             await tourRepository.UpdateAsync(entityToUpdate);
             return Task.CompletedTask;

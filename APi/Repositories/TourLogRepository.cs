@@ -1,4 +1,4 @@
-﻿using Tourplanner.Entities.TourLog;
+﻿using Tourplanner.Entities.TourLogs;
 
 namespace Tourplanner.Repositories;
 
@@ -8,13 +8,18 @@ public class TourLogRepository : Repository<TourLog>, ITourLogRepository
     {
     }
 
-    public IEnumerable<TourLog> GetTourLogsForTour(int tourid)
+    public async Task<IEnumerable<TourLog>> GetTourLogsForTour(int tourId)
     {
-        return dbSet.Where(log => log.TourId == tourid).ToList();
+        return dbSet.Where(log => log.TourId == tourId).ToList();
+        
+        var logs = await GetAll();
+        return logs;
     }
+
+
 }
 
 public interface ITourLogRepository : IRepository<TourLog>
 {
-    IEnumerable<TourLog> GetTourLogsForTour(int tourid);
+    Task<IEnumerable<TourLog>> GetTourLogsForTour(int tourid);
 }

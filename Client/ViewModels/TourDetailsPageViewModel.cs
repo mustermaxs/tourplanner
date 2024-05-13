@@ -27,7 +27,6 @@ public class TourDetailsPageViewModel
         Tour = await _tourDao.Read(Tour);
     }
 
-
     public async Task DeleteTour()
     {
         await _tourDao.Delete(Tour);
