@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Tourplanner.Entities.Tour;
+using Tourplanner.Entities.Tours;
 
 namespace Tourplanner.Repositories;
 
@@ -13,13 +13,14 @@ public class TourRepository : Repository<Tour>, ITourRepository
     {
         await dbSet.AddAsync(tour);
         await SaveAsync();
-        return tour.TourId;
+        return tour.Id;
     }
 
     public async Task<Tour?> GetTourWithLogs(int tourId)
     {
+        return await Get(tourId);
         return await dbSet.Include(t => t.TourLogs)
-            .FirstOrDefaultAsync(to => to.TourId == tourId);
+            .FirstOrDefaultAsync(to => to.Id == tourId);
     }
 }
 

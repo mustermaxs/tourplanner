@@ -2,8 +2,10 @@ using System.Reflection;
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Tourplanner.DTOs;
-using Tourplanner.Entities.Tour;
-using Tourplanner.Entities.TourLog;
+using Tourplanner.Entities;
+using Tourplanner.Entities.Tours;
+using Tourplanner.Entities.TourLogs;
+using Tourplanner.Entities.TourLogs.Commands;
 using Tourplanner.Infrastructure;
 using Tourplanner.Repositories;
 

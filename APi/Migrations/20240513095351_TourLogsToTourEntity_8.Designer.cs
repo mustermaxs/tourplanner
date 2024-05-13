@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Tourplanner;
@@ -11,9 +12,11 @@ using Tourplanner;
 namespace Api.Migrations
 {
     [DbContext(typeof(TourContext))]
-    partial class TourContextModelSnapshot : ModelSnapshot
+    [Migration("20240513095351_TourLogsToTourEntity_8")]
+    partial class TourLogsToTourEntity_8
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -59,11 +62,11 @@ namespace Api.Migrations
 
             modelBuilder.Entity("Tourplanner.Entities.Tours.Tour", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("TourId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("TourId"));
 
                     b.Property<float>("ChildFriendliness")
                         .HasColumnType("real");
@@ -105,7 +108,7 @@ namespace Api.Migrations
                     b.Property<int>("TransportType")
                         .HasColumnType("integer");
 
-                    b.HasKey("Id");
+                    b.HasKey("TourId");
 
                     b.ToTable("Tours");
                 });

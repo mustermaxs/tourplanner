@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Tourplanner;
 using Tourplanner.Models;
-using Tourplanner.Entities.Tour;
+using Tourplanner.Entities.Tours;
 using Tourplanner.DTOs;
-using Tourplanner.Entities.TourLog;
+using Tourplanner.Entities.TourLogs;
 using Tourplanner.Infrastructure;
 using Microsoft.AspNetCore.Cors;
+using Tourplanner.Entities;
+using Tourplanner.Entities.TourLogs.Commands;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -31,9 +33,16 @@ namespace Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<IResponse>> CreateTour([FromBody] CreateTourCommand createTourCommand)
+        public async Task<ActionResult<IResponse>> CreateTour([FromBody] CreateTourDto createTourDto)
         {
-            return await ResponseAsync(createTourCommand);
+            var command = new CreateTourCommand(
+                createTourDto.Name,
+                createTourDto.Description,
+                createTourDto.From,
+                createTourDto.To,
+                createTourDto.TransportType
+                );
+            return await ResponseAsync(command);
         }
 
         [HttpDelete("{tourid}")]

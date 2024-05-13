@@ -5,7 +5,7 @@ using Tourplanner.Models;
 using Tourplanner.Repositories;
 using Tourplanner.Services;
 
-namespace Tourplanner.Entities.Tour
+namespace Tourplanner.Entities.Tours
 {
     public record CreateTourCommand
     (

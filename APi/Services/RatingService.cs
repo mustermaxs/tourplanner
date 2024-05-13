@@ -1,4 +1,4 @@
-﻿using Tourplanner.Entities.TourLog;
+﻿using Tourplanner.Entities.TourLogs;
 using Tourplanner.Repositories;
 
 namespace Tourplanner.Services

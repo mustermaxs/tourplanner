@@ -4,7 +4,7 @@ using Tourplanner.Infrastructure;
 using Tourplanner.Repositories;
 using Tourplanner.Services;
 
-namespace Tourplanner.Entities.TourLog
+namespace Tourplanner.Entities.TourLogs
 {
     public record GetSingleTourLogRequest(int TourId, int LogId) : IRequest;
 
@@ -33,7 +33,7 @@ namespace Tourplanner.Entities.TourLog
                     comment: log.Comment,
                     difficulty: log.Difficulty,
                     totalTime: log.Duration,
-                    rating: ratingService.Calculate(logs)
+                    rating: log.Rating
                 );
 
             return tourLogDto;

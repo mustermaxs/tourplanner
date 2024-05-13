@@ -1,7 +1,8 @@
 ﻿using Tourplanner.Infrastructure;
 using Tourplanner.Repositories;
+using Tourplanner.Entities.TourLogs;
 
-namespace Tourplanner.Entities.TourLog
+namespace Tourplanner.Entities.TourLogs.Commands
 {
     public record CreateTourLogCommand(
         int TourId,

@@ -6,7 +6,7 @@ using Tourplanner.Repositories;
 using Tourplanner.Infrastructure;
 using Tourplanner.Services;
 
-namespace Tourplanner.Entities.Tour
+namespace Tourplanner.Entities.Tours
 {
     public record GetTourByIdRequest(int Id) : IRequest;
 
@@ -27,11 +27,11 @@ namespace Tourplanner.Entities.Tour
                 throw new ResourceNotFoundException($"Tour {request.Id} doesn't seem to exist.");
             }
 
-            var childFriendliness = await childFriendlinessService.Calculate(tour.TourId);
+            var childFriendliness = await childFriendlinessService.Calculate(tour.Id);
             var popularity = ratingService.Calculate(tour.TourLogs);
             
             return await Task.FromResult(new TourDto(
-                tour.TourId,
+                tour.Id,
                 tour.Description,
                 tour.Name,
                 tour.From,

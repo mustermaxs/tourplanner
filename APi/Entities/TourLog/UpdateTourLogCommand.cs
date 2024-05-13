@@ -2,7 +2,7 @@
 using Tourplanner.Infrastructure;
 using Tourplanner.Repositories;
 
-namespace Tourplanner.Entities.TourLog
+namespace Tourplanner.Entities.TourLogs.Commands
 {
     public record UpdateTourLogCommand(
         int TourLogId,

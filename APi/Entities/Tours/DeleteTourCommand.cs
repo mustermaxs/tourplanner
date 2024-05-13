@@ -1,7 +1,7 @@
 using Tourplanner.Exceptions;
 using Tourplanner.Repositories;
 
-namespace Tourplanner.Entities.Tour;
+namespace Tourplanner.Entities.Tours;
 
 using Tourplanner.Infrastructure;
 

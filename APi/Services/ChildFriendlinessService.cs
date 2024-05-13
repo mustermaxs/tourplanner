@@ -1,5 +1,5 @@
-﻿using Tourplanner.Entities.Tour;
-using Tourplanner.Entities.TourLog;
+﻿using Tourplanner.Entities.Tours;
+using Tourplanner.Entities.TourLogs;
 using Tourplanner.Exceptions;
 using Tourplanner.Repositories;
 using Tourplanner.Entities;
@@ -39,7 +39,7 @@ namespace Tourplanner.Services
         public async Task<float> Calculate(int tourId)
         {
             var tours = await _tourRepository.GetAll();
-            var tour = tours?.SingleOrDefault(t => t.TourId == tourId) ?? null;
+            var tour = tours?.SingleOrDefault(t => t.Id == tourId) ?? null;
 
             if (tours is null || !tours.Any() || tour is null)
             {
@@ -47,7 +47,7 @@ namespace Tourplanner.Services
             }
 
             var maxDistance = tours.Max(tour => tour.Distance);
-            var logs = tourLogRepository.GetTourLogsForTour(tourId);
+            var logs = tour.TourLogs;
             var avgDifficulty = GetAverageDifficulty(logs);
             var durationInHours = tour.EstimatedTime / 60;
             var normalizedDistance = MathUtils.MapRange(tour.Distance, 0.0f, maxDistance, 0f, 10.0f);

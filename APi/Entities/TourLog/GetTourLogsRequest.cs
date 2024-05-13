@@ -3,7 +3,7 @@ using Tourplanner.Infrastructure;
 using Tourplanner.Repositories;
 using Tourplanner.Services;
 
-namespace Tourplanner.Entities.TourLog
+namespace Tourplanner.Entities.TourLogs
 {
     public record GetTourLogsRequest(int TourId) : IRequest;
 
@@ -14,7 +14,7 @@ namespace Tourplanner.Entities.TourLog
     {
         public override async Task<IEnumerable<TourLogDto>> Handle(GetTourLogsRequest request)
         {
-            var tourLogs = tourLogRepository.GetTourLogsForTour(request.TourId);
+            var tourLogs = await tourLogRepository.GetTourLogsForTour(request.TourId);
             var tourLogDtos = new List<TourLogDto>();
             
             foreach (var log in tourLogs)

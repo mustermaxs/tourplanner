@@ -7,7 +7,7 @@ using Tourplanner.Infrastructure;
 using Tourplanner.Repositories;
 using Tourplanner.Services;
 
-namespace Tourplanner.Entities.Tour
+namespace Tourplanner.Entities.Tours
 {
     public record GetToursRequest : IRequest
     {
@@ -27,9 +27,9 @@ namespace Tourplanner.Entities.Tour
             
             foreach (var tour in tourEntities)
             {
-                var childFriendliness = childFriendlinessService.Calculate(tour.TourId);
+                var childFriendliness = childFriendlinessService.Calculate(tour.Id);
                 tourDtos.Add(new TourDto(
-                    tour.TourId,
+                    tour.Id,
                     tour.Description,
                     tour.Name,
                     tour.From,

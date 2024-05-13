@@ -4,7 +4,7 @@ using Tourplanner.Models;
 using Tourplanner.Repositories;
 using Tourplanner.Services;
 
-namespace Tourplanner.Entities.Tour
+namespace Tourplanner.Entities.Tours
 {
     public record UpdateTourCommand(
         int Id,
@@ -36,7 +36,7 @@ namespace Tourplanner.Entities.Tour
             entityToUpdate.From = command.From;
             entityToUpdate.To = command.To;
             entityToUpdate.Popularity = ratingService.Calculate(entityToUpdate.TourLogs);
-            entityToUpdate.ChildFriendliness = await childFriendlinessService.Calculate(entityToUpdate.TourId);
+            entityToUpdate.ChildFriendliness = await childFriendlinessService.Calculate(entityToUpdate.Id);
 
             await tourRepository.UpdateAsync(entityToUpdate);
             return Task.CompletedTask;

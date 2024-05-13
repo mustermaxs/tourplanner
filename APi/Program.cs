@@ -1,3 +1,5 @@
+using Tourplanner.Entities;
+using Tourplanner.Entities.TourLogs.Commands;
 using Tourplanner.Services;
 
 namespace Tourplanner;
@@ -10,8 +12,8 @@ using Microsoft.Extensions.Logging;
 using System;
 using Tourplanner.Repositories;
 using Tourplanner.Infrastructure;
-using Tourplanner.Entities.Tour;
-using Tourplanner.Entities.TourLog;
+using Entities.Tours;
+using Entities.TourLogs;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 

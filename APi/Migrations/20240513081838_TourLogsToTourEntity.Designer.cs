@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Tourplanner;
@@ -11,9 +12,11 @@ using Tourplanner;
 namespace Api.Migrations
 {
     [DbContext(typeof(TourContext))]
-    partial class TourContextModelSnapshot : ModelSnapshot
+    [Migration("20240513081838_TourLogsToTourEntity")]
+    partial class TourLogsToTourEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,20 +53,25 @@ namespace Api.Migrations
                     b.Property<int>("TourId")
                         .HasColumnType("integer");
 
+                    b.Property<int>("TourId1")
+                        .HasColumnType("integer");
+
                     b.HasKey("TourLogId");
 
                     b.HasIndex("TourId");
+
+                    b.HasIndex("TourId1");
 
                     b.ToTable("TourLogs");
                 });
 
             modelBuilder.Entity("Tourplanner.Entities.Tours.Tour", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("TourId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("TourId"));
 
                     b.Property<float>("ChildFriendliness")
                         .HasColumnType("real");
@@ -105,16 +113,22 @@ namespace Api.Migrations
                     b.Property<int>("TransportType")
                         .HasColumnType("integer");
 
-                    b.HasKey("Id");
+                    b.HasKey("TourId");
 
                     b.ToTable("Tours");
                 });
 
             modelBuilder.Entity("Tourplanner.Entities.TourLogs.TourLog", b =>
                 {
-                    b.HasOne("Tourplanner.Entities.Tours.Tour", "Tour")
+                    b.HasOne("Tourplanner.Entities.Tours.Tour", null)
                         .WithMany("TourLogs")
                         .HasForeignKey("TourId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Tourplanner.Entities.Tours.Tour", "Tour")
+                        .WithMany()
+                        .HasForeignKey("TourId1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
