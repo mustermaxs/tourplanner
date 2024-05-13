@@ -1,12 +1,14 @@
 ﻿
 public class CreateTourLogDto(
+    DateTime dateTime,
     string comment,
     float difficulty,
-    float totalTime,
+    float duration,
     float rating)
 {
+    public DateTime DateTime { get; private set; } = dateTime;
     public string Comment { get; private set; } = comment;
     public float Difficulty { get; private set; } = difficulty;
-    public float TotalTime { get; private set; } = totalTime;
+    public float Duration { get; private set; } = duration;
     public float Rating { get; private set; } = rating;
 }

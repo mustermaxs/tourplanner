@@ -7,7 +7,7 @@
             DateTime dateTime,
             string comment,
             float difficulty,
-            float totalTime,
+            float duration,
             double rating
         )
         {
@@ -16,7 +16,7 @@
             DateTime = dateTime;
             Comment = comment;
             Difficulty = difficulty;
-            TotalTime = totalTime;
+            Duration = duration;
             Rating = rating;
         }
 
@@ -25,6 +25,6 @@
         public DateTime DateTime { get; private set; }
         public string Comment { get; private set; }
         public float Difficulty { get; private set; }
-        public float TotalTime { get; private set; }
+        public float Duration { get; private set; }
         public double Rating { get; private set; }
     }

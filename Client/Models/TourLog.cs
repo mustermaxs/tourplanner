@@ -1,7 +1,13 @@
+using Client.Dao;
+using Client.Models;
+
 public class TourLog
 {
-    public int Id { get; set; } = 0;
-    public DateTime Date { get; set; } = DateTime.Now;
+    public TourLog()
+    {
+    }
+    public int Id { get; set; }
+    public DateTime DateTime { get; set; }
     public string Comment { get; set; } = "";
     public float Difficulty { get; set; } = 0;
     public float Duration { get; set; } = 0;

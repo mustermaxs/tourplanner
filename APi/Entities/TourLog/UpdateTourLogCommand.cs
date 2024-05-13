@@ -27,7 +27,7 @@ namespace Tourplanner.Entities.TourLog
                 throw new ResourceNotFoundException($"Tour log entry {request.TourLogId} doesn't seem to exist");
             }
             
-            tourLog.Date = request.DateTime;
+            tourLog.DateTime = request.DateTime;
             tourLog.Comment = request.Comment;
             tourLog.Difficulty = request.Difficulty;
             tourLog.Duration = request.TotalTime;

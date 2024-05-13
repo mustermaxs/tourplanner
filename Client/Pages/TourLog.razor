@@ -1,22 +1,30 @@
-@page "/log/{TourLogId}"
+@page "/tours/{TourId}/log/{TourLogId}"
 @attribute [StreamRendering]
 @inject TourLogPageViewModel EditLogVM
 @inject NavigationManager NavManager
 
 <PageTitle>Edit Tour Log</PageTitle>
 
-<h1>Edit Tour Log</h1>
+
 @if (EditLogVM.TourLog == null)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
-<h5>Tour: @EditLogVM.TourLog.Tour.Name</h5>
+    <div class="d-flex justify-content-between align-items-center">
+    <h1>Edit Tour Log</h1>
+        <div>
+            <button class="btn btn-danger" @onclick="() => EditLogVM.DeleteLog()">
+                Delete
+            </button>
+        </div>
+    </div>
+    <h5>Tour: @EditLogVM.TourLog.Tour.Name</h5>
         <div class="row">
             <div class="col-md-4">
                 <label for="date">Date</label>
-                <input type="datetime-local" class="form-control" id="date" @bind="EditLogVM.TourLog.Date">
+                <input type="datetime-local" class="form-control" id="date" @bind="EditLogVM.TourLog.DateTime">
             </div>
             <div class="col-md-4">
                 <label for="difficulty">Difficulty</label>
@@ -40,9 +48,13 @@ else
     [Parameter]
     public string TourLogId { get; set; }
 
+    [Parameter]
+    public string TourId {get; set;}
+
     protected override async Task OnInitializedAsync()
     {
-        EditLogVM = new TourLogPageViewModel(NavManager);
-        await EditLogVM.InitializeAsync(Convert.ToInt32(TourLogId));
+        await EditLogVM.InitializeAsync(Convert.ToInt32(TourId), Convert.ToInt32(TourLogId));
+        Console.WriteLine(EditLogVM.TourLog.Id);
+        StateHasChanged();
     }
 }

@@ -15,6 +15,7 @@ namespace Tourplanner.Entities.TourLog
         {
             var tourLog = await tourLogRepository.Get(request.TourLogId);
 
+
             if (tourLog is null)
             {
                 throw new ResourceNotFoundException($"Tour log {request.TourLogId} could not be found");

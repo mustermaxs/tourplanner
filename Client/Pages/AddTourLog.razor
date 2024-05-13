@@ -18,7 +18,7 @@ else
         <div class="row">
             <div class="col mt-3">
                 <label for="date">Date</label>
-                <input type="datetime-local" class="form-control" id="date" @bind="AddLogVM.TourLog.Date">
+                <input type="datetime-local" class="form-control" id="date" @bind="AddLogVM.TourLog.DateTime">
             </div>
             <div class="col mt-3">
                 <label for="difficulty">Difficulty</label>
@@ -43,5 +43,10 @@ else
 @code {
     [Parameter]
     public string TourId { get; set; }
-
+    
+    protected override async Task OnInitializedAsync()
+    {
+        await AddLogVM.InitializeAsync(int.Parse(TourId));
+        StateHasChanged();
+    }
 }

@@ -66,10 +66,10 @@ namespace Api.Controllers
             return await ResponseAsync(command);
         }
 
-        [HttpGet("{tourid}/logs/{logid}")]
-        public async Task<ActionResult<IResponse>> GetLogForTour(int tourid, int logid)
+        [HttpGet("logs/{logid}")]
+        public async Task<ActionResult<IResponse>> GetLog(int logid)
         {
-            var command = new GetSingleTourLogRequest(tourid, logid);
+            var command = new GetSingleTourLogRequest(logid);
             return await ResponseAsync(command);
         }
 

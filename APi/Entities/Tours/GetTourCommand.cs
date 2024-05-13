@@ -25,8 +25,8 @@ namespace Tourplanner.Entities.Tour
             
             return await Task.FromResult(new TourDto(
                 tour.TourId,
-                tour.Description,
                 tour.Name,
+                tour.Description,
                 tour.From,
                 tour.To,
                 tour.TransportType,
