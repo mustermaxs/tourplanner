@@ -6,7 +6,7 @@ namespace Tourplanner.Entities.Tour;
 using Microsoft.EntityFrameworkCore;
 using Tourplanner.Entities.TourLog;
 
-public class Tour
+public class Tour : Entity
 {
     public Tour()
     {

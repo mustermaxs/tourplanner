@@ -1,24 +1,21 @@
-﻿using Tourplanner.Repositories;
+﻿using Tourplanner.Entities.TourLog;
+using Tourplanner.Repositories;
 
 namespace Tourplanner.Services
 {
     public interface IRatingService
     {
-        public float Calculate(int tourId);
+        public float Calculate(IEnumerable<TourLog> tourLogs);
     }
     public class RatingService : IRatingService
     {
-        private readonly ITourLogRepository tourLogRepository;
 
-        public RatingService(ITourLogRepository tourLogRepository)
+        public RatingService()
         {
-            this.tourLogRepository = tourLogRepository;
         }
 
-        public float Calculate(int tourId)
+        public float Calculate(IEnumerable<TourLog> tourLogs)
         {
-            var tourLogs = tourLogRepository.GetTourLogsForTour(tourId);
-
             if (tourLogs == null || !tourLogs.Any())
             {
                 return 0.0f;

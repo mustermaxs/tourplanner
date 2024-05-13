@@ -9,8 +9,7 @@ namespace Tourplanner.Entities.TourLog
 
     public class GetTourLogsRequestHandler(
         TourContext ctx,
-        ITourLogRepository tourLogRepository,
-        IRatingService ratingService)
+        ITourLogRepository tourLogRepository)
         : RequestHandler<GetTourLogsRequest, IEnumerable<TourLogDto>>(ctx)
     {
         public override async Task<IEnumerable<TourLogDto>> Handle(GetTourLogsRequest request)
@@ -27,7 +26,7 @@ namespace Tourplanner.Entities.TourLog
                     comment: log.Comment,
                     difficulty: log.Difficulty,
                     totalTime: log.Duration,
-                    rating: ratingService.Calculate(request.TourId)
+                    rating: log.Rating
                 ));
             }
 

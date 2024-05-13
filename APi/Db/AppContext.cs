@@ -49,6 +49,10 @@ public class TourContext : DbContext
         modelBuilder.Entity<Tour>()
             .Property(t => t.TransportType)
             .HasConversion<int>();
+        modelBuilder.Entity<Tour>()
+            .HasMany<TourLog>(t => t.TourLogs)
+            .WithOne()
+            .HasForeignKey(to => to.TourId);
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

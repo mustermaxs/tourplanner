@@ -11,12 +11,14 @@ namespace Tourplanner.Entities.TourLog
     public class GetSingleTourLogRequestHandler(
         TourContext ctx,
         ITourLogRepository tourLogRepository,
+        ITourRepository tourRepository,
         IRatingService ratingService)
         : RequestHandler<GetSingleTourLogRequest, TourLogDto>(ctx)
     {
         public override async Task<TourLogDto> Handle(GetSingleTourLogRequest request)
         {
             var log = await tourLogRepository.Get(request.LogId);
+            var logs = (await tourRepository.GetTourWithLogs(log.TourId)).TourLogs;
 
             if (log is null)
             {
@@ -31,7 +33,7 @@ namespace Tourplanner.Entities.TourLog
                     comment: log.Comment,
                     difficulty: log.Difficulty,
                     totalTime: log.Duration,
-                    rating: ratingService.Calculate(log.TourLogId)
+                    rating: ratingService.Calculate(logs)
                 );
 
             return tourLogDto;

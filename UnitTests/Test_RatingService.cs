@@ -25,10 +25,10 @@ namespace Tourplanner.Services.Tests
             var moqTourLogRepository = new Mock<ITourLogRepository>();
             moqTourLogRepository.Setup(repo => repo.GetTourLogsForTour(1)).Returns(tourLogs);
 
-            var ratingService = new RatingService(moqTourLogRepository.Object);
+            var ratingService = new RatingService();
 
             // Act
-            var result = ratingService.Calculate(1);
+            var result = ratingService.Calculate(moqTourLogRepository.Object.GetTourLogsForTour(1));
 
             // Assert
             Assert.That(4.0f == result); // The expected average rating is 4.0 (average of 4, 5, and 3)
@@ -41,10 +41,10 @@ namespace Tourplanner.Services.Tests
             var moqTourLogRepository = new Mock<ITourLogRepository>();
             moqTourLogRepository.Setup(repo => repo.GetTourLogsForTour(1)).Returns(new List<TourLog>());
 
-            var ratingService = new RatingService(moqTourLogRepository.Object);
+            var ratingService = new RatingService();
 
             // Act
-            var result = ratingService.Calculate(1);
+            var result = ratingService.Calculate(moqTourLogRepository.Object.GetTourLogsForTour(1));
 
             // Assert
             Assert.That(0.0f == result); // The expected result is 0.0 since there are no tour logs

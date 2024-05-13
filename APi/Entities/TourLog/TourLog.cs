@@ -5,7 +5,7 @@ namespace Tourplanner.Entities.TourLog;
 
 using Microsoft.EntityFrameworkCore;
 using Tourplanner.Entities.Tour;
-public class TourLog
+public class TourLog : Entity
 {
     public int TourLogId { get; set; }
     public float Difficulty { get; set; }

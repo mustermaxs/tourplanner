@@ -13,12 +13,14 @@ namespace Tourplanner.Entities.Tour
     public class GetTourByIdCommandHandler(
         TourContext ctx,
         ITourRepository tourRepository,
+        ITourLogRepository tourLogRepository,
+        IRatingService ratingService,
         IChildFriendlinessService childFriendlinessService)
         : RequestHandler<GetTourByIdRequest, TourDto>(ctx)
     {
         public override async Task<TourDto> Handle(GetTourByIdRequest request)
         {
-            var tour = await tourRepository.Get(request.Id);
+            var tour = await tourRepository.GetTourWithLogs(request.Id);
 
             if (tour is null)
             {
@@ -26,6 +28,7 @@ namespace Tourplanner.Entities.Tour
             }
 
             var childFriendliness = await childFriendlinessService.Calculate(tour.TourId);
+            var popularity = ratingService.Calculate(tour.TourLogs);
             
             return await Task.FromResult(new TourDto(
                 tour.TourId,

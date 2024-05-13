@@ -29,8 +29,10 @@ namespace Tourplanner.Entities.Tour
             tour.From = request.From;
             tour.To = request.To;
             tour.TransportType = request.TransportType;
+            tour.Popularity = 0.0f;
 
-            await tourRepository.Create(tour); // TODO return Id
+            var tourId = await tourRepository.CreateReturnId(tour); // TODO return Id
+            tour.ChildFriendliness = await childFriendlinessService.Calculate(tourId);
             return Task.CompletedTask;
         }
     }
