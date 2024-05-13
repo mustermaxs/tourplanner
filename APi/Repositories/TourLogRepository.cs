@@ -10,6 +10,8 @@ public class TourLogRepository : Repository<TourLog>, ITourLogRepository
 
     public async Task<IEnumerable<TourLog>> GetTourLogsForTour(int tourId)
     {
+        return dbSet.Where(log => log.TourId == tourId).ToList();
+        
         var logs = await GetAll();
         return logs;
     }
