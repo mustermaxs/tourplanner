@@ -3,6 +3,7 @@ using Tourplanner.DTOs;
 using Tourplanner.Infrastructure;
 using Tourplanner.Models;
 using Tourplanner.Repositories;
+using Tourplanner.Services;
 
 namespace Tourplanner.Entities.Tour
 {
@@ -17,7 +18,8 @@ namespace Tourplanner.Entities.Tour
 
     public class CreateTourCommandHandler(
         TourContext ctx,
-        ITourRepository tourRepository) : RequestHandler<CreateTourCommand, Task>(ctx)
+        ITourRepository tourRepository,
+        IChildFriendlinessService childFriendlinessService) : RequestHandler<CreateTourCommand, Task>(ctx)
     {
         public override async Task<Task> Handle(CreateTourCommand request)
         {
@@ -28,7 +30,7 @@ namespace Tourplanner.Entities.Tour
             tour.To = request.To;
             tour.TransportType = request.TransportType;
 
-            await tourRepository.Create(tour);
+            await tourRepository.Create(tour); // TODO return Id
             return Task.CompletedTask;
         }
     }

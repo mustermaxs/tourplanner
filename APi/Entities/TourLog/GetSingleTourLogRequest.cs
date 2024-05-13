@@ -2,6 +2,7 @@
 using Tourplanner.Exceptions;
 using Tourplanner.Infrastructure;
 using Tourplanner.Repositories;
+using Tourplanner.Services;
 
 namespace Tourplanner.Entities.TourLog
 {
@@ -9,7 +10,8 @@ namespace Tourplanner.Entities.TourLog
 
     public class GetSingleTourLogRequestHandler(
         TourContext ctx,
-        ITourLogRepository tourLogRepository)
+        ITourLogRepository tourLogRepository,
+        IRatingService ratingService)
         : RequestHandler<GetSingleTourLogRequest, TourLogDto>(ctx)
     {
         public override async Task<TourLogDto> Handle(GetSingleTourLogRequest request)
@@ -29,7 +31,7 @@ namespace Tourplanner.Entities.TourLog
                     comment: log.Comment,
                     difficulty: log.Difficulty,
                     totalTime: log.Duration,
-                    rating: log.Rating
+                    rating: ratingService.Calculate(log.TourLogId)
                 );
 
             return tourLogDto;

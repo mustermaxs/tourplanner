@@ -2,33 +2,32 @@
 
 namespace Tourplanner.Services
 {
-
-    namespace Client.Services
+    public interface IRatingService
     {
-        public class RatingService
+        public float Calculate(int tourId);
+    }
+    public class RatingService : IRatingService
+    {
+        private readonly ITourLogRepository tourLogRepository;
+
+        public RatingService(ITourLogRepository tourLogRepository)
         {
-            private readonly ITourLogRepository tourLogRepository;
+            this.tourLogRepository = tourLogRepository;
+        }
 
-            public RatingService(ITourLogRepository tourLogRepository)
+        public float Calculate(int tourId)
+        {
+            var tourLogs = tourLogRepository.GetTourLogsForTour(tourId);
+
+            if (tourLogs == null || !tourLogs.Any())
             {
-                this.tourLogRepository = tourLogRepository;
-            }
-            public float Calculate(int tourId)
-            {
-                var tourLogs = tourLogRepository.GetTourLogsForTour(tourId);
-    
-                if (tourLogs == null || !tourLogs.Any())
-                {
-                    return 0.0f;
-                }
-    
-                float totalRating = tourLogs.Sum(t => t.Rating);
-                float averageRating = totalRating / tourLogs.Count();
-    
-                return averageRating;
+                return 0.0f;
             }
 
+            float totalRating = tourLogs.Sum(t => t.Rating);
+            float averageRating = totalRating / tourLogs.Count();
+
+            return averageRating;
         }
     }
-
 }

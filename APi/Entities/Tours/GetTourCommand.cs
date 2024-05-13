@@ -4,6 +4,7 @@ using Tourplanner.Exceptions;
 using Tourplanner.Models;
 using Tourplanner.Repositories;
 using Tourplanner.Infrastructure;
+using Tourplanner.Services;
 
 namespace Tourplanner.Entities.Tour
 {
@@ -11,7 +12,8 @@ namespace Tourplanner.Entities.Tour
 
     public class GetTourByIdCommandHandler(
         TourContext ctx,
-        ITourRepository tourRepository)
+        ITourRepository tourRepository,
+        IChildFriendlinessService childFriendlinessService)
         : RequestHandler<GetTourByIdRequest, TourDto>(ctx)
     {
         public override async Task<TourDto> Handle(GetTourByIdRequest request)
@@ -22,6 +24,8 @@ namespace Tourplanner.Entities.Tour
             {
                 throw new ResourceNotFoundException($"Tour {request.Id} doesn't seem to exist.");
             }
+
+            var childFriendliness = await childFriendlinessService.Calculate(tour.TourId);
             
             return await Task.FromResult(new TourDto(
                 tour.TourId,
@@ -33,7 +37,7 @@ namespace Tourplanner.Entities.Tour
                 tour.Distance,
                 tour.EstimatedTime,
                 tour.Popularity,
-                tour.ChildFriendliness,
+                childFriendliness,
                 tour.ImagePath));
             
         }

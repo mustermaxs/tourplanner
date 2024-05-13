@@ -1,3 +1,5 @@
+using Tourplanner.Services;
+
 namespace Tourplanner;
 
 using Microsoft.AspNetCore.Hosting;
@@ -63,6 +65,8 @@ internal class Program
         services.AddTransient<DbContext, TourContext>();
         services.AddTransient<IServiceProvider, ServiceProvider>();
         services.AddTransient<IMediator, Mediator>();
+        services.AddTransient<IRatingService, RatingService>();
+        services.AddTransient<IChildFriendlinessService, ChildFriendlinessService>();
         services.AddScoped<ITourLogRepository, TourLogRepository>();
         services.AddScoped<ITourRepository, TourRepository>();
 
