@@ -16,8 +16,8 @@ public class TourDetailsPageViewModel
         _tourLogDao = TourLogDao;
     }
 
-    public Tour Tour { get; private set; } = new Tour();
-    public List<TourLog> TourLogs { get; private set; } = new List<TourLog>();
+    public Tour Tour { get; set; } = new Tour();
+    public List<TourLog> TourLogs { get; set; } = new List<TourLog>();
 
     public async Task InitializeAsync(int tourId)
     {

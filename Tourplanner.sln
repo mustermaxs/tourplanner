@@ -1,10 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csproj", "{213AABB1-1A37-4EEF-ABDB-EC2D787AFB6C}"
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34728.123
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Client", "Client\Client.csproj", "{213AABB1-1A37-4EEF-ABDB-EC2D787AFB6C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api", "Api\Api.csproj", "{6E8471D1-DFBA-44AA-AA62-744C047B3689}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api", "Api\Api.csproj", "{6E8471D1-DFBA-44AA-AA62-744C047B3689}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{8CFD58A0-859F-4911-9A47-3B0ECF523A65}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTests", "UnitTests\UnitTests.csproj", "{8CFD58A0-859F-4911-9A47-3B0ECF523A65}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,5 +27,11 @@ Global
 		{8CFD58A0-859F-4911-9A47-3B0ECF523A65}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8CFD58A0-859F-4911-9A47-3B0ECF523A65}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8CFD58A0-859F-4911-9A47-3B0ECF523A65}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9D08655D-2150-4500-8094-9141E9B1CDF8}
 	EndGlobalSection
 EndGlobal
