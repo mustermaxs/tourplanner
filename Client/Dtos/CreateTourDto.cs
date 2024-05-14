@@ -1,4 +1,6 @@
-﻿    public class CreateTourDto
+﻿using Client.Models;
+
+    public class CreateTourDto
     {
         public CreateTourDto(
             string name,
@@ -6,7 +8,8 @@
             string from,
             string to,
             float distance,
-            float estimatedTime
+            float estimatedTime,
+            TransportType transportType
         )
         {
             Name = name;
@@ -15,6 +18,7 @@
             To = to;
             Distance = distance;
             EstimatedTime = estimatedTime;
+            TransportType = transportType;
         }
 
         public string Name { get; set; }
@@ -23,4 +27,5 @@
         public string To { get; set; }
         public float Distance { get; set; }
         public float EstimatedTime { get; set; }
+        public TransportType TransportType {get; set;}
     }

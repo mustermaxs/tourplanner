@@ -2,13 +2,13 @@
 @attribute [StreamRendering]
 @inject TourAddPageViewModel AddTourVM
 @using Client.Components
+@using Client.Models
 
 <PageTitle>Add Tour</PageTitle>
 
 <h1>Add Tour</h1>
 
 
-<form>
     <div class="form-group mt-3">
         <div class="row">
             @* Tour name *@
@@ -19,8 +19,12 @@
             @* Transport Type *@
             <div class="col">
                 <label for="transporttype">Transport Type</label>
-                <input type="text" class="form-control" id="transporttype" placeholder="Enter transport type"
-                    @bind="AddTourVM.Tour.TransportType">
+                <select class="form-control" id="transporttype" @bind="AddTourVM.Tour.TransportType">
+                    @foreach (var type in Enum.GetValues<TransportType>())
+                    {
+                        <option value="@type">@type</option>
+                    }
+                </select>
             </div>
         </div>
     </div>
@@ -48,6 +52,4 @@
             @bind="AddTourVM.Tour.Description"></textarea>
     </div>
 
-    <button type="submit" class="btn btn-primary mt-3" @onclick="AddTourVM.AddTour">Submit</button>
-
-</form>
+    <button class="btn btn-primary mt-3" @onclick="AddTourVM.AddTour">Submit</button>

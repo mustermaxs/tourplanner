@@ -1,35 +1,29 @@
-using System;
-using System.Text.Json;
-using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Components;
 using Client.Dao;
 using Client.Models;
-using Client.Dto;
 
 public class TourAddPageViewModel
 {
-    private IHttpService _httpService;
-    public Tour Tour { get; private set; }
+    private readonly ITourDao _tourDao;
+    private readonly NavigationManager _navigationManager;
 
-    public TourAddPageViewModel(IHttpService httpService)
+    public TourAddPageViewModel(NavigationManager navigationManager, ITourDao tourDao)
     {
-        _httpService = httpService;
-        Tour = new Tour();
+        _navigationManager = navigationManager;
+        _tourDao = tourDao;
     }
+    public Tour Tour { get; private set; } = new Tour();
 
-    public void AddTour()
+    public async Task AddTour()
     {
         try
         {
-            var createTourDto = new CreateTourDto(
-                name: Tour.Name,
-                description: Tour.Description,
-                from: Tour.From,
-                to: Tour.To,
-                distance: Tour.Distance,
-                estimatedTime: Tour.EstimatedTime
-                );
-            _httpService.Post<CreateTourDto>(createTourDto, "Tours");
+
+            await _tourDao.Create(Tour);
+            Tour = new Tour();
+            _navigationManager.NavigateTo("/tours");
+
         }
         catch (Exception ex)
         {

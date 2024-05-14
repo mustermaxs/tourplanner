@@ -1,6 +1,4 @@
 using Microsoft.AspNetCore.Components;
-using Client.Models;
-using Client.Dto;
 using Client.Dao;
 public class TourLogPageViewModel
 {

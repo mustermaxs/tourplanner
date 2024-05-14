@@ -30,8 +30,8 @@ namespace Tourplanner.Entities.Tours
                 var childFriendliness = childFriendlinessService.Calculate(tour.Id);
                 tourDtos.Add(new TourDto(
                     tour.Id,
-                    tour.Description,
                     tour.Name,
+                    tour.Description,
                     tour.From,
                     tour.To,
                     tour.TransportType,
