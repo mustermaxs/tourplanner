@@ -37,6 +37,7 @@ namespace Tourplanner.Entities.Tours
             entityToUpdate.To = command.To;
             entityToUpdate.Popularity = ratingService.Calculate(entityToUpdate.TourLogs);
             entityToUpdate.ChildFriendliness = await childFriendlinessService.Calculate(entityToUpdate.Id);
+            entityToUpdate.TransportType = command.TransportType;
 
             await tourRepository.UpdateAsync(entityToUpdate);
             return Task.CompletedTask;

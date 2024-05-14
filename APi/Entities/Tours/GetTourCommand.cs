@@ -39,7 +39,7 @@ namespace Tourplanner.Entities.Tours
                 tour.TransportType,
                 tour.Distance,
                 tour.EstimatedTime,
-                tour.Popularity,
+                popularity,
                 childFriendliness,
                 tour.ImagePath));
             

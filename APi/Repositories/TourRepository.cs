@@ -18,7 +18,7 @@ public class TourRepository : Repository<Tour>, ITourRepository
 
     public async Task<Tour?> GetTourWithLogs(int tourId)
     {
-        return await Get(tourId);
+        // return await Get(tourId);
         return await dbSet.Include(t => t.TourLogs)
             .FirstOrDefaultAsync(to => to.Id == tourId);
     }

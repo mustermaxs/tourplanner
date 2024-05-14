@@ -33,6 +33,7 @@ namespace Tourplanner.Entities.TourLogs.Commands
             await tourLogRepository.Create(tourLog);
 
             var tour = await tourRepository.Get(request.TourId);
+            tour.Popularity = ratingService.Calculate(await tourLogRepository.GetTourLogsForTour(request.TourId));
             tour.ChildFriendliness = await childFriendlinessService.Calculate(tour.Id);
             await tourRepository.UpdateAsync(tour);
             
