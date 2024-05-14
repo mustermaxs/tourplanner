@@ -66,12 +66,12 @@ else
                 <td><i class="icon-child"></i></td>
                 <td>Child Friendliness</td>
                 <td>
-                    <div class="progress">
+                    <div class="progress" style="position: relative;">
                         <div class="progress-bar" role="progressbar" style="width: @(TourVM.Tour.ChildFriendliness * 10)%"
                             aria-valuenow="@TourVM.Tour.ChildFriendliness" aria-valuemin="0" aria-valuemax="10">
-                            @TourVM.Tour.ChildFriendliness
                         </div>
-                    </div>
+                        <div class="progress-text" style="color: @(TourVM.Tour.ChildFriendliness < 5 ? "black" : "white; text-shadow:0px 0px 3px black"); position: absolute; top: 0; left: 0; width: 100%; text-align: center;">@TourVM.Tour.ChildFriendliness / 10</div>
+                        </div>
                 </td>
             </tr>
             <tr>
@@ -79,11 +79,11 @@ else
                 <td><i class="icon-heart"></i></td>
                 <td>Popularity</td>
                 <td>
-                    <div class="progress">
+                    <div class="progress" style="position: relative;">
                         <div class="progress-bar" role="progressbar" style="width: @(TourVM.Tour.Popularity * 10)%"
                             aria-valuenow="@TourVM.Tour.Popularity" aria-valuemin="0" aria-valuemax="10">
-                            @TourVM.Tour.Popularity / 10
                         </div>
+                        <div class="progress-text" style="color: @(TourVM.Tour.ChildFriendliness < 5 ? "black" : "white; text-shadow:0px 0px 3px black"); position: absolute; top: 0; left: 0; width: 100%; text-align: center;">@TourVM.Tour.Popularity / 10</div>
                     </div>
                 </td>
             </tr>
@@ -134,7 +134,7 @@ else
     {
         int id = Convert.ToInt32(TourId);
         await TourVM.InitializeAsync(Convert.ToInt32(TourId));
-        StateHasChanged();
+            StateHasChanged();
     }
     private void EditTour()
     {
