@@ -67,10 +67,10 @@ else
                 <td>Child Friendliness</td>
                 <td>
                     <div class="progress" style="position: relative;">
-                        <div class="progress-bar" role="progressbar" style="width: @(TourVM.Tour.ChildFriendliness * 10)%"
-                            aria-valuenow="@TourVM.Tour.ChildFriendliness" aria-valuemin="0" aria-valuemax="10">
+                        <div class="progress-bar" role="progressbar" style="width: @(Math.Ceiling(TourVM.Tour.ChildFriendliness) * 10)%"
+                            aria-valuenow="@Math.Ceiling(TourVM.Tour.ChildFriendliness)" aria-valuemin="0" aria-valuemax="10">
                         </div>
-                        <div class="progress-text" style="color: @(TourVM.Tour.ChildFriendliness < 5 ? "black" : "white; text-shadow:0px 0px 3px black"); position: absolute; top: 0; left: 0; width: 100%; text-align: center;">@TourVM.Tour.ChildFriendliness / 10</div>
+                        <div class="progress-text" style="color: @(TourVM.Tour.ChildFriendliness < 5 ? "black" : "white; text-shadow:0px 0px 3px black"); position: absolute; top: 0; left: 0; width: 100%; text-align: center;">@Math.Ceiling(TourVM.Tour.ChildFriendliness) / 10</div>
                         </div>
                 </td>
             </tr>
@@ -80,10 +80,10 @@ else
                 <td>Popularity</td>
                 <td>
                     <div class="progress" style="position: relative;">
-                        <div class="progress-bar" role="progressbar" style="width: @(TourVM.Tour.Popularity * 10)%"
-                            aria-valuenow="@TourVM.Tour.Popularity" aria-valuemin="0" aria-valuemax="10">
+                        <div class="progress-bar" role="progressbar" style="width: @(Math.Ceiling(TourVM.Tour.Popularity) * 10)%"
+                            aria-valuenow="@Math.Ceiling(TourVM.Tour.Popularity)" aria-valuemin="0" aria-valuemax="10">
                         </div>
-                        <div class="progress-text" style="color: @(TourVM.Tour.ChildFriendliness < 5 ? "black" : "white; text-shadow:0px 0px 3px black"); position: absolute; top: 0; left: 0; width: 100%; text-align: center;">@TourVM.Tour.Popularity / 10</div>
+                        <div class="progress-text" style="color: @(TourVM.Tour.ChildFriendliness < 5 ? "black" : "white; text-shadow:0px 0px 3px black"); position: absolute; top: 0; left: 0; width: 100%; text-align: center;">@Math.Ceiling(TourVM.Tour.Popularity) / 10</div>
                     </div>
                 </td>
             </tr>
