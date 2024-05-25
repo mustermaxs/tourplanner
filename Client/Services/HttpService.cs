@@ -18,7 +18,6 @@ public class HttpService : IHttpService
     public HttpService(HttpClient http)
     {
         baseUrl = StaticResService.GetApiBaseUrl;
-        // client = new HttpClient();
         client = http;
         client.DefaultRequestHeaders.Add("Access-Control-Allow-Origin", "*");
 

@@ -3,6 +3,7 @@
 @inject ToursViewModel ToursVM
 @inject NavigationManager NavManager
 
+@using Client.Components
 @using Client.Pages;
 
 <PageTitle>Tours</PageTitle>
@@ -10,7 +11,7 @@
 <div class="d-flex justify-content-between align-items-center">
     <h1>Tours</h1>
 
-    <Button Label="Add Tour" onclick="AddTour"></Button>
+    <Button Label="Add Tour"  OnClickCallback="AddTour"></Button>
 
 </div>
 @if (ToursVM.Tours == null)
@@ -22,30 +23,30 @@ else
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Transport Type</th>
-                    <th>From</th>
-                    <th>To</th>
-                    <th>Popularity</th>
-                    <th></th>
-                </tr>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Transport Type</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Popularity</th>
+                <th></th>
+            </tr>
             </thead>
             <tbody>
-                @foreach (var tour in ToursVM.Tours)
-                {
-                    <tr>
-                        <td>
-                            <a class="link" style="cursor:pointer" @onclick='() => TourDetails(tour.Id.ToString())'>@tour.Name</a>
-                        </td>
-                        <td>@tour.Description</td>
-                        <td>@tour.TransportType</td>
-                        <td>@tour.From</td>
-                        <td>@tour.To</td>
-                        <td>@tour.Popularity</td>
-                    </tr>
-                }
+            @foreach (var tour in ToursVM.Tours)
+            {
+                <tr>
+                    <td>
+                        <a class="link" style="cursor:pointer" @onclick='() => TourDetails(tour.Id.ToString())'>@tour.Name</a>
+                    </td>
+                    <td>@tour.Description</td>
+                    <td>@tour.TransportType</td>
+                    <td>@tour.From</td>
+                    <td>@tour.To</td>
+                    <td>@tour.Popularity</td>
+                </tr>
+            }
             </tbody>
         </table>
     </div>
@@ -55,6 +56,7 @@ else
     protected override async Task OnInitializedAsync()
     {
         await ToursVM.GetToursAsync();
+        
         StateHasChanged();
     }
 

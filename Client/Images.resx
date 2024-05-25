@@ -2,7 +2,7 @@
 
 <root>
     <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-        xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+                xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
         <xsd:element name="root" msdata:IsDataSet="true">
 
         </xsd:element>
@@ -55,6 +55,9 @@
     </data>
     <data name="duration" type="System.String">
         <value>stopwatch.png</value>
+    </data>
+    <data name="add" type="System.String">
+        <value>plus.png</value>
     </data>
     <data name="primary" type="System.String">
         <value>#5E38AA</value>

@@ -1,0 +1,40 @@
+﻿@inject PopupViewModel PopupVM
+
+@if (@PopupVM.IsOpen)
+{
+    <div class="tp-popup">
+        <div id="decoBar" class="@PopupVM.PopupStyle.ToString().ToLower()">
+            <h6 class="tp-popup-title">@PopupVM.Title</h6>
+            <button @onclick="@PopupVM.Close" id="close">
+                &#128473;
+            </button>
+        </div>
+        <div id="text">
+            <span>
+                @PopupVM.Message
+            </span>
+        </div>
+    </div>
+}
+
+
+@code
+{
+    protected override Task OnInitializedAsync()
+    {
+        PopupVM.InitializeAsync(StateHasChanged);
+        Console.WriteLine(PopupVM.IsOpen);
+        StateHasChanged();
+        return base.OnInitializedAsync();
+    }
+
+    public void OnShow()
+    {
+        PopupVM.Open();
+    }
+
+    public void OnHide()
+    {
+        PopupVM.Close();
+    }
+}
