@@ -1,0 +1,8 @@
+﻿.pageheader {
+    height: 2.5rem;
+    display: flex;
+    flex-direction: row;
+    align-content: space-around;
+    align-items: stretch;
+    justify-content: space-around;
+}

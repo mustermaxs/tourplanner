@@ -2,27 +2,30 @@
 
 @inject NavigationManager NavManager
 @inject TourDetailsPageViewModel TourVM
+@using Client.Components
 
 <PageTitle>@TourVM.Tour.Name</PageTitle>
 
 @if (TourVM.Tour == null)
 {
-    <p><em>Loading...</em></p>
+    <p>
+        <em>Loading...</em>
+    </p>
 }
 else
 {
     <div class="tour-header">
         <div class="d-flex justify-content-between align-items-center">
-            <h1>@TourVM.Tour.Name</h1>
-        <div>
-            <button class="btn btn-danger" @onclick="DeleteTour">
-                Delete
-            </button>
-            <button class="btn btn-primary" @onclick="EditTour">
-                Edit
-            </button>
+            <PageHeader Icon="route">@TourVM.Tour.Name</PageHeader>
+            <div>
+                <button class="btn btn-danger" @onclick="DeleteTour">
+                    Delete
+                </button>
+                <button class="btn btn-primary" @onclick="EditTour">
+                    Edit
+                </button>
+            </div>
         </div>
-    </div>
         <hr>
         @* Description *@
         <p>@TourVM.Tour.Description</p>
@@ -30,63 +33,75 @@ else
 
     <table class="table table-striped">
         <thead>
-            <tr>
-                <th></th>
-                <th>Info</th>
-                <th>Details</th>
-            </tr>
+        <tr>
+            <th></th>
+            <th>Info</th>
+            <th>Details</th>
+        </tr>
         </thead>
         <tbody>
-            <tr>
-                @* Estimated time *@
-                <td><i class="icon-clock"></i></td>
-                <td>Estimated time</td>
-                <td>@FormatEstimatedTime(TourVM.Tour.EstimatedTime) h</td>
-            </tr>
-            <tr>
-                @* From *@
-                <td><i class="icon-location"></i></td>
-                <td>From</td>
-                <td>@TourVM.Tour.From</td>
-            </tr>
-            <tr>
-                @* To *@
-                <td><i class="icon-destination"></i></td>
-                <td>To</td>
-                <td>@TourVM.Tour.To</td>
-            </tr>
-            <tr>
-                @* Transport Type *@
-                <td><i class="icon-transport"></i></td>
-                <td>Transport type</td>
-                <td>@TourVM.Tour.TransportType</td>
-            </tr>
-            <tr>
-                @* ChildFriendliness *@
-                <td><i class="icon-child"></i></td>
-                <td>Child Friendliness</td>
-                <td>
-                    <div class="progress" style="position: relative;">
-                        <div class="progress-bar" role="progressbar" style="width: @(Math.Ceiling(TourVM.Tour.ChildFriendliness) * 10)%"
-                            aria-valuenow="@Math.Ceiling(TourVM.Tour.ChildFriendliness)" aria-valuemin="0" aria-valuemax="10">
-                        </div>
-                        <div class="progress-text" style="color: @(TourVM.Tour.ChildFriendliness < 5 ? "black" : "white; text-shadow:0px 0px 3px black"); position: absolute; top: 0; left: 0; width: 100%; text-align: center;">@Math.Ceiling(TourVM.Tour.ChildFriendliness) / 10</div>
-                        </div>
-                </td>
-            </tr>
-            <tr>
-                @* Popularity *@
-                <td><i class="icon-heart"></i></td>
-                <td>Popularity</td>
-                <td>
-                    <div class="progress" style="position: relative;">
-                        <div class="progress-bar" role="progressbar" style="width: @(Math.Ceiling(TourVM.Tour.Popularity) * 10)%"
-                            aria-valuenow="@Math.Ceiling(TourVM.Tour.Popularity)" aria-valuemin="0" aria-valuemax="10">
-                        </div>
-                        <div class="progress-text" style="color: @(TourVM.Tour.ChildFriendliness < 5 ? "black" : "white; text-shadow:0px 0px 3px black"); position: absolute; top: 0; left: 0; width: 100%; text-align: center;">@Math.Ceiling(TourVM.Tour.Popularity) / 10</div>
+        <tr>
+            @* Estimated time *@
+            <td>
+                <i class="icon-clock"></i>
+            </td>
+            <td>Estimated time</td>
+            <td>@FormatEstimatedTime(TourVM.Tour.EstimatedTime) h</td>
+        </tr>
+        <tr>
+            @* From *@
+            <td>
+                <i class="icon-location"></i>
+            </td>
+            <td>From</td>
+            <td>@TourVM.Tour.From</td>
+        </tr>
+        <tr>
+            @* To *@
+            <td>
+                <i class="icon-destination"></i>
+            </td>
+            <td>To</td>
+            <td>@TourVM.Tour.To</td>
+        </tr>
+        <tr>
+            @* Transport Type *@
+            <td>
+                <i class="icon-transport"></i>
+            </td>
+            <td>Transport type</td>
+            <td>@TourVM.Tour.TransportType</td>
+        </tr>
+        <tr>
+            @* ChildFriendliness *@
+            <td>
+                <i class="icon-child"></i>
+            </td>
+            <td>Child Friendliness</td>
+            <td>
+                <div class="progress" style="position: relative;">
+                    <div class="progress-bar" role="progressbar" style="width: @(Math.Ceiling(TourVM.Tour.ChildFriendliness) * 10)%"
+                         aria-valuenow="@Math.Ceiling(TourVM.Tour.ChildFriendliness)" aria-valuemin="0" aria-valuemax="10">
                     </div>
-                </td>
-            </tr>
+                    <div class="progress-text" style="color: @(TourVM.Tour.ChildFriendliness < 5 ? "black" : "white; text-shadow:0px 0px 3px black"); position: absolute; top: 0; left: 0; width: 100%; text-align: center;">@Math.Ceiling(TourVM.Tour.ChildFriendliness) / 10</div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            @* Popularity *@
+            <td>
+                <i class="icon-heart"></i>
+            </td>
+            <td>Popularity</td>
+            <td>
+                <div class="progress" style="position: relative;">
+                    <div class="progress-bar" role="progressbar" style="width: @(Math.Ceiling(TourVM.Tour.Popularity) * 10)%"
+                         aria-valuenow="@Math.Ceiling(TourVM.Tour.Popularity)" aria-valuemin="0" aria-valuemax="10">
+                    </div>
+                    <div class="progress-text" style="color: @(TourVM.Tour.ChildFriendliness < 5 ? "black" : "white; text-shadow:0px 0px 3px black"); position: absolute; top: 0; left: 0; width: 100%; text-align: center;">@Math.Ceiling(TourVM.Tour.Popularity) / 10</div>
+                </div>
+            </td>
+        </tr>
 
 
         </tbody>
@@ -103,43 +118,46 @@ else
     </div>
     <table class="table table-striped">
         <thead>
-            <tr>
-                <th>Date</th>
-                <th>Comment</th>
-                <th>Difficulty</th>
-                <th>Duration (hrs)</th>
-                <th>Rating</th>
-            </tr>
+        <tr>
+            <th>Date</th>
+            <th>Comment</th>
+            <th>Difficulty</th>
+            <th>Duration (hrs)</th>
+            <th>Rating</th>
+        </tr>
         </thead>
         <tbody>
-            @foreach (var log in TourVM.TourLogs)
-            {
-                <tr>
-                    <a href="/tours/@TourId/log/@log.Id">
-                        <td>@log.DateTime.ToString("yyyy-MM-dd")</td>
-                    </a>
-                    <td>@log.Comment</td>
-                    <td>@log.Difficulty</td>
-                    <td>@log.Duration</td>
-                    <td>@log.Rating</td>
-                </tr>
-            }
+        @foreach (var log in TourVM.TourLogs)
+        {
+            <tr>
+                <a href="/tours/@TourId/log/@log.Id">
+                    <td>@log.DateTime.ToString("yyyy-MM-dd")</td>
+                </a>
+                <td>@log.Comment</td>
+                <td>@log.Difficulty</td>
+                <td>@log.Duration</td>
+                <td>@log.Rating</td>
+            </tr>
+        }
         </tbody>
     </table>
 }
 
 @code {
     [Parameter] public string? TourId { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         int id = Convert.ToInt32(TourId);
         await TourVM.InitializeAsync(Convert.ToInt32(TourId));
-            StateHasChanged();
+        StateHasChanged();
     }
+
     private void EditTour()
     {
-       NavManager.NavigateTo($"/edit/{TourId}");
+        NavManager.NavigateTo($"/edit/{TourId}");
     }
+
     private void AddLog()
     {
         NavManager.NavigateTo($"/tour/{TourId}/add-log");
@@ -154,12 +172,18 @@ else
     private string FormatEstimatedTime(double minutes) // TODO ins ViewModel geben
     {
         double hours = minutes / 60;
-        if (hours % 1 == 0) {
+        if (hours % 1 == 0)
+        {
             return $"{hours:0}";
-        } else if ((hours * 10) % 10 == 5) {
+        }
+        else if ((hours * 10) % 10 == 5)
+        {
             return $"{hours:0.0}";
-        } else {
+        }
+        else
+        {
             return $"{hours:0.00}";
         }
     }
+
 }

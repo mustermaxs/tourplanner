@@ -1,0 +1,31 @@
+﻿@using System.Resources
+@using Client.Utils
+
+<div class="pageheader">
+    <div class="icon-wrapper" style="margin-right: 0.8rem;">
+        <img src="@IconPath" alt=""/>
+    </div>
+    <h1>@ChildContent</h1>
+</div>
+
+@code {
+    private String? _IconPath = String.Empty;
+    [Parameter] public String? Icon { private get; set; }
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    private String? IconPath
+    {
+        get
+        {
+            if (!String.IsNullOrEmpty(Icon))
+            {
+                return StaticResService.GetIconPath(Icon);
+            }
+
+            return String.Empty;
+        }
+        set => _IconPath = value;
+    }
+
+}
