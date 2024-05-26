@@ -60,11 +60,20 @@ namespace Client {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to http://localhost:5161/api/.
+        ///   Looks up a localized string similar to &lt;value&gt;https://loclhost:5161/api/&lt;/value&gt;.
         /// </summary>
         internal static string api_base_url {
             get {
                 return ResourceManager.GetString("api_base_url", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to baby.png.
+        /// </summary>
+        internal static string childfriendliness {
+            get {
+                return ResourceManager.GetString("childfriendliness", resourceCulture);
             }
         }
         
@@ -132,7 +141,7 @@ namespace Client {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to like.png.
+        ///   Looks up a localized string similar to heart.png.
         /// </summary>
         internal static string rating {
             get {
