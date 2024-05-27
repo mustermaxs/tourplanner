@@ -1,0 +1,22 @@
+﻿table {
+    /*width: 30rem;*/
+    height: 100%;
+    vertical-align: middle !important;
+}
+
+.tour-table {
+    /*width: 40rem !important;*/
+}
+
+tr {
+    height: 1.8rem;
+}
+
+.icon-td {
+    width: 5rem;
+}
+
+td .icon-wrapper {
+    width: 100%;
+    display: block;
+}

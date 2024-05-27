@@ -1,0 +1,30 @@
+﻿
+<div class="d-flex justify-content-@_layout align-items-center m-4">
+    @ChildContent
+</div>
+
+@code {
+    public enum Position
+    {
+        Start,
+        Center,
+        End
+    }
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter] public Position Layout { get; set; } = Position.Center;
+    private string _layout { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        _layout = Layout switch
+        {
+            Position.Start => "start",
+            Position.Center => "center",
+            Position.End => "end",
+            _ => "center"
+        };
+    }
+
+}

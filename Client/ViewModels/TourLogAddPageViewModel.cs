@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components;
 using System;
 using System.Threading.Tasks;
 using Client.Dao;
+using Client.Models;
 
 public class TourLogAddPageViewModel
 {
