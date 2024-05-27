@@ -28,17 +28,31 @@
 
     [Parameter] public EventCallback OnClickCallback { get; set; }
 
+    [Parameter] public String mt { get; set; } = "0px";
+
+    [Parameter] public String mb { get; set; } = "0px";
+
+    [Parameter] public String ml { get; set; } = "0px";
+
+    [Parameter] public String mr { get; set; } = "0px";
+
+    private string GetMarginStyles()
+    {
+        return $"{(mt != null ? "mt-" + mt : "")} {(mb != null ? "mb-" + mb : "")} {(ml != null ? "ml-" + ml : "")} {(mr != null ? "mr-" + mr : "")}";
+        
+    }
+
     protected override void OnParametersSet()
     {
         SetCssClass();
     }
-
+    
     private bool HasIcon() => !String.IsNullOrEmpty(Img);
 
     private void SetCssClass()
     {
         _btnClass = HasIcon() ? "tp-button icon" : "tp-button";
-        _btnClass += $" {ButtonType} ";
+        _btnClass += $" {ButtonType}";
     }
 
     [Parameter] public String? AltText { get; set; } = "undefined";
