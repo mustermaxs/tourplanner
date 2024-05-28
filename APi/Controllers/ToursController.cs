@@ -75,6 +75,12 @@ namespace Api.Controllers
             return await ResponseAsync(command);
         }
 
+        [HttpGet("search")]
+        public async Task<ActionResult<IResponse>> SearchInTours([FromBody] SearchDto searchDto)
+        {
+            
+        }
+
         [HttpGet("logs/{logid}")]
         public async Task<ActionResult<IResponse>> GetLog(int logid)
         {

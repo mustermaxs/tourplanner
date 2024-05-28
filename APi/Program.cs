@@ -1,6 +1,7 @@
 using Tourplanner.Entities;
 using Tourplanner.Entities.TourLogs.Commands;
 using Tourplanner.Services;
+using Tourplanner.Services.Search;
 
 namespace Tourplanner;
 
@@ -67,6 +68,7 @@ internal class Program
         services.AddTransient<DbContext, TourContext>();
         services.AddTransient<IServiceProvider, ServiceProvider>();
         services.AddTransient<IMediator, Mediator>();
+        services.AddScoped<ISearchService, StringSearchService>();
         services.AddTransient<IRatingService, RatingService>();
         services.AddTransient<IChildFriendlinessService, ChildFriendlinessService>();
         services.AddScoped<ITourLogRepository, TourLogRepository>();
@@ -82,6 +84,7 @@ internal class Program
         services.AddScoped<ICommandHandler, CreateTourLogCommandHandler>();
         services.AddScoped<ICommandHandler, UpdateTourLogCommandHandler>();
         services.AddScoped<ICommandHandler, DeleteTourLogCommandHandler>();
+        services.AddScoped<ICommandHandler, GetSearchResultsQueryHandler>();
     }
 
     private static void CreateDbIfNotExists(WebApplication app)
