@@ -7,12 +7,12 @@ using Client.Models;
 public class TourLogAddPageViewModel
 {
     public TourLog TourLog { get; set; } = new TourLog();
-    private readonly NavigationManager NavigationManager;
+    private readonly NavigationManager _navigationManager;
     private ITourLogDao _tourLogDao;
 
     public TourLogAddPageViewModel(NavigationManager navigationManager, ITourLogDao tourLogDao)
     {
-        NavigationManager = navigationManager;
+        _navigationManager = navigationManager;
         _tourLogDao = tourLogDao;
         TourLog = new TourLog();
         
@@ -27,7 +27,7 @@ public class TourLogAddPageViewModel
     public async Task AddLog()
     {
         await _tourLogDao.Create(TourLog);
-        NavigationManager.NavigateTo($"/tours/{TourLog.Tour.Id}");
+        _navigationManager.NavigateTo($"/tours/{TourLog.Tour.Id}");
         TourLog = new TourLog();
     }
 };

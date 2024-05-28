@@ -2,7 +2,7 @@
 @using Client.Utils
 
 
-<button @onclick="OnClickCallback" class="@_btnClass" disabled="@IsDisabled">
+<button @onclick="OnClickCallback" class="@_btnClass @GetMarginStyles()" disabled="@IsDisabled">
 
     @if (HasIcon())
     {
@@ -24,9 +24,23 @@
 
     [Parameter] public bool IsDisabled { get; set; } = false;
 
-    [Parameter] public String ButtonType { get; set; } = "secondary";
+    [Parameter] public String ButtonType { get; set; } = "Primary";
 
     [Parameter] public EventCallback OnClickCallback { get; set; }
+
+    [Parameter] public String mt { get; set; } = "0px";
+
+    [Parameter] public String mb { get; set; } = "0px";
+
+    [Parameter] public String ml { get; set; } = "0px";
+
+    [Parameter] public String mr { get; set; } = "0px";
+
+    private string GetMarginStyles()
+    {
+        return $"{(mt != null ? "mt-" + mt : "")} {(mb != null ? "mb-" + mb : "")} {(ml != null ? "ml-" + ml : "")} {(mr != null ? "mr-" + mr : "")}";
+        
+    }
 
     protected override void OnParametersSet()
     {
@@ -38,6 +52,7 @@
     private void SetCssClass()
     {
         _btnClass = HasIcon() ? "tp-button icon" : "tp-button";
+        _btnClass += $" {ButtonType}";
     }
 
     [Parameter] public String? AltText { get; set; } = "undefined";
