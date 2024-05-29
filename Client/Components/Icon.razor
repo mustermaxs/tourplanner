@@ -1,0 +1,25 @@
+﻿@using System.Resources
+@using Client.Utils
+
+<div class="icon-wrapper">
+    <img src="@IconPath" alt="@AltText"/>
+</div>
+
+@code {
+    private String? _ImgPath = String.Empty;
+    [Parameter] public String? AltText { get; set; } = "undefined";
+    [Parameter] public String? Img { private get; set; }
+    private String? IconPath
+    {
+        get
+        {
+            if (!String.IsNullOrEmpty(Img))
+            {
+                return StaticResService.GetIconPath(Img);
+            }
+
+            return String.Empty;
+        }
+        set => _ImgPath = value;
+    }
+}
