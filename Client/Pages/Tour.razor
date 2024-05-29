@@ -2,6 +2,7 @@
 
 @inject NavigationManager NavManager
 @inject TourDetailsPageViewModel TourVM
+@using Client.Components
 
 <PageTitle>@TourVM.Tour.Name</PageTitle>
 
@@ -15,12 +16,8 @@ else
         <div class="d-flex justify-content-between align-items-center">
             <h1>@TourVM.Tour.Name</h1>
         <div>
-            <button class="btn btn-danger" @onclick="DeleteTour">
-                Delete
-            </button>
-            <button class="btn btn-primary" @onclick="EditTour">
-                Edit
-            </button>
+            <Button ButtonType="Danger" Label="Delete" OnClickCallback="DeleteTour"/>
+            <Button ButtonType="Primary" Label="Edit" OnClickCallback="EditTour"/>
         </div>
     </div>
         <hr>
@@ -101,31 +98,38 @@ else
         <h2>Logs</h2>
         <button class="btn btn-primary" @onclick="AddLog">+ Add Log</button>
     </div>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Comment</th>
-                <th>Difficulty</th>
-                <th>Duration (hrs)</th>
-                <th>Rating</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var log in TourVM.TourLogs)
-            {
+    @if (TourVM.TourLogs.Count == 0)
+    {
+        <p>No logs available.</p>
+    }
+    else
+    {
+        <table class="table table-striped">
+            <thead>
                 <tr>
-                    <a href="/tours/@TourId/log/@log.Id">
-                        <td>@log.DateTime.ToString("yyyy-MM-dd")</td>
-                    </a>
-                    <td>@log.Comment</td>
-                    <td>@log.Difficulty</td>
-                    <td>@log.Duration</td>
-                    <td>@log.Rating</td>
+                    <th>Date</th>
+                    <th>Comment</th>
+                    <th>Difficulty</th>
+                    <th>Duration (hrs)</th>
+                    <th>Rating</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var log in TourVM.TourLogs)
+                {
+                    <tr>
+                        <td><a href="/tours/@TourId/log/@log.Id">
+                            @log.DateTime.ToString("yyyy-MM-dd")
+                        </a></td>
+                        <td>@log.Comment</td>
+                        <td>@log.Difficulty</td>
+                        <td>@log.Duration</td>
+                        <td>@log.Rating</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
 }
 
 @code {

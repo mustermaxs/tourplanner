@@ -52,7 +52,8 @@
             @bind="AddTourVM.Tour.Description"></textarea>
     </div>
 
-    <button class="btn btn-primary mt-3" @onclick="AddTourVM.AddTour">Submit</button>
+    <Button ButtonType="Primary" mt="4" Label="Add" Icon="map" OnClickCallback="AddTourVM.AddTour"/>
+
 
 @code
 {
@@ -61,3 +62,4 @@
         return base.OnInitializedAsync();
     }
 }
+

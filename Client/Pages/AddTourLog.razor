@@ -2,6 +2,7 @@
 @attribute [StreamRendering]
 @inject TourLogAddPageViewModel AddLogVM
 @inject NavigationManager NavManager
+@using Client.Components
 
 <PageTitle>Add Tour Log</PageTitle>
 
@@ -37,7 +38,7 @@ else
             </div>
         </div>
 
-        <button class="btn btn-primary mt-3" @onclick="AddLogVM.AddLog">Add Log</button>
+    <Button ButtonType="Primary" mt="4" Label="Add" Icon="map" OnClickCallback="AddLogVM.AddLog"/>
 }
 
 @code {
