@@ -59,6 +59,9 @@
     <data name="duration" type="System.String">
         <value>stopwatch.png</value>
     </data>
+    <data name="add" type="System.String">
+        <value>plus.png</value>
+    </data>
     <data name="primary" type="System.String">
         <value>#5E38AA</value>
     </data>

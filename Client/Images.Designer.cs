@@ -59,7 +59,14 @@ namespace Client {
             }
         }
         
-        /// <summary>
+        ///   Looks up a localized string similar to plus.png.
+        /// </summary>
+        internal static string add {
+            get {
+                return ResourceManager.GetString("add", resourceCulture);
+            }
+        }
+        
         ///   Looks up a localized string similar to &lt;value&gt;https://loclhost:5161/api/&lt;/value&gt;.
         /// </summary>
         internal static string api_base_url {
