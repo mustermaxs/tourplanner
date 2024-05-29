@@ -14,7 +14,7 @@
             @* Tour name *@
             <div class="col">
                 <label for="name">Name</label>
-                <input type="text" class="form-control" id="name" placeholder="Enter name" @bind="AddTourVM.Tour.Name">
+                <input aria-invalid="True" type="text" class="form-control" id="name" placeholder="Enter name" @bind="AddTourVM.Tour.Name">
             </div>
             @* Transport Type *@
             <div class="col">
@@ -53,3 +53,13 @@
     </div>
 
     <Button ButtonType="Primary" mt="4" Label="Add" Icon="map" OnClickCallback="AddTourVM.AddTour"/>
+
+
+@code
+{
+    protected override Task OnInitializedAsync()
+    {
+        return base.OnInitializedAsync();
+    }
+}
+
