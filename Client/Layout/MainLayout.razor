@@ -2,6 +2,8 @@
 @using Client.Components
 @inject IJSRuntime JsRuntime
 @inject NavigationManager NavManager
+@* @inject PopupViewModel PopupVM *@
+@using Client.Components.Popup
 
 <nav class="navbar navbar-expand-sm navbar-light bg-light">
     <div class="container-fluid">
@@ -39,9 +41,15 @@
         </article>
     </main>
 </div>
-
+<Popup></Popup>
 @code
 {
+    [Inject] private PopupViewModel PopupVM { get; set; }
+    
+    protected override Task OnInitializedAsync()
+    {
+        return base.OnInitializedAsync();
+    }
     private string SearchValue { get; set; }
 
     private async Task TriggerSearch()
