@@ -24,7 +24,7 @@
 
     [Parameter] public bool IsDisabled { get; set; } = false;
 
-    [Parameter] public String ButtonType { get; set; } = "Primary";
+    [Parameter] public String ButtonType { get; set; } = "secondary";
 
     [Parameter] public EventCallback OnClickCallback { get; set; }
 
@@ -47,7 +47,7 @@
         SetCssClass();
     }
     
-    private bool HasIcon() => !String.IsNullOrEmpty(Icon);
+    private bool HasIcon() => !String.IsNullOrEmpty(Img);
 
     private void SetCssClass()
     {
@@ -63,9 +63,9 @@
     {
         get
         {
-            if (!String.IsNullOrEmpty(Icon))
+            if (!String.IsNullOrEmpty(Img))
             {
-                return StaticResService.GetIconPath(Icon);
+                return StaticResService.GetIconPath(Img);
             }
 
             return String.Empty;
@@ -73,5 +73,5 @@
         set => _IconPath = value;
     }
 
-    [Parameter] public String? Icon { private get; set; }
+    [Parameter] public String? Img { private get; set; }
 }

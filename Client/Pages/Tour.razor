@@ -15,7 +15,8 @@
 else
 {
     <div class="tour-header">
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+
             <PageHeader Icon="route">@TourVM.Tour.Name</PageHeader>
             <div>
                 <button class="btn btn-danger" @onclick="DeleteTour">
@@ -31,90 +32,103 @@ else
         <p>@TourVM.Tour.Description</p>
     </div>
 
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th></th>
-            <th>Info</th>
-            <th>Details</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            @* Estimated time *@
-            <td>
-                <i class="icon-clock"></i>
-            </td>
-            <td>Estimated time</td>
-            <td>@FormatEstimatedTime(TourVM.Tour.EstimatedTime) h</td>
-        </tr>
-        <tr>
-            @* From *@
-            <td>
-                <i class="icon-location"></i>
-            </td>
-            <td>From</td>
-            <td>@TourVM.Tour.From</td>
-        </tr>
-        <tr>
-            @* To *@
-            <td>
-                <i class="icon-destination"></i>
-            </td>
-            <td>To</td>
-            <td>@TourVM.Tour.To</td>
-        </tr>
-        <tr>
-            @* Transport Type *@
-            <td>
-                <i class="icon-transport"></i>
-            </td>
-            <td>Transport type</td>
-            <td>@TourVM.Tour.TransportType</td>
-        </tr>
-        <tr>
-            @* ChildFriendliness *@
-            <td>
-                <i class="icon-child"></i>
-            </td>
-            <td>Child Friendliness</td>
-            <td>
-                <div class="progress" style="position: relative;">
-                    <div class="progress-bar" role="progressbar" style="width: @(Math.Ceiling(TourVM.Tour.ChildFriendliness) * 10)%"
-                         aria-valuenow="@Math.Ceiling(TourVM.Tour.ChildFriendliness)" aria-valuemin="0" aria-valuemax="10">
-                    </div>
-                    <div class="progress-text" style="color: @(TourVM.Tour.ChildFriendliness < 5 ? "black" : "white; text-shadow:0px 0px 3px black"); position: absolute; top: 0; left: 0; width: 100%; text-align: center;">@Math.Ceiling(TourVM.Tour.ChildFriendliness) / 10</div>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            @* Popularity *@
-            <td>
-                <i class="icon-heart"></i>
-            </td>
-            <td>Popularity</td>
-            <td>
-                <div class="progress" style="position: relative;">
-                    <div class="progress-bar" role="progressbar" style="width: @(Math.Ceiling(TourVM.Tour.Popularity) * 10)%"
-                         aria-valuenow="@Math.Ceiling(TourVM.Tour.Popularity)" aria-valuemin="0" aria-valuemax="10">
-                    </div>
-                    <div class="progress-text" style="color: @(TourVM.Tour.ChildFriendliness < 5 ? "black" : "white; text-shadow:0px 0px 3px black"); position: absolute; top: 0; left: 0; width: 100%; text-align: center;">@Math.Ceiling(TourVM.Tour.Popularity) / 10</div>
-                </div>
-            </td>
-        </tr>
 
-
-        </tbody>
-    </table>
+<table class="table tour-table">
+    <tbody>
+    <tr>
+        <td class="icon-td">
+            <div style="width: 1.7rem">
+                <div class="icon-wrapper">
+                    <Icon Img="duration" AltText="#duration"></Icon>
+                </div>
+            </div>
+        </td>
+        <td>Est. time</td>
+        <td>@FormatEstimatedTime(TourVM.Tour.EstimatedTime) h</td>
+    </tr>
+    <tr>
+        <td class="icon-td">
+            <div style="width: 1.7rem">
+                <div class="icon-wrapper">
+                    <Icon Img="map"></Icon>
+                </div>
+            </div>
+        </td>
+        <td>From</td>
+        <td>@TourVM.Tour.From</td>
+    </tr>
+    <tr>
+        <td class="icon-td">
+            <div style="width: 1.7rem">
+                <div class="icon-wrapper">
+                   <Icon Img="to" AltText="#destination"></Icon>
+                </div>
+            </div>
+        </td>
+        <td>To</td>
+        <td>@TourVM.Tour.To</td>
+    </tr>
+    <tr>
+        <td class="icon-td">
+            <div style="width: 1.7rem">
+                <div class="icon-wrapper">
+                    <Icon Img="difficulty" AltText="#difficulty"></Icon>
+                </div>
+            </div>
+        </td>
+        <td>Difficulty</td>
+        <td>8/10</td>
+    </tr>
+    <tr>
+        <td class="icon-td">
+            <div style="width: 1.7rem">
+                <div class="icon-wrapper">
+                    <Icon Img="childfriendliness" AltText="#baby"></Icon>
+                </div>
+            </div>
+        </td>
+        <td>Childfriendliness</td>
+        <td>
+            <div class="progress" style="position: relative;">
+                <div class="progress-bar" role="progressbar" style="width: @(Math.Ceiling(TourVM.Tour.ChildFriendliness) * 10)%"
+                     aria-valuenow="@Math.Ceiling(TourVM.Tour.ChildFriendliness)" aria-valuemin="0" aria-valuemax="10">
+                </div>
+                <div class="progress-text" style="color: @(TourVM.Tour.ChildFriendliness < 5 ? "black" : "white; text-shadow:0px 0px 3px black"); position: absolute; top: 0; left: 0; width: 100%; text-align: center;">@Math.Ceiling(TourVM.Tour.ChildFriendliness) / 10</div>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td class="icon-td">
+            <div style="width: 1.7rem">
+                <div class="icon-wrapper">
+                    <Icon Img="rating" AltText="<3"></Icon>
+                </div>
+            </div>
+        </td>
+        <td>Popularity</td>
+        <td>
+            <div class="progress" style="position: relative;">
+                <div class="progress-bar" role="progressbar" style="width: @(Math.Ceiling(TourVM.Tour.Popularity) * 10)%"
+                     aria-valuenow="@Math.Ceiling(TourVM.Tour.Popularity)" aria-valuemin="0" aria-valuemax="10">
+                </div>
+                <div class="progress-text" style="color: @(TourVM.Tour.ChildFriendliness < 5 ? "black" : "white; text-shadow:0px 0px 3px black"); position: absolute; top: 0; left: 0; width: 100%; text-align: center;">@Math.Ceiling(TourVM.Tour.Popularity) / 10</div>
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>
 
     @* Image *@
     <div class="tour-map">
         <img src="map.png" alt="Map">
     </div>
-
+    <ButtonGroup Layout="ButtonGroup.Position.Center">
+        <Button Img="log" OnClickCallback="@AddLog" Label="Add Log"></Button>
+    </ButtonGroup>
+    
     <div class="d-flex justify-content-between align-items-center">
         <h2>Logs</h2>
-        <button class="btn btn-primary" @onclick="AddLog">+ Add Log</button>
+        
     </div>
     <table class="table table-striped">
         <thead>
@@ -185,4 +199,5 @@ else
             return $"{hours:0.00}";
         }
     }
+
 }

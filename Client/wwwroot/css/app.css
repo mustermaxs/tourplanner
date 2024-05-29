@@ -1,6 +1,7 @@
 html,
 body {
   font-family: Inter, Arial, Helvetica, sans-serif;
+  zoom: 0.9;
 }
 
 h1:focus {
@@ -125,6 +126,7 @@ code {
 
 .primary {
   background: #5e38aa !important;
+  color: white !important;
 }
 
 .secondary {

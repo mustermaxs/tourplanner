@@ -1,0 +1,97 @@
+﻿@* @using Client.ViewModels *@
+@* @inject LogsTableViewModel LogsTableVM *@
+@* *@
+@* <table class="table tour-table"> *@
+@*     <tbody> *@
+@*     <tr> *@
+@*         <td class="icon-td"> *@
+@*             <div style="width: 1.7rem"> *@
+@*                 <div class="icon-wrapper"> *@
+@*                     <Icon Img="duration" AltText="#duration"></Icon> *@
+@*                 </div> *@
+@*             </div> *@
+@*         </td> *@
+@*         <td>Est. time</td> *@
+@*         <td>@FormatEstimatedTime(TourVM.Tour.EstimatedTime) h</td> *@
+@*     </tr> *@
+@*     <tr> *@
+@*         <td class="icon-td"> *@
+@*             <div style="width: 1.7rem"> *@
+@*                 <div class="icon-wrapper"> *@
+@*                     <Icon Img="map"></Icon> *@
+@*                 </div> *@
+@*             </div> *@
+@*         </td> *@
+@*         <td>From</td> *@
+@*         <td>@TourVM.Tour.From</td> *@
+@*     </tr> *@
+@*     <tr> *@
+@*         <td class="icon-td"> *@
+@*             <div style="width: 1.7rem"> *@
+@*                 <div class="icon-wrapper"> *@
+@*                    <Icon Img="to" AltText="#destination"></Icon> *@
+@*                 </div> *@
+@*             </div> *@
+@*         </td> *@
+@*         <td>To</td> *@
+@*         <td>@TourVM.Tour.To</td> *@
+@*     </tr> *@
+@*     <tr> *@
+@*         <td class="icon-td"> *@
+@*             <div style="width: 1.7rem"> *@
+@*                 <div class="icon-wrapper"> *@
+@*                     <Icon Img="difficulty" AltText="#difficulty"></Icon> *@
+@*                 </div> *@
+@*             </div> *@
+@*         </td> *@
+@*         <td>Difficulty</td> *@
+@*         <td>8/10</td> *@
+@*     </tr> *@
+@*     <tr> *@
+@*         <td class="icon-td"> *@
+@*             <div style="width: 1.7rem"> *@
+@*                 <div class="icon-wrapper"> *@
+@*                     <Icon Img="childfriendliness" AltText="#baby"></Icon> *@
+@*                 </div> *@
+@*             </div> *@
+@*         </td> *@
+@*         <td>Childfriendliness</td> *@
+@*         <td> *@
+@*             <div class="progress" style="position: relative;"> *@
+@*                 <div class="progress-bar" role="progressbar" style="width: @(Math.Ceiling(TourVM.Tour.ChildFriendliness) * 10)%" *@
+@*                      aria-valuenow="@Math.Ceiling(TourVM.Tour.ChildFriendliness)" aria-valuemin="0" aria-valuemax="10"> *@
+@*                 </div> *@
+@*                 <div class="progress-text" style="color: @(TourVM.Tour.ChildFriendliness < 5 ? "black" : "white; text-shadow:0px 0px 3px black"); position: absolute; top: 0; left: 0; width: 100%; text-align: center;">@Math.Ceiling(TourVM.Tour.ChildFriendliness) / 10</div> *@
+@*             </div> *@
+@*         </td> *@
+@*     </tr> *@
+@*     <tr> *@
+@*         <td class="icon-td"> *@
+@*             <div style="width: 1.7rem"> *@
+@*                 <div class="icon-wrapper"> *@
+@*                     <Icon Img="popularity" AltText="<3"></Icon> *@
+@*                 </div> *@
+@*             </div> *@
+@*         </td> *@
+@*         <td>Popularity</td> *@
+@*         <td> *@
+@*             <div class="progress" style="position: relative;"> *@
+@*                 <div class="progress-bar" role="progressbar" style="width: @(Math.Ceiling(TourVM.Tour.Popularity) * 10)%" *@
+@*                      aria-valuenow="@Math.Ceiling(TourVM.Tour.Popularity)" aria-valuemin="0" aria-valuemax="10"> *@
+@*                 </div> *@
+@*                 <div class="progress-text" style="color: @(TourVM.Tour.ChildFriendliness < 5 ? "black" : "white; text-shadow:0px 0px 3px black"); position: absolute; top: 0; left: 0; width: 100%; text-align: center;">@Math.Ceiling(TourVM.Tour.Popularity) / 10</div> *@
+@*             </div> *@
+@*         </td> *@
+@*     </tr> *@
+@*     </tbody> *@
+@* </table> *@
+@* *@
+@* @code { *@
+@*     [Parameter] public string? TourId { get; set; } *@
+@*     protected override async Task OnInitializedAsync() *@
+@*     { *@
+@*         int id = Convert.ToInt32(TourId); *@
+@*         await LogsTableVM.GetTourLogsAsync(id); *@
+@*         StateHasChanged(); *@
+@*     } *@
+@* } *@
