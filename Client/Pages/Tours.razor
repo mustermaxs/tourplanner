@@ -1,3 +1,4 @@
+@page "/"
 @page "/tours"
 @attribute [StreamRendering(true)]
 @inject ToursPageViewModel ToursVM
@@ -11,7 +12,7 @@
 
     <PageHeader Icon="map"><span>Tours</span></PageHeader>
 
-    <Button Label="Add Tour" OnClickCallback="AddTour"></Button>
+    <Button Img="map" Label="Add Tour" OnClickCallback="AddTour"></Button>
 
 </div>
 @if (ToursVM.Tours == null)
