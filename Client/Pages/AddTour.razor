@@ -5,9 +5,10 @@
 @using Client.Models
 
 <PageTitle>Add Tour</PageTitle>
-<div class="mb-4">
-    <PageHeader Icon="route">Add Tour</PageHeader>
-</div>
+
+<h1>Add Tour</h1>
+
+
     <div class="form-group mt-3">
         <div class="row">
             @* Tour name *@
@@ -25,31 +26,29 @@
                     }
                 </select>
             </div>
-
         </div>
     </div>
-</div>
 
-<div class="form-group mt-3">
-    <div class="row">
-        @* From *@
-        <div class="col">
-            <label for="from">From</label>
-            <input type="text" class="form-control" id="from" placeholder="Enter start" @bind="AddTourVM.Tour.From">
-        </div>
-        @* To *@
-        <div class="col">
-            <label for="to">To</label>
-            <input type="text" class="form-control" id="to" placeholder="Enter destination"
-                   @bind="AddTourVM.Tour.To">
+    <div class="form-group mt-3">
+        <div class="row">
+            @* From *@
+            <div class="col">
+                <label for="from">From</label>
+                <input type="text" class="form-control" id="from" placeholder="Enter start" @bind="AddTourVM.Tour.From">
+            </div>
+            @* To *@
+            <div class="col">
+                <label for="to">To</label>
+                <input type="text" class="form-control" id="to" placeholder="Enter destination"
+                    @bind="AddTourVM.Tour.To">
+            </div>
         </div>
     </div>
-</div>
 
-@* Description *@
-<div class="form-group mt-3">
-    <label for="description">Description</label>
-    <textarea class="form-control" id="description" placeholder="Enter description"
+    @* Description *@
+    <div class="form-group mt-3">
+        <label for="description">Description</label>
+        <textarea class="form-control" id="description" placeholder="Enter description"
             @bind="AddTourVM.Tour.Description"></textarea>
     </div>
 
