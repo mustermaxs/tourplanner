@@ -50,6 +50,9 @@
     <data name="childfriendliness" type="System.String">
         <value>baby.png</value>
     </data>
+    <data name="transporttype" type="System.String">
+        <value>bicycle.png</value>
+    </data>
     <data name="start" type="System.String">
         <value>star.png</value>
     </data>

@@ -59,6 +59,7 @@ namespace Client {
             }
         }
         
+        /// <summary>
         ///   Looks up a localized string similar to plus.png.
         /// </summary>
         internal static string add {
@@ -67,6 +68,7 @@ namespace Client {
             }
         }
         
+        /// <summary>
         ///   Looks up a localized string similar to &lt;value&gt;https://loclhost:5161/api/&lt;/value&gt;.
         /// </summary>
         internal static string api_base_url {
@@ -189,6 +191,15 @@ namespace Client {
         internal static string to {
             get {
                 return ResourceManager.GetString("to", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to bicycle.png.
+        /// </summary>
+        internal static string transporttype {
+            get {
+                return ResourceManager.GetString("transporttype", resourceCulture);
             }
         }
     }

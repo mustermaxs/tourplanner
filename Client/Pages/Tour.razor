@@ -33,90 +33,101 @@ else
     </div>
 
 
-<table class="table tour-table">
-    <tbody>
-    <tr>
-        <td class="icon-td">
-            <div style="width: 1.7rem">
-                <div class="icon-wrapper">
-                    <Icon Img="duration" AltText="#duration"></Icon>
+    <table class="table tour-table">
+        <tbody>
+        <tr>
+            <td class="icon-td">
+                <div style="width: 1.7rem">
+                    <div class="icon-wrapper">
+                        <Icon Img="duration" AltText="#duration"></Icon>
+                    </div>
                 </div>
-            </div>
-        </td>
-        <td>Est. time</td>
-        <td>@FormatEstimatedTime(TourVM.Tour.EstimatedTime) h</td>
-    </tr>
-    <tr>
-        <td class="icon-td">
-            <div style="width: 1.7rem">
-                <div class="icon-wrapper">
-                    <Icon Img="map"></Icon>
+            </td>
+            <td>Est. time</td>
+            <td>@FormatEstimatedTime(TourVM.Tour.EstimatedTime) h</td>
+        </tr>
+        <tr>
+            <td class="icon-td">
+                <div style="width: 1.7rem">
+                    <div class="icon-wrapper">
+                        <Icon Img="map"></Icon>
+                    </div>
                 </div>
-            </div>
-        </td>
-        <td>From</td>
-        <td>@TourVM.Tour.From</td>
-    </tr>
-    <tr>
-        <td class="icon-td">
-            <div style="width: 1.7rem">
-                <div class="icon-wrapper">
-                   <Icon Img="to" AltText="#destination"></Icon>
+            </td>
+            <td>From</td>
+            <td>@TourVM.Tour.From</td>
+        </tr>
+        <tr>
+            <td class="icon-td">
+                <div style="width: 1.7rem">
+                    <div class="icon-wrapper">
+                        <Icon Img="to" AltText="#destination"></Icon>
+                    </div>
                 </div>
-            </div>
-        </td>
-        <td>To</td>
-        <td>@TourVM.Tour.To</td>
-    </tr>
-    <tr>
-        <td class="icon-td">
-            <div style="width: 1.7rem">
-                <div class="icon-wrapper">
-                    <Icon Img="difficulty" AltText="#difficulty"></Icon>
+            </td>
+            <td>To</td>
+            <td>@TourVM.Tour.To</td>
+        </tr>
+        <tr>
+            <td class="icon-td">
+                <div style="width: 1.7rem">
+                    <div class="icon-wrapper">
+                        <Icon Img="transporttype" AltText="#transport-type"></Icon>
+                    </div>
                 </div>
-            </div>
-        </td>
-        <td>Difficulty</td>
-        <td>8/10</td>
-    </tr>
-    <tr>
-        <td class="icon-td">
-            <div style="width: 1.7rem">
-                <div class="icon-wrapper">
-                    <Icon Img="childfriendliness" AltText="#baby"></Icon>
+            </td>
+            <td>Transport type</td>
+            <td>@TourVM.Tour.TransportType</td>
+        </tr>
+        <tr>
+            <td class="icon-td">
+                <div style="width: 1.7rem">
+                    <div class="icon-wrapper">
+                        <Icon Img="difficulty" AltText="#difficulty"></Icon>
+                    </div>
                 </div>
-            </div>
-        </td>
-        <td>Childfriendliness</td>
-        <td>
-            <div class="progress" style="position: relative;">
-                <div class="progress-bar" role="progressbar" style="width: @(Math.Ceiling(TourVM.Tour.ChildFriendliness) * 10)%"
-                     aria-valuenow="@Math.Ceiling(TourVM.Tour.ChildFriendliness)" aria-valuemin="0" aria-valuemax="10">
+            </td>
+            <td>Difficulty</td>
+            <td>8/10</td>
+        </tr>
+        <tr>
+            <td class="icon-td">
+                <div style="width: 1.7rem">
+                    <div class="icon-wrapper">
+                        <Icon Img="childfriendliness" AltText="#baby"></Icon>
+                    </div>
                 </div>
-                <div class="progress-text" style="color: @(TourVM.Tour.ChildFriendliness < 5 ? "black" : "white; text-shadow:0px 0px 3px black"); position: absolute; top: 0; left: 0; width: 100%; text-align: center;">@Math.Ceiling(TourVM.Tour.ChildFriendliness) / 10</div>
-            </div>
-        </td>
-    </tr>
-    <tr>
-        <td class="icon-td">
-            <div style="width: 1.7rem">
-                <div class="icon-wrapper">
-                    <Icon Img="rating" AltText="<3"></Icon>
+            </td>
+            <td>Childfriendliness</td>
+            <td>
+                <div class="progress" style="position: relative;">
+                    <div class="progress-bar" role="progressbar" style="width: @(Math.Ceiling(TourVM.Tour.ChildFriendliness) * 10)%"
+                         aria-valuenow="@Math.Ceiling(TourVM.Tour.ChildFriendliness)" aria-valuemin="0" aria-valuemax="10">
+                    </div>
+                    <div class="progress-text" style="color: @(TourVM.Tour.ChildFriendliness < 5 ? "black" : "white; text-shadow:0px 0px 3px black"); position: absolute; top: 0; left: 0; width: 100%; text-align: center;">@Math.Ceiling(TourVM.Tour.ChildFriendliness) / 10</div>
                 </div>
-            </div>
-        </td>
-        <td>Popularity</td>
-        <td>
-            <div class="progress" style="position: relative;">
-                <div class="progress-bar" role="progressbar" style="width: @(Math.Ceiling(TourVM.Tour.Popularity) * 10)%"
-                     aria-valuenow="@Math.Ceiling(TourVM.Tour.Popularity)" aria-valuemin="0" aria-valuemax="10">
+            </td>
+        </tr>
+        <tr>
+            <td class="icon-td">
+                <div style="width: 1.7rem">
+                    <div class="icon-wrapper">
+                        <Icon Img="rating" AltText="<3"></Icon>
+                    </div>
                 </div>
-                <div class="progress-text" style="color: @(TourVM.Tour.ChildFriendliness < 5 ? "black" : "white; text-shadow:0px 0px 3px black"); position: absolute; top: 0; left: 0; width: 100%; text-align: center;">@Math.Ceiling(TourVM.Tour.Popularity) / 10</div>
-            </div>
-        </td>
-    </tr>
-    </tbody>
-</table>
+            </td>
+            <td>Popularity</td>
+            <td>
+                <div class="progress" style="position: relative;">
+                    <div class="progress-bar" role="progressbar" style="width: @(Math.Ceiling(TourVM.Tour.Popularity) * 10)%"
+                         aria-valuenow="@Math.Ceiling(TourVM.Tour.Popularity)" aria-valuemin="0" aria-valuemax="10">
+                    </div>
+                    <div class="progress-text" style="color: @(TourVM.Tour.ChildFriendliness < 5 ? "black" : "white; text-shadow:0px 0px 3px black"); position: absolute; top: 0; left: 0; width: 100%; text-align: center;">@Math.Ceiling(TourVM.Tour.Popularity) / 10</div>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 
     @* Image *@
     <div class="tour-map">
@@ -125,12 +136,12 @@ else
     <ButtonGroup Layout="ButtonGroup.Position.Center">
         <Button Img="log" OnClickCallback="@AddLog" Label="Add Log"></Button>
     </ButtonGroup>
-    
+
     <div class="d-flex justify-content-between align-items-center">
         <h2>Logs</h2>
-        
+
     </div>
-    
+
     <table class="table table-table">
         <thead>
         <tr>
@@ -145,7 +156,9 @@ else
         @foreach (var log in TourVM.TourLogs)
         {
             <tr>
-                <td><a href="/tours/@TourId/log/@log.Id">@log.DateTime.ToString("yyyy-MM-dd")</a></td>
+                <td>
+                    <a href="/tours/@TourId/log/@log.Id">@log.DateTime.ToString("yyyy-MM-dd")</a>
+                </td>
                 <td>@log.Comment</td>
                 <td>@log.Difficulty</td>
                 <td>@log.Duration</td>
