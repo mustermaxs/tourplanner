@@ -24,6 +24,14 @@
             completedSetup = true;
         }
 
+        public void UpdatePrefixTree(List<string> searchables)
+        {
+            foreach (var word in searchables)
+            {
+                prefixTree.Insert(word);
+            }
+        }
+
         private int CbSortByDistanceAsc(WordDistanceMap currentWord, WordDistanceMap nextWord)
         {
             return currentWord.Distance <= nextWord.Distance ? -1 : 1;
@@ -67,17 +75,16 @@
         /// Use this implementation if you don't plan to reuse the wordlist.
         /// </summary>
         /// <param name="userInput">Search term.</param>
-        /// <param name="wordList">List of searchable words.</param>
+        /// <param name="searchables">List of searchable words.</param>
         /// <returns></returns>
-        public List<string> GetMatches(string userInput, List<string> wordList)
+        public List<WordDistanceMap> GetMatches(string userInput, List<string> searchables)
         {
-            SetSearchableWords(wordList);
-            wordList = wordList.Select(word => word.ToLower()).ToList();
-            var stringDistanceMappings = CreateDistanceMappingsForWordList(wordList, userInput);
+            SetSearchableWords(searchables);
+            searchables = searchables.Select(word => word.ToLower()).ToList();
+            var stringDistanceMappings = CreateDistanceMappingsForWordList(searchables, userInput);
             stringDistanceMappings = SortSuggestions(stringDistanceMappings);
             var matches = stringDistanceMappings
-                .Where(mapping => mapping.Distance <= threshold)
-                .Select(word => word.Content).ToList();
+                .Where(mapping => mapping.Distance <= threshold).ToList();
             
             Reset();
 
@@ -93,7 +100,7 @@
         /// <returns>List of possible matches.</returns>
         /// <exception cref="Exception">Throws exception if setup is incomplete (e.g. no list of searchable
         /// words provided.</exception>
-        public List<string> GetMatches(string userInput)
+        public List<WordDistanceMap> GetMatches(string userInput)
         {
             if (!completedSetup)
                 throw new Exception("Setup incomplete!");
@@ -102,7 +109,7 @@
             var stringDistanceMappings = CreateDistanceMappingsForWordList(matches, userInput);
             stringDistanceMappings = SortSuggestions(stringDistanceMappings);
 
-            return stringDistanceMappings.Select(word => word.Content).ToList();
+            return stringDistanceMappings.Where(mapping => mapping.Distance <= threshold).ToList();
         }
 
         private string LimitWordLength(string word, int length)
@@ -120,11 +127,11 @@
             return Math.Min(trimmedWordDistance, untrimmedWordDistance);
         }
 
-        private List<WordDistanceMap> CreateDistanceMappingsForWordList(List<string> wordList, string userInput)
+        private List<WordDistanceMap> CreateDistanceMappingsForWordList(List<string> searchables, string userInput)
         {
             bool existsAsPrefix = prefixTree.PrefixExists(userInput);
 
-            return wordList.Select(word =>
+            return searchables.Select(word =>
             {
                 bool isPrefix = existsAsPrefix && word.StartsWith(userInput);
                 int distance = GetShorterDistance(userInput, word);

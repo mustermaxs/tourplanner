@@ -1,15 +1,17 @@
 ﻿namespace Tourplanner.DTOs
 {
-    
-    public class SearchResult<T
-    
-    
-    public class SearchResultsDto
+    public class SearchResultsDto<TEntity>
     {
-        public SearchResultsDto(
-            string SearchTerm,
-            IEnumerable<TourDto> Tours,
-            IEnumerable<TourLogDto> TourLogs);
+        public readonly string SearchTerm;
+        public readonly string Category;
+        public readonly IEnumerable<TEntity> Matches;
+
+        public SearchResultsDto(string searchTerm, string category, IEnumerable<TEntity> matches)
+        {
+            SearchTerm = searchTerm;
+            Matches = matches;
+            Category = category;
+        }
     }
 }
 
