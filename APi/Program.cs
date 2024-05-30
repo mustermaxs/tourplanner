@@ -1,10 +1,8 @@
 using Tourplanner.Entities;
 using Tourplanner.Entities.TourLogs.Commands;
 using Tourplanner.Services;
-
-namespace Tourplanner;
-
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,10 +10,14 @@ using Microsoft.Extensions.Logging;
 using System;
 using Tourplanner.Repositories;
 using Tourplanner.Infrastructure;
-using Entities.Tours;
-using Entities.TourLogs;
+using Tourplanner.Entities.Tours;
+using Tourplanner.Entities.TourLogs;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+
+namespace Tourplanner;
+
+
 
 internal class Program
 {
@@ -27,6 +29,9 @@ internal class Program
 
         builder.Services.AddDbContext<TourContext>(options =>
             options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+        builder.Services.AddHttpClient();
+        builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+        builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 
         builder.Services.AddCors(options =>
         {
@@ -56,7 +61,6 @@ internal class Program
 
         app.MapControllers();
 
-        // Ensure database is created
         CreateDbIfNotExists(app);
 
         app.Run();
@@ -64,13 +68,15 @@ internal class Program
 
     private static void RegisterServices(IServiceCollection services)
     {
-        services.AddTransient<DbContext, TourContext>();
+        services.AddScoped<IHttpService, HttpService>();
+        services.AddScoped<DbContext, TourContext>();
         services.AddTransient<IServiceProvider, ServiceProvider>();
         services.AddTransient<IMediator, Mediator>();
         services.AddTransient<IRatingService, RatingService>();
         services.AddTransient<IChildFriendlinessService, ChildFriendlinessService>();
         services.AddScoped<ITourLogRepository, TourLogRepository>();
         services.AddScoped<ITourRepository, TourRepository>();
+        services.AddTransient<IOpenRouteService, OpenRouteService>();
 
         services.AddScoped<ICommandHandler, GetToursCommandHandler>();
         services.AddScoped<ICommandHandler, GetTourByIdCommandHandler>();
@@ -82,6 +88,7 @@ internal class Program
         services.AddScoped<ICommandHandler, CreateTourLogCommandHandler>();
         services.AddScoped<ICommandHandler, UpdateTourLogCommandHandler>();
         services.AddScoped<ICommandHandler, DeleteTourLogCommandHandler>();
+        services.AddScoped<ICommandHandler, GetGeoAutoCompleteQueryHandler>();
     }
 
     private static void CreateDbIfNotExists(WebApplication app)

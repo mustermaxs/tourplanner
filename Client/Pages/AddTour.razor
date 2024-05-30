@@ -34,7 +34,7 @@
         @* From *@
         <div class="col">
             <label for="from">From</label>
-            <input type="text" class="form-control" id="from" placeholder="Enter start" @bind="AddTourVM.Tour.From">
+            <input type="text" class="form-control" id="from" @onkeyup="AddTourVM.GetGeoSuggestion" placeholder="Enter start" @bind="AddTourVM.Tour.From">
         </div>
         @* To *@
         <div class="col">

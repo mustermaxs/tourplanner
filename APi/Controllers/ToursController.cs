@@ -32,6 +32,13 @@ namespace Api.Controllers
             return await ResponseAsync(command);
         }
 
+        [HttpGet("geosuggestion")]
+        public async Task<ActionResult<object>> GetAutoCompleteSuggestionForLocation([FromQuery] string location)
+        {
+            var query = new GetGeoAutoCompleteQuery(location);
+            return await ResponseAsync(query);
+        }
+
         [HttpPost]
         public async Task<ActionResult<IResponse>> CreateTour([FromBody] CreateTourDto createTourDto)
         {

@@ -84,6 +84,7 @@ public class Mediator : IMediator
         Register<CreateTourLogCommand, CreateTourLogCommandHandler>();
         Register<UpdateTourLogCommand, UpdateTourLogCommandHandler>();
         Register<DeleteTourLogCommand, DeleteTourLogCommandHandler>();
+        Register<GetGeoAutoCompleteQuery, GetGeoAutoCompleteQueryHandler>();
     }
 
     public void DiscoverPublishers()

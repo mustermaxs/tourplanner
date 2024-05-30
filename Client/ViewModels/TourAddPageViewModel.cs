@@ -1,3 +1,4 @@
+using System.Text.Json.Nodes;
 using Microsoft.AspNetCore.Components;
 using Client.Dao;
 using Client.Models;
@@ -8,13 +9,15 @@ public class TourAddPageViewModel
 {
     private readonly ITourDao _tourDao;
     private PopupViewModel _popupVm;
+    private readonly IHttpService _httpService;
     private readonly NavigationManager _navigationManager;
 
-    public TourAddPageViewModel(NavigationManager navigationManager, ITourDao tourDao, PopupViewModel popupVm)
+    public TourAddPageViewModel(NavigationManager navigationManager, ITourDao tourDao, PopupViewModel popupVm, IHttpService httpService)
     {
         _navigationManager = navigationManager;
         _tourDao = tourDao;
         _popupVm = popupVm;
+        _httpService = httpService;
     }
 
     public Tour Tour { get; private set; } = new Tour();
@@ -43,5 +46,10 @@ public class TourAddPageViewModel
             Console.WriteLine($"Error adding tour: {ex.Message}");
             _popupVm.Open("Error", "Failed to add tour.", PopupStyle.Error);
         }
+    }
+
+    public void GetGeoSuggestion()
+    {
+        _httpService.Get<JsonObject>()
     }
 }
