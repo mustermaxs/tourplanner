@@ -4,16 +4,15 @@
 @inject ToursPageViewModel ToursVM
 @inject NavigationManager NavManager
 @using Client.Components
-
 @using Client.Pages;
 
 <PageTitle>Tours</PageTitle>
 
-<div class="d-flex justify-content-between align-items-center">
-    <h1>Tours</h1>
+<div class="d-flex justify-content-between align-items-center mb-4">
 
-    <Button ButtonType="Primary" Label="Add Tour" Icon="map" OnClickCallback="AddTour"/>
+    <PageHeader Icon="map"><span>Tours</span></PageHeader>
 
+    <Button Img="map" Label="Add Tour" OnClickCallback="AddTour"></Button>
 
 </div>
 @if (ToursVM.Tours == null)
@@ -25,15 +24,15 @@ else
     <div class="table-responsive">
         <table class="table table-striped">
             <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Transport Type</th>
-                    <th>From</th>
-                    <th>To</th>
-                    <th>Popularity</th>
-                    <th></th>
-                </tr>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Transport Type</th>
+                <th>From</th>
+                <th>To</th>
+                <th>Popularity</th>
+                <th></th>
+            </tr>
             </thead>
             <tbody>
                 @foreach (var tour in ToursVM.Tours)
@@ -46,7 +45,7 @@ else
                         <td>@tour.TransportType</td>
                         <td>@tour.From</td>
                         <td>@tour.To</td>
-                        <td>@tour.Popularity / 10</td>
+                        <td>@tour.Popularity</td>
                     </tr>
                 }
             </tbody>
@@ -58,6 +57,7 @@ else
     protected override async Task OnInitializedAsync()
     {
         await ToursVM.GetToursAsync();
+        
         StateHasChanged();
     }
 

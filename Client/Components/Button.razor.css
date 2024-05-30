@@ -2,11 +2,10 @@
     max-width: 10rem;
     height: 2.5rem;
     background: white;
-    border-radius: 7px;
+    border-radius: 28px;
     border: none;
-    font-size: 1rem;
-    font-weight: 500;
-    /* box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.33); */
+    font-size: 0.9rem;
+    box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.33);
     align-content: space-evenly;
     align-items: center;
     transition: all 90ms;
@@ -41,7 +40,6 @@
     overflow:hidden;
     white-space:nowrap;
     text-overflow: ellipsis;
-    margin: 0 0.5rem;
 }
 
 .tp-button.icon .tp-button-label {
@@ -56,7 +54,7 @@
 }
 
 .tp-button:hover {
-    box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.33);
+    box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.63);
 }
 
 .tp-button:active {
@@ -64,29 +62,6 @@
     border: 0.5px solid darkgray;
 }
 
-.tp-button.Primary {
-    background: #0078d4;
-    color: white;
-}
-
-.tp-button.Primary:hover {
-    background: #005a9e;
-}
-
-.tp-button.Secondary {
-    background: #f3f2f1;
-    color: black;
-}
-
-.tp-button.Secondary:hover {
-    background: #e1dfdd;
-}
-
-.tp-button.Danger {
-    background: #d13438;
-    color: white;
-}
-
-.tp-button.Danger:hover {
-    background: #a4262c;
+.tp-button + .tp-button {
+    margin: 0px 20px;
 }

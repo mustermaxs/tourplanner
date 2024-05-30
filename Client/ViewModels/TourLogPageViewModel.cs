@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Client.Dao;
+using Client.Models;
+
 public class TourLogPageViewModel
 {
     public TourLog TourLog { get; set; }
