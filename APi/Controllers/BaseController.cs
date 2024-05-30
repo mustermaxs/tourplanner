@@ -1,4 +1,6 @@
-﻿using System.Windows.Input;
+﻿using System.Text.Json;
+using System.Text.Json.Nodes;
+using System.Windows.Input;
 using Microsoft.AspNetCore.Mvc;
 using Tourplanner;
 using Tourplanner.Exceptions;
@@ -24,6 +26,12 @@ public abstract class BaseController : ControllerBase
             if (responseObj is null)
             {
                 return NotFound();
+            }
+
+            if (responseObj is JsonObject)
+            {
+                var jsonRes = JsonSerializer.Serialize(responseObj);
+                return Content(jsonRes, "application/json");
             }
             return Ok(responseObj);
         }

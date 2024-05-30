@@ -34,7 +34,14 @@
         @* From *@
         <div class="col">
             <label for="from">From</label>
-            <input type="text" class="form-control" id="from" @onkeyup="AddTourVM.GetGeoSuggestion" placeholder="Enter start" @bind="AddTourVM.Tour.From">
+            <input list="from_list" type="text" @ref="FromInput" class="form-control" id="from" @oninput="(ev) => AddTourVM.GetSuggestion(ev.Value.ToString())" placeholder="Enter start" @bind="AddTourVM.Tour.From">
+
+                <datalist @ref="FromInputDataList" id="from_list">
+                    @foreach (var suggestion in AddTourVM.Suggestions)
+                    {
+                        <option value="@suggestion.Label"></option>
+                    }
+                </datalist>
         </div>
         @* To *@
         <div class="col">
@@ -57,9 +64,12 @@
 
 @code
 {
-    protected override Task OnInitializedAsync()
+    public ElementReference FromInput;
+    public ElementReference FromInputDataList;
+    
+    protected override async Task OnInitializedAsync()
     {
-        return base.OnInitializedAsync();
+        await AddTourVM.Initialize(StateHasChanged);
     }
 }
 

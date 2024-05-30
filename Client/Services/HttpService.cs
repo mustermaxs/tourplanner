@@ -30,7 +30,17 @@ public class HttpService : IHttpService
         if (response.IsSuccessStatusCode)
         {
             var content = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<TDto>(content, options: new JsonSerializerOptions(JsonSerializerDefaults.Web));
+
+            try
+            {
+                JsonElement jsonElement = JsonSerializer.Deserialize<JsonElement>(content);
+                return JsonSerializer.Deserialize<TDto>(content, options: new JsonSerializerOptions(JsonSerializerDefaults.Web));
+            }
+            catch (JsonException e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
         else
         {

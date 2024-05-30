@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Client;
 using Client.Components;
 using Client.Dao;
+using Client.Utils;
 using Client.ViewModels;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
@@ -11,6 +12,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddScoped<IHttpService, HttpService>();
+// builder.Services.AddScoped<Debouncer>();
 builder.Services.AddTransient<IPopupService, PopupService>();
 builder.Services.AddTransient<ITourDao, TourDao>();
 builder.Services.AddTransient<ITourLogDao, TourLogDao>();

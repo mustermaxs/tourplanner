@@ -3,6 +3,7 @@
 @inject NavigationManager NavManager
 @inject TourDetailsPageViewModel TourVM
 @using Client.Components
+@inject IJSRuntime JS
 
 <PageTitle>@TourVM.Tour.Name</PageTitle>
 
@@ -132,6 +133,7 @@ else
     @* Image *@
     <div class="tour-map">
         <img src="map.png" alt="Map">
+        <div id="map"></div>
     </div>
     <ButtonGroup Layout="ButtonGroup.Position.Center">
         <Button Img="log" OnClickCallback="@AddLog" Label="Add Log"></Button>

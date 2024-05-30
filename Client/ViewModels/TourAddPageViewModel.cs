@@ -1,9 +1,12 @@
+using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Components;
 using Client.Dao;
 using Client.Models;
 using Client.Utils;
 using Client.Components;
+using Microsoft.AspNetCore.Components.Web;
 
 public class TourAddPageViewModel
 {
@@ -11,8 +14,23 @@ public class TourAddPageViewModel
     private PopupViewModel _popupVm;
     private readonly IHttpService _httpService;
     private readonly NavigationManager _navigationManager;
+    public Tour Tour { get; set; } = new Tour();
+    private string test { get; set; }
+    public string Test
+    {
+        get => test;
+        set
+        {
+            test = value;
+            _notifyStateChanged.Invoke();
+        }
+    }
 
-    public TourAddPageViewModel(NavigationManager navigationManager, ITourDao tourDao, PopupViewModel popupVm, IHttpService httpService)
+    public List<GeoSuggestion> Suggestions { get; private set; } = new List<GeoSuggestion>{new GeoSuggestion("blabla", new Coordinates(1.9d, 2.0d))};
+    private Action _notifyStateChanged;
+
+    public TourAddPageViewModel(NavigationManager navigationManager, ITourDao tourDao, PopupViewModel popupVm,
+        IHttpService httpService)
     {
         _navigationManager = navigationManager;
         _tourDao = tourDao;
@@ -20,7 +38,10 @@ public class TourAddPageViewModel
         _httpService = httpService;
     }
 
-    public Tour Tour { get; private set; } = new Tour();
+    public async Task Initialize(Action notifySateChanged)
+    {
+        _notifyStateChanged = notifySateChanged;
+    }
 
     public async Task AddTour()
     {
@@ -48,8 +69,41 @@ public class TourAddPageViewModel
         }
     }
 
-    public void GetGeoSuggestion()
+    public async Task GetSuggestion(string userInput)
     {
-        _httpService.Get<JsonObject>()
+        Console.WriteLine(userInput);
+        await Debouncer.Debounce<string>(GetGeoSuggestion, userInput, 1000);
+        _notifyStateChanged.Invoke();
+    }
+
+    private async Task GetGeoSuggestion(string userInput)
+    {
+        var json = await _httpService.Get<JsonElement>($"Tours/geosuggestion?location={userInput}");
+
+        var features = json.GetProperty("features");
+
+        foreach (JsonElement feature in features.EnumerateArray())
+        {
+            var jsonCoordinates = feature.GetProperty("geometry").GetProperty("coordinates").EnumerateArray();
+            var longitude = jsonCoordinates.ElementAt(0).GetDouble();
+            var lattitute = jsonCoordinates.ElementAt(1).GetDouble();
+            var coordinates = new Coordinates(longitude, lattitute);
+            var properties = feature.GetProperty("properties");
+            try
+            {
+                Suggestions.Add(
+                    new GeoSuggestion(
+                        properties.GetProperty("label").GetString(),
+                        coordinates
+                    )
+                );
+            }
+            catch (KeyNotFoundException e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+
+        }
     }
 }

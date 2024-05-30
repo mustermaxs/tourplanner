@@ -33,7 +33,7 @@ namespace Api.Controllers
         }
 
         [HttpGet("geosuggestion")]
-        public async Task<ActionResult<object>> GetAutoCompleteSuggestionForLocation([FromQuery] string location)
+        public async Task<ActionResult<IResponse>> GetAutoCompleteSuggestionForLocation([FromQuery] string location)
         {
             var query = new GetGeoAutoCompleteQuery(location);
             return await ResponseAsync(query);
