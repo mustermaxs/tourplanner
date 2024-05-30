@@ -44,6 +44,9 @@
     <data name="difficulty" type="System.String">
         <value>dumbbell.png</value>
     </data>
+    <data name="search" type="System.String">
+        <value>search.png</value>
+    </data>
     <data name="edit" type="System.String">
         <value>edit.png</value>
     </data>

@@ -16,16 +16,15 @@ namespace Tourplanner.Entities.Tours
         ITourRepository tourRepository,
         ITourLogRepository tourLogRepository,
         ISearchService searchService)
-        : RequestHandler<GetSearchResultsQuery, IEnumerable<SearchResultsDto<object>>>(ctx)
+        : RequestHandler<GetSearchResultsQuery, GlobalSearchResultsDto>(ctx)
     {
-        public override async Task<IEnumerable<SearchResultsDto<object>>> Handle(GetSearchResultsQuery query)
+        public override async Task<GlobalSearchResultsDto> Handle(GetSearchResultsQuery query)
         {
             var searchTerm = query.SearchTerm ?? string.Empty;
             var tours = await tourRepository.GetAll();
             var tourlogs = await tourLogRepository.GetAll();
 
             var searchables = new List<string>();
-            var results = new List<SearchResultsDto<object>>();
 
             var tourMatches = await dbContext.Tours.Where(tour =>
                     EF.Functions.ILike(tour.Name, $"%{searchTerm}%") ||
@@ -35,7 +34,6 @@ namespace Tourplanner.Entities.Tours
                 .Select(match => match.ToTourDto())
                 .ToListAsync();
 
-            var tourSearchResults = new SearchResultsDto<object>(query.SearchTerm, "Tours", tourMatches);
 
             var tourLogMatches = await dbContext.TourLogs
                 .Where(log =>
@@ -43,10 +41,11 @@ namespace Tourplanner.Entities.Tours
                 .Select(log => log.ToTourLogDto())
                 .ToListAsync();
 
-            var logSearchResults = new SearchResultsDto<object>(query.SearchTerm, "TourLogs", tourLogMatches);
-
-            results.Add(tourSearchResults);
-            results.Add(logSearchResults);
+            var results = new GlobalSearchResultsDto(
+                query.SearchTerm,
+                tourMatches,
+                tourLogMatches,
+                tourMatches.Count() + tourLogMatches.Count() > 0);
 
             return results;
         }

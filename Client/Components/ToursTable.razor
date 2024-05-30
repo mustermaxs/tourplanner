@@ -1,0 +1,54 @@
+﻿@using Client.Models
+@inject NavigationManager NavManager
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Transport Type</th>
+            <th>From</th>
+            <th>To</th>
+            <th>Popularity</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var tour in @Tours)
+        {
+        <tr>
+            <td>
+                <a class="link" style="cursor:pointer" @onclick='() => TourDetails(tour.Id.ToString())'>@tour.Name</a>
+            </td>
+            <td>@tour.Description</td>
+            <td>@tour.TransportType</td>
+            <td>@tour.From</td>
+            <td>@tour.To</td>
+            <td>@tour.Popularity</td>
+        </tr>
+        }
+        </tbody>
+    </table>
+</div>
+@code {
+    [Parameter]
+    public IEnumerable<Tour> Tours { get; set; }
+    
+    protected override async Task OnInitializedAsync()
+    {
+        StateHasChanged();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        base.OnParametersSetAsync();
+        StateHasChanged();
+    }
+
+    private void TourDetails(string tourId)
+    {
+        Console.WriteLine($"TOUR ID: {tourId}");
+        NavManager.NavigateTo($"/tours/{tourId}");
+    }
+}

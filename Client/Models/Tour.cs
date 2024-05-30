@@ -15,6 +15,20 @@ namespace Client.Models
         public Tour()
         {
         }
+        public Tour(int id, string name, string from, string to, float estimatedTime, string description, float distance, float popularity, TransportType transportType, float childFriendliness, string imagePath)
+        {
+            Id = id;
+            Name = name;
+            From = from;
+            To = to;
+            EstimatedTime = estimatedTime;
+            Description = description;
+            Distance = distance;
+            Popularity = popularity;
+            TransportType = transportType;
+            ChildFriendliness = childFriendliness;
+            ImagePath = imagePath;
+        }
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string From { get; set; } = string.Empty;
@@ -26,7 +40,6 @@ namespace Client.Models
         public TransportType TransportType { get; set; } = TransportType.Car;
         public float ChildFriendliness { get; set; } = 0;
         public string ImagePath { get; set; } = string.Empty;
-        public string TourName {get; set;} = string.Empty;
     }
 
 }

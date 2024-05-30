@@ -1,0 +1,52 @@
+﻿@page "/search"
+@inject SearchPageViewModel SearchVM
+@inject NavigationManager NavManager
+@using Client.Components
+@using Client.ViewModels
+@using Microsoft.AspNetCore.WebUtilities
+
+<PageTitle>@SearchVM.PageTitle</PageTitle>
+
+<div class="tour-header">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <PageHeader Icon="search">Search Results: "@SearchTerm"</PageHeader>
+    </div>
+</div>
+
+<h2>@SearchVM.Tours.Count() Tours</h2>
+
+@if (SearchVM.FoundTours)
+{
+    <ToursTable Tours="@SearchVM.Tours"></ToursTable>
+}
+
+@if (SearchVM.FoundTourLogs)
+{
+    // TODO logs table
+}
+
+<h2>@SearchVM.Tours.Count() Tour Logs</h2>
+
+@code {
+    [Parameter] public string? SearchTerm { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var uri = NavManager.ToAbsoluteUri(NavManager.Uri);
+
+        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("q", out var searchTerm))
+        {
+            SearchTerm = searchTerm;
+        }
+        SearchVM.Initialize(StateHasChanged);
+        await SearchVM.GetSearchResults(SearchTerm);
+        base.OnInitializedAsync();
+    }
+
+    protected override Task OnParametersSetAsync()
+    {
+        
+        return base.OnParametersSetAsync();
+    }
+
+}

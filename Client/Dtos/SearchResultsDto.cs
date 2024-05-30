@@ -1,4 +1,6 @@
-﻿namespace Tourplanner.DTOs
+﻿using Client.Models;
+
+namespace Client.Dto
 {
     public class SearchResultsDto<TEntity>
     {
@@ -16,12 +18,18 @@
 
     public class GlobalSearchResultsDto
     {
-        public readonly string SearchTerm;
-        public readonly IEnumerable<TourDto> Tours;
-        public readonly IEnumerable<TourLogDto> TourLogs;
-        public readonly bool Successful;
+        public string SearchTerm { get; set; }
+        public IEnumerable<Tour> Tours { get; set; }
+        public IEnumerable<TourLog> TourLogs { get; set; }
+        public bool Successful { get; set; }
 
-        public GlobalSearchResultsDto(string searchTerm, IEnumerable<TourDto> tours, IEnumerable<TourLogDto> tourLogs, bool successful)
+        public GlobalSearchResultsDto()
+        {
+            
+        }
+
+        public GlobalSearchResultsDto(string searchTerm, IEnumerable<Tour> tours, IEnumerable<TourLog> tourLogs,
+            bool successful)
         {
             SearchTerm = searchTerm;
             Tours = tours;
@@ -30,4 +38,3 @@
         }
     }
 }
-

@@ -8,7 +8,16 @@ namespace Client.Models
         public TourLog()
         {
         }
-
+        public TourLog(int id, DateTime dateTime, string comment, float difficulty, float duration, float rating, Tour tour)
+        {
+            Id = id;
+            DateTime = dateTime;
+            Comment = comment;
+            Difficulty = difficulty;
+            Duration = duration;
+            Rating = rating;
+            Tour = tour;
+        }
         public int Id { get; set; }
         public DateTime DateTime { get; set; }
         public string Comment { get; set; } = "";
