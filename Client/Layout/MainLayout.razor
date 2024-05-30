@@ -26,7 +26,7 @@
                 </li>
             </ul>
            <div class="d-flex" role="search">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" @bind="SearchValue">
+                <input aria-label="Search" @bind="SearchValue" class="form-control me-2" @onkeyup="(ev) => Enter(ev)" placeholder="Search" type="search">
                 @* <button class="btn btn-primary" @onclick="() => TriggerSearch()">Search</button> *@
                 <button class="btn btn-primary" @onclick="() => TriggerSearch()">Search</button>
             </div>
@@ -50,16 +50,15 @@
     {
         return base.OnInitializedAsync();
     }
-    private string SearchValue { get; set; }
+    private string? SearchValue { get; set; }
 
     private async Task TriggerSearch()
     {
-
         if(string.IsNullOrWhiteSpace(SearchValue))
             return;
-
-        var encodedSearchValue = Uri.EscapeDataString(SearchValue);
         NavManager.NavigateTo($"/search?q={SearchValue}");
+
+        return;
     }
 
     private bool collapseNavMenu = true;
@@ -70,4 +69,13 @@
     {
         collapseNavMenu = !collapseNavMenu;
     }
+
+    private async Task Enter(KeyboardEventArgs obj)
+    {
+        if (obj.Key == "Enter")
+        {
+            await TriggerSearch();
+        }
+    }
+
 }

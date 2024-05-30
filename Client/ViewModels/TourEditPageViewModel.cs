@@ -22,7 +22,7 @@ public class TourEditPageViewModel
     {
         try
         {
-            
+            // TODO validation
             await _tourDao.Update(Tour);
             _navigationManager.NavigateTo($"/tours/{Tour.Id}");
         }

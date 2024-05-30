@@ -26,6 +26,7 @@ public class TourLogAddPageViewModel
 
     public async Task AddLog()
     {
+        // TODO validation
         await _tourLogDao.Create(TourLog);
         _navigationManager.NavigateTo($"/tours/{TourLog.Tour.Id}");
         TourLog = new TourLog();

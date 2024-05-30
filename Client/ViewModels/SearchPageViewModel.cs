@@ -21,6 +21,7 @@ public class SearchPageViewModel
     public bool FoundTourLogs { get; set; } = false;
     private Action _notifyStateChanged;
     public bool SearchCompleted { get; private set; }
+    private string SearchTerm { get; set; }
 
 
     public SearchPageViewModel(
@@ -42,8 +43,10 @@ public class SearchPageViewModel
     {
         try
         {
-            // if (String.IsNullOrEmpty(searchTerm)) return;
-
+            Reset();
+            
+            if (String.IsNullOrEmpty(searchTerm)) return;
+            
             SearchResults = await _httpService.Get<GlobalSearchResultsDto>($"?q={searchTerm}");
             FoundTours = SearchResults.Tours.Any();
             FoundTourLogs = SearchResults.TourLogs.Any();
@@ -59,6 +62,17 @@ public class SearchPageViewModel
             Console.WriteLine(e);
             _popupViewModel.Open("Error", "Something went wrong :(", PopupStyle.Error);
             SearchCompleted = true;
+            Reset();
         }
+    }
+
+    private void Reset()
+    {
+        Tours = new List<Tour>();
+        TourLogs = new List<TourLog>();
+        SearchTerm = string.Empty;
+        FoundTours = false;
+        FoundTourLogs = false;
+        _notifyStateChanged();
     }
 }

@@ -4,6 +4,8 @@
 @using Client.Components
 @using Client.ViewModels
 @using Microsoft.AspNetCore.WebUtilities
+@inject IJSRuntime JS
+
 
 <PageTitle>@SearchVM.PageTitle</PageTitle>
 
@@ -13,6 +15,10 @@
     </div>
 </div>
 
+<hr/>
+<br/>
+<br/>
+
 <h2>@SearchVM.Tours.Count() Tours</h2>
 
 @if (SearchVM.FoundTours)
@@ -20,33 +26,49 @@
     <ToursTable Tours="@SearchVM.Tours"></ToursTable>
 }
 
+<br/>
+
+<h2>@SearchVM.TourLogs.Count() Tour Logs</h2>
+
 @if (SearchVM.FoundTourLogs)
 {
-    // TODO logs table
+    <TourLogsTable TourLogs="SearchVM.TourLogs"></TourLogsTable>
 }
 
-<h2>@SearchVM.Tours.Count() Tour Logs</h2>
 
 @code {
     [Parameter] public string? SearchTerm { get; set; }
-
+    private string? _currentSearchTerm;
+    
     protected override async Task OnInitializedAsync()
+    {
+        NavManager.LocationChanged += OnLocationChanged;
+        SearchVM.Initialize(StateHasChanged);
+        await UpdateSearchResults();
+    }
+
+    private async void OnLocationChanged(object? sender, Microsoft.AspNetCore.Components.Routing.LocationChangedEventArgs e)
+    {
+        await UpdateSearchResults();
+    }
+
+    private async Task UpdateSearchResults()
     {
         var uri = NavManager.ToAbsoluteUri(NavManager.Uri);
 
         if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("q", out var searchTerm))
         {
             SearchTerm = searchTerm;
+            _currentSearchTerm = SearchTerm;
+            await SearchVM.GetSearchResults(SearchTerm);
+            StateHasChanged();
+            await JS.InvokeVoidAsync("highlightSearchResults", SearchTerm);
         }
-        SearchVM.Initialize(StateHasChanged);
-        await SearchVM.GetSearchResults(SearchTerm);
-        base.OnInitializedAsync();
     }
 
-    protected override Task OnParametersSetAsync()
+    public void Dispose()
     {
-        
-        return base.OnParametersSetAsync();
+        NavManager.LocationChanged -= OnLocationChanged;
     }
-
 }
+

@@ -16,7 +16,6 @@ public class ToursPageViewModel
         try
         {
             Tours = await _tourDao.ReadMultiple();
-
         }
         catch (Exception ex)
         {
