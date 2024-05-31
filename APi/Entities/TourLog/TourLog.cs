@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Tourplanner.DTOs;
 using Tourplanner.Entities.Tours;
 
 namespace Tourplanner.Entities.TourLogs
@@ -18,5 +19,22 @@ namespace Tourplanner.Entities.TourLogs
         public Tour Tour { get; set; } = null!;
 
         public DateTime Date { get; set; }
+    }
+
+    public static class TourLogExtensionMethods
+    {
+        public static TourLogDto ToTourLogDto(this TourLog log)
+        {
+            return new TourLogDto(
+                log.TourLogId,
+                log.TourId,
+                log.Date,
+                log.Comment,
+                log.Difficulty,
+                log.Duration,
+                log.Rating,
+                log.Tour.Name,
+                log.Tour.ToTourDto());
+        }
     }
 }

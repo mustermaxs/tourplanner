@@ -25,6 +25,12 @@ public abstract class BaseController : ControllerBase
             {
                 return NotFound();
             }
+
+            if (responseObj is byte[] pdfBytes)
+            {
+                return File(pdfBytes, "application/pdf");
+            }
+
             return Ok(responseObj);
         }
         catch (ResourceNotFoundException rex)

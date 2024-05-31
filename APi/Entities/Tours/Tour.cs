@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Tourplanner.DTOs;
 using Tourplanner.Models;
 using Tourplanner.Entities.TourLogs;
 
 namespace Tourplanner.Entities.Tours;
-
 public class Tour
 {
     public Tour()
@@ -35,4 +35,24 @@ public class Tour
     public ICollection<TourLog> TourLogs { get; set; }
 
     public TransportType TransportType { get; set; }
+}
+
+public static class TourExtensionMethods
+{
+    public static TourDto ToTourDto(this Tour tour)
+    {
+        return new TourDto(
+            tour.Id,
+            tour.Name,
+            tour.Description,
+            tour.From,
+            tour.To,
+            tour.TransportType,
+            tour.Distance,
+            tour.EstimatedTime,
+            tour.Popularity,
+            tour.ChildFriendliness,
+            tour.ImagePath
+            );
+    }
 }
