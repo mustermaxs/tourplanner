@@ -14,6 +14,8 @@ builder.Services.AddScoped<IHttpService, HttpService>();
 builder.Services.AddTransient<IPopupService, PopupService>();
 builder.Services.AddTransient<ITourDao, TourDao>();
 builder.Services.AddTransient<ITourLogDao, TourLogDao>();
+builder.Services.AddTransient<IReportService, ReportService>();
+
 builder.Services.AddScoped<ToursPageViewModel>();
 builder.Services.AddScoped<TourDetailsPageViewModel>();
 builder.Services.AddScoped<LogsTableViewModel>();

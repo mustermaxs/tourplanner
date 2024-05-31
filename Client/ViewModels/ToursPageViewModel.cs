@@ -1,33 +1,25 @@
 using Client.Models;
 using Client.Dao;
-using Microsoft.JSInterop;
 using System.Net.Http;
 using System.IO;
 
 public class ToursPageViewModel
 {
     private ITourDao _tourDao;
-    private IJSRuntime _jsRuntime;
+    private IReportService _reportService;
     public IEnumerable<Tour> Tours { get; private set; } = new List<Tour>();
 
-    public ToursPageViewModel(ITourDao tourDao, IJSRuntime jsRuntime)
+    public ToursPageViewModel(ITourDao tourDao,IReportService reportService)
     {
         _tourDao = tourDao;
-        _jsRuntime = jsRuntime;
+        _reportService = reportService;
     }
 
     public async Task DownloadReportAsync()
     {
         try
         {
-            using (var httpClient = new HttpClient())
-            {
-                //TODO: make not idiot way to get the report
-                var report = await httpClient.GetByteArrayAsync("http://localhost:5161/api/reports/tours");
-
-                var base64Report = Convert.ToBase64String(report);
-                await _jsRuntime.InvokeVoidAsync("downloadFileFromBase64", "application/pdf", "ToursReport.pdf", base64Report);
-            }
+            await _reportService.GetSummaryReport();
         }
         catch (Exception ex)
         {
