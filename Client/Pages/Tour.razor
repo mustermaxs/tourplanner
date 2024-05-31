@@ -142,41 +142,24 @@ else
 
     </div>
 
-    <table class="table table-table">
-        <thead>
-        <tr>
-            <th>Date</th>
-            <th>Comment</th>
-            <th>Difficulty</th>
-            <th>Duration (hrs)</th>
-            <th>Rating</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var log in TourVM.TourLogs)
-        {
-            <tr>
-                <td>
-                    <a href="/tours/@TourId/log/@log.Id">@log.DateTime.ToString("yyyy-MM-dd")</a>
-                </td>
-                <td>@log.Comment</td>
-                <td>@log.Difficulty</td>
-                <td>@log.Duration</td>
-                <td>@log.Rating</td>
-            </tr>
-        }
-        </tbody>
-    </table>
+    <TourLogsTable TourLogs="TourVM.TourLogs"></TourLogsTable>
+
 }
 
 @code {
-    [Parameter] public string? TourId { get; set; }
+    [Parameter] public string TourId { get; set; }
+    private int Id { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        int id = Convert.ToInt32(TourId);
-        await TourVM.InitializeAsync(Convert.ToInt32(TourId));
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Id = Convert.ToInt32(TourId);
+        await TourVM.InitializeAsync(Id);
         StateHasChanged();
+        base.OnParametersSetAsync();
     }
 
     private void EditTour()

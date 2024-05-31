@@ -10,6 +10,6 @@ public class AddTourSpecification : CompositeSpecification<Tour>
         return !(
             string.IsNullOrEmpty(tour.Description) &&
             string.IsNullOrEmpty(tour.From) &&
-            string.IsNullOrEmpty(tour.TourName));
+            string.IsNullOrEmpty(tour.Name));
     }
 }
