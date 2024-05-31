@@ -12,7 +12,7 @@ using Tourplanner.Entities.TourLogs.Commands;
 namespace Api.Controllers
 {
     [ApiController]
-    [Route("api")]
+    [Route("api/[controller]")]
     public class SearchController(IMediator mediator) : BaseController(mediator)
     {
         [HttpGet]

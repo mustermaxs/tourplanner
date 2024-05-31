@@ -47,7 +47,7 @@ public class SearchPageViewModel
             
             if (String.IsNullOrEmpty(searchTerm)) return;
             
-            SearchResults = await _httpService.Get<GlobalSearchResultsDto>($"?q={searchTerm}");
+            SearchResults = await _httpService.Get<GlobalSearchResultsDto>($"search?q={searchTerm}");
             FoundTours = SearchResults.Tours.Any();
             FoundTourLogs = SearchResults.TourLogs.Any();
 
