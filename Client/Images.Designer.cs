@@ -202,5 +202,14 @@ namespace Client {
                 return ResourceManager.GetString("to", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to bicycle.png.
+        /// </summary>
+        internal static string transporttype {
+            get {
+                return ResourceManager.GetString("transporttype", resourceCulture);
+            }
+        }
     }
 }
