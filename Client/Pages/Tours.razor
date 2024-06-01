@@ -12,8 +12,11 @@
 
     <PageHeader Icon="map"><span>Tours</span></PageHeader>
 
-    <Button Img="map" Label="Add Tour" OnClickCallback="AddTour"></Button>
-
+    <ButtonGroup Layout="ButtonGroup.Position.Center">
+        <Button Img="log" Label="Report" OnClickCallback="ToursVM.DownloadReportAsync"></Button>
+        <Button Img="map" Label="Add Tour" OnClickCallback="AddTour"></Button>
+    </ButtonGroup>
+    
 </div>
 @if (ToursVM.Tours == null)
 {

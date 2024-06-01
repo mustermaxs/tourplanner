@@ -22,10 +22,17 @@ public class TourRepository : Repository<Tour>, ITourRepository
         return await dbSet.Include(t => t.TourLogs)
             .FirstOrDefaultAsync(to => to.Id == tourId);
     }
+
+    public async Task<IEnumerable<Tour>> GetToursWithLogs()
+    {
+        return await dbSet.Include(t => t.TourLogs).ToListAsync();
+    }
+
 }
 
 public interface ITourRepository : IRepository<Tour>
 {
     public Task<int> CreateReturnId(Tour tour);
     public Task<Tour?> GetTourWithLogs(int tourId);
+    public Task<IEnumerable<Tour>> GetToursWithLogs();
 }
