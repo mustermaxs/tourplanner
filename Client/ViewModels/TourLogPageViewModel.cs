@@ -30,7 +30,6 @@ public class TourLogPageViewModel : BaseViewModel
     public async Task DeleteLog()
     {
         try {
-        
             await _tourLogDao.Delete(TourLog);
             NavigationManager.NavigateTo($"/tours/{TourLog.Tour.Id}");
         } catch (Exception e) {

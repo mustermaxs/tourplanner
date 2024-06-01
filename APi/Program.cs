@@ -96,6 +96,7 @@ internal class Program
         services.AddScoped<ICommandHandler, GetTourReportCommandHandler>();
         services.AddScoped<ICommandHandler, GetSummaryReportCommandHandler>();
         services.AddScoped<ICommandHandler, GetSearchResultsQueryHandler>();
+        services.AddScoped<ICommandHandler, GetGeoAutoCompleteQueryHandler>();
     }
 
     private static void CreateDbIfNotExists(WebApplication app)

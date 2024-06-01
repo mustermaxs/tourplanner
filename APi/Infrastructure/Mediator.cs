@@ -91,6 +91,7 @@ public class Mediator : IMediator
         Register<GetTourReportRequest, GetTourReportCommandHandler>();
         Register<GetSummaryReportRequest, GetSummaryReportCommandHandler>();
         Register<GetSearchResultsQuery, GetSearchResultsQueryHandler>();
+        Register<GetGeoAutoCompleteQuery, GetGeoAutoCompleteQueryHandler>();
 
     }
 
