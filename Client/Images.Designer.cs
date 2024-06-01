@@ -168,6 +168,15 @@ namespace Client {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to search.png.
+        /// </summary>
+        internal static string search {
+            get {
+                return ResourceManager.GetString("search", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to #ffffff.
         /// </summary>
         internal static string secondary {

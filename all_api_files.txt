@@ -1,0 +1,2068 @@
+﻿using System.Windows.Input;
+using Microsoft.AspNetCore.Mvc;
+using Tourplanner;
+using Tourplanner.Exceptions;
+using Tourplanner.Infrastructure;
+
+namespace Api.Controllers;
+
+public abstract class BaseController : ControllerBase
+{
+    private readonly IMediator Mediator;
+
+    public BaseController(IMediator mediator)
+    {
+        Mediator = mediator;
+    }
+
+    protected async Task<ActionResult<IResponse>> ResponseAsync(IRequest command)
+    {
+        try
+        {
+            Console.WriteLine(command.ToString());
+            var responseObj = await Mediator.Send(command);
+            if (responseObj is null)
+            {
+                return NotFound();
+            }
+            return Ok(responseObj);
+        }
+        catch (ResourceNotFoundException rex)
+        {
+            Console.WriteLine(rex);
+            return BadRequest(rex.Message);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return Problem($"Something went wrong :(");
+        }
+    }
+}﻿using Microsoft.AspNetCore.Mvc;
+using Tourplanner;
+using Tourplanner.Models;
+using Tourplanner.Entities.Tours;
+using Tourplanner.DTOs;
+using Tourplanner.Entities.TourLogs;
+using Tourplanner.Infrastructure;
+using Microsoft.AspNetCore.Cors;
+using Tourplanner.Entities;
+using Tourplanner.Entities.TourLogs.Commands;
+
+namespace Api.Controllers
+{
+    [ApiController]
+    [Route("api")]
+    public class SearchController(IMediator mediator) : BaseController(mediator)
+    {
+        [HttpGet]
+        public async Task<ActionResult<IResponse>> SearchInTours([FromQuery] string q)
+        {
+            var query = new GetSearchResultsQuery(q);
+
+            return await ResponseAsync(query);
+        }
+    }
+}﻿using Microsoft.AspNetCore.Mvc;
+
+// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+
+namespace Api.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class TourLogsController : ControllerBase
+    {
+        // GET: api/<TourLogsController>
+        [HttpGet]
+        public IEnumerable<string> Get()
+        {
+            return new string[] { "value1", "value2" };
+        }
+
+        // GET api/<TourLogsController>/5
+        [HttpGet("{id}")]
+        public string Get(int id)
+        {
+            return "value";
+        }
+
+        // POST api/<TourLogsController>
+        [HttpPost]
+        public void Post([FromBody] string value)
+        {
+        }
+
+        // PUT api/<TourLogsController>/5
+        [HttpPut("{id}")]
+        public void Put(int id, [FromBody] string value)
+        {
+        }
+
+        // DELETE api/<TourLogsController>/5
+        [HttpDelete("{id}")]
+        public void Delete(int id)
+        {
+        }
+    }
+}
+﻿using Microsoft.AspNetCore.Mvc;
+using Tourplanner;
+using Tourplanner.Models;
+using Tourplanner.Entities.Tours;
+using Tourplanner.DTOs;
+using Tourplanner.Entities.TourLogs;
+using Tourplanner.Infrastructure;
+using Microsoft.AspNetCore.Cors;
+using Tourplanner.Entities;
+using Tourplanner.Entities.TourLogs.Commands;
+
+// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+
+namespace Api.Controllers
+{
+    [ApiController]
+    [Route("api/[controller]")]
+    public class ToursController(IMediator mediator) : BaseController(mediator)
+    {
+        [HttpGet]
+        public async Task<ActionResult<IResponse>> GetTours()
+        {
+            var command = new GetToursRequest();
+            return await ResponseAsync(command);
+        }
+
+        [HttpGet("{tourid}")]
+        public async Task<ActionResult<IResponse>> GetTourById(int tourid)
+        {
+            var command = new GetTourByIdRequest(tourid);
+            return await ResponseAsync(command);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<IResponse>> CreateTour([FromBody] CreateTourDto createTourDto)
+        {
+            var command = new CreateTourCommand(
+                createTourDto.Name,
+                createTourDto.Description,
+                createTourDto.From,
+                createTourDto.To,
+                createTourDto.TransportType
+            );
+            return await ResponseAsync(command);
+        }
+        //
+        // [HttpGet("search")]
+        // public async Task<ActionResult<IResponse>> SearchInTours([FromBody] SearchDto searchDto)
+        // {
+        //     var query = new GetSearchResultsQuery(searchDto.SearchTerm);
+        // }
+
+        [HttpDelete("{tourid}")]
+        public async Task<ActionResult<IResponse>> DeleteTour(int tourid)
+        {
+            var command = new DeleteTourCommand(tourid);
+            return await ResponseAsync(command);
+        }
+
+        [HttpPut("{tourid}")]
+        public async Task<ActionResult<IResponse>> UpdateTour([FromBody] UpdateTourDto updateTourDto,
+            [FromRoute] int tourid)
+        {
+            var command = new UpdateTourCommand(
+                tourid,
+                updateTourDto.Name,
+                updateTourDto.Description,
+                updateTourDto.From,
+                updateTourDto.To,
+                updateTourDto.TransportType
+            );
+
+            return await ResponseAsync(command);
+        }
+
+        [HttpGet("{tourid}/logs")]
+        public async Task<ActionResult<IResponse>> GetLogsForTour(int tourid)
+        {
+            var command = new GetTourLogsRequest(tourid);
+            return await ResponseAsync(command);
+        }
+
+        [HttpGet("logs/{logid}")]
+        public async Task<ActionResult<IResponse>> GetLog(int logid)
+        {
+            var command = new GetSingleTourLogRequest(logid);
+            return await ResponseAsync(command);
+        }
+        
+        [HttpGet("search")]
+        public async Task<ActionResult<IResponse>> SearchInTours([FromQuery] string q)
+        {
+            var query = new GetSearchResultsQuery(q);
+
+            return await ResponseAsync(query);
+        }
+
+        [HttpPost("{tourid}/logs")]
+        public async Task<ActionResult<IResponse>> CreateTourLog([FromBody] CreateTourLogDto createTourLogDto,
+            int tourid)
+        {
+            var command = new CreateTourLogCommand(
+                tourid,
+                DateTime.UtcNow,
+                createTourLogDto.Comment,
+                createTourLogDto.Difficulty,
+                createTourLogDto.TotalTime,
+                createTourLogDto.Rating
+            );
+
+            return await ResponseAsync(command);
+        }
+
+        [HttpPut("logs/{logid}")]
+        public async Task<ActionResult<IResponse>> CreateTourLog([FromBody] UpdateTourLogDto updateTourLogDto,
+            int logid)
+        {
+            var command = new UpdateTourLogCommand(
+                TourLogId: logid,
+                DateTime: DateTime.UtcNow,
+                Comment: updateTourLogDto.Comment,
+                Difficulty: updateTourLogDto.Difficulty,
+                TotalTime: updateTourLogDto.TotalTime,
+                Rating: updateTourLogDto.Rating);
+
+            return await ResponseAsync(command);
+        }
+
+
+        [HttpDelete("logs/{logid}")]
+        public async Task<ActionResult<IResponse>> DeleteTourLog([FromBody] DeleteTourLogCommand deleteTourLogCommand,
+            int logid)
+        {
+            var command = new DeleteTourLogCommand(logid);
+
+            return await ResponseAsync(command);
+        }
+    }
+}﻿using Microsoft.EntityFrameworkCore;
+using Tourplanner.Entities.Tours;
+using Tourplanner.Entities.TourLogs;
+using Tourplanner.Models;
+
+namespace Tourplanner;
+
+public class TourContext : DbContext
+{
+    public DbSet<Tour> Tours { get; set; }
+    public DbSet<TourLog> TourLogs { get; set; }
+
+    public TourContext(DbContextOptions<TourContext> options)
+        : base(options)
+    {
+    }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        // modelBuilder.Entity<Tour>()
+        //     .HasData(
+        //         new
+        //         {
+        //             TourId = 1,
+        //             Name = "Example Tour 1",
+        //             From = "Origin 1",
+        //             To = "Destination 1",
+        //             Distance = 100.0f,
+        //             Description = "This is an example tour 1.",
+        //             EstimatedTime = 2.0f,
+        //             ImagePath = "example1.jpg",
+        //             Popularity = 4.5f,
+        //             ChildFriendliness = 4.0f,
+        //             TransportType = TransportType.Car
+        //         }
+        //     );
+        // modelBuilder.Entity<TourLog>()
+        //     .HasData(
+        //         new TourLog
+        //         {
+        //             TourLogId = 1,
+        //             Difficulty = 3.5f,
+        //             Duration = 2.0f,
+        //             Rating = 4.0f,
+        //             Comment = "This was a great tour!",
+        //             TourId = 1,
+        //             Date = DateTime.Now
+        //         });
+        
+        // modelBuilder.Entity<Tour>()
+        //     .Property(t => t.TransportType)
+        //     .HasConversion<int>();
+        // //
+        // modelBuilder.Entity<TourLog>()
+        //     .Property(x => x.TourId)
+        //     .HasColumnName("TourId");
+        //
+        // modelBuilder.Entity<Tour>()
+        //     .HasMany<TourLog>(t => t.TourLogs)
+        //     .WithOne(to => to.Tour)
+        //     .HasForeignKey(t => t.TourId);
+        // //
+        // modelBuilder.Entity<TourLog>()
+        //     .HasOne<Tour>(t => t.Tour)
+        //     .WithMany(t => t.TourLogs)
+        //     .HasForeignKey(t => t.TourId);
+        modelBuilder.Entity<TourLog>()
+            .HasOne(tl => tl.Tour)
+            .WithMany(t => t.TourLogs)
+            .HasForeignKey(tl => tl.TourId)
+            .OnDelete(DeleteBehavior.Cascade); // Or whatever behavior you want
+
+        base.OnModelCreating(modelBuilder);
+
+
+    }
+
+    // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    // {
+    //     optionsBuilder.UseNpgsql("Host=192.168.0.130;Database=tourplanner;Username=tour_admin;Password=tour_admin123");
+    // }
+}﻿using System;
+using System.Linq;
+using Tourplanner.Entities;
+
+namespace Tourplanner
+{
+    public static class DbInitializer
+    {
+        public static void Initialize(TourContext context)
+        {
+            context.Database.EnsureCreated();
+            context.SaveChanges();
+        }
+    } 
+}﻿using Tourplanner.Models;
+
+namespace Tourplanner.DTOs
+{
+    public class CreateTourDto
+    {
+        public CreateTourDto(
+            string name,
+            string description,
+            string from,
+            string to,
+            float estimatedTime,
+            TransportType transportType
+        )
+        {
+            Name = name;
+            Description = description;
+            From = from;
+            To = to;
+            EstimatedTime = estimatedTime;
+            TransportType = transportType;
+        }
+
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string From { get; set; }
+        public string To { get; set; }
+        public float EstimatedTime { get; set; }
+        public TransportType TransportType { get; set; }
+    }
+}﻿namespace Tourplanner.DTOs;
+
+public class CreateTourLogDto(
+    string comment,
+    float difficulty,
+    float totalTime,
+    float rating)
+{
+    public string Comment { get; private set; } = comment;
+    public float Difficulty { get; private set; } = difficulty;
+    public float TotalTime { get; private set; } = totalTime;
+    public float Rating { get; private set; } = rating;
+}namespace Tourplanner.DTOs;
+using Microsoft.AspNetCore.Mvc;
+using Tourplanner.Infrastructure;
+public interface IDto : IResponse, IRequest 
+{} ﻿namespace Tourplanner.DTOs;
+
+public class SearchDto(string searchTerm, string category, int threshold)
+{
+    public string SearchTerm { get; private set; } = searchTerm;
+    public string Category { get; private set; } = category;
+    public int Threshold { get; private set; } = threshold;
+}﻿namespace Tourplanner.DTOs
+{
+    public class SearchResultsDto<TEntity>
+    {
+        private readonly string SearchTerm;
+        private readonly string Category;
+        private readonly IEnumerable<TEntity> Matches;
+
+        public SearchResultsDto(string searchTerm, string category, IEnumerable<TEntity> matches)
+        {
+            SearchTerm = searchTerm;
+            Matches = matches;
+            Category = category;
+        }
+    }
+}
+
+using System;
+
+namespace Tourplanner.DTOs
+{
+    using Tourplanner.Models;
+
+    public class TourDto
+    {
+        public TourDto(
+            int id,
+            string name,
+            string description,
+            string from,
+            string to,
+            TransportType transportType,
+            float distance,
+            float timespan,
+            float popularity,
+            float childfriendliness,
+            string routeImage
+        )
+        {
+            Id = id;
+            Name = name;
+            Description = description;
+            From = from;
+            To = to;
+            TransportType = transportType;
+            Distance = distance;
+            EstimatedTime = timespan;
+            Popularity = popularity;
+            Childfriendliness = childfriendliness;
+            RouteImage = routeImage;
+        }
+        public int Id { get; protected set; }
+        public string Name { get; protected set; }
+        public string Description { get; protected set; }
+        public string From { get; protected set; }
+        public string To { get; protected set; }
+        public TransportType TransportType { get; protected set; }
+        public float Distance { get; protected set; }
+        public float EstimatedTime { get; protected set; }
+        public float Popularity { get; protected set; }
+        public float Childfriendliness { get; protected set; }
+        public string RouteImage { get; protected set; }
+    }
+}
+namespace Tourplanner.DTOs
+{
+    public class TourLogDto
+    {
+        public TourLogDto(
+            int id,
+            int tourId,
+            DateTime dateTime,
+            string comment,
+            float difficulty,
+            float totalTime,
+            double rating,
+            string tourName,
+            TourDto tour
+        )
+        {
+            Id = id;
+            TourId = tourId;
+            DateTime = dateTime;
+            Comment = comment;
+            Difficulty = difficulty;
+            TotalTime = totalTime;
+            Rating = rating;
+            TourName = tourName;
+            Tour = tour;
+        }
+
+        public int Id { get; private set; }
+        public int TourId { get; private set; }
+        public DateTime DateTime { get; private set; }
+        public string Comment { get; private set; }
+        public float Difficulty { get; private set; }
+        public float TotalTime { get; private set; }
+        public double Rating { get; private set; }
+        public string TourName {get; set;}
+        public TourDto Tour {get; set;}
+    }
+}
+﻿using Tourplanner.Models;
+
+namespace Tourplanner.DTOs;
+
+public class UpdateTourDto
+{
+    public UpdateTourDto(
+        string name,
+        string description,
+        string from,
+        string to,
+        TransportType transportType)
+    {
+        Name = name;
+        Description = description;
+        From = from;
+        To = to;
+    }
+
+    public string Name { get; set; }
+    public string Description { get; set; }
+    public string From { get; set; }
+    public string To { get; set; }
+    public TransportType TransportType { get; set; }
+}﻿namespace Tourplanner.DTOs;
+
+public class UpdateTourLogDto(
+    int id,
+    string comment,
+    float difficulty,
+    float totalTime,
+    float rating)
+{
+    public int Id { get; private set; } = id;
+    public string Comment { get; private set; } = comment;
+    public float Difficulty { get; private set; } = difficulty;
+    public float TotalTime { get; private set; } = totalTime;
+    public float Rating { get; private set; } = rating;
+}﻿using Tourplanner.Infrastructure;
+using Tourplanner.Repositories;
+using Tourplanner.Entities.TourLogs;
+using Tourplanner.Services;
+
+namespace Tourplanner.Entities.TourLogs.Commands
+{
+    public record CreateTourLogCommand(
+        int TourId,
+        DateTime DateTime,
+        string Comment,
+        float Difficulty,
+        float TotalTime,
+        float Rating
+    ) : IRequest;
+    
+    public class CreateTourLogCommandHandler(
+        TourContext ctx,
+        ITourLogRepository tourLogRepository,
+        ITourRepository tourRepository,
+        IChildFriendlinessService childFriendlinessService,
+        IRatingService ratingService) : RequestHandler<CreateTourLogCommand, Task>(ctx)
+    {
+        public override async Task<Task> Handle(CreateTourLogCommand request)
+        {
+            var tourLog = new TourLog();
+            tourLog.TourId = request.TourId;
+            tourLog.Date = request.DateTime;
+            tourLog.Comment = request.Comment;
+            tourLog.Difficulty = request.Difficulty;
+            tourLog.Duration = request.TotalTime;
+            tourLog.Rating = request.Rating;
+            await tourLogRepository.Create(tourLog);
+
+            var tour = await tourRepository.Get(request.TourId);
+            tour.Popularity = ratingService.Calculate(await tourLogRepository.GetTourLogsForTour(request.TourId));
+            tour.ChildFriendliness = await childFriendlinessService.Calculate(tour.Id);
+            await tourRepository.UpdateAsync(tour);
+            
+            return Task.CompletedTask;
+        }
+    }
+}
+
+﻿using Tourplanner.Exceptions;
+using Tourplanner.Infrastructure;
+using Tourplanner.Repositories;
+
+namespace Tourplanner.Entities.TourLogs
+{
+    public record DeleteTourLogCommand(int TourLogId) : IRequest;
+    
+    public class DeleteTourLogCommandHandler(
+        TourContext ctx,
+        ITourLogRepository tourLogRepository)
+    : RequestHandler<DeleteTourLogCommand, Task>(ctx)
+    {
+        public override async Task<Task> Handle(DeleteTourLogCommand request)
+        {
+            var tourLog = await tourLogRepository.Get(request.TourLogId);
+
+
+            if (tourLog is null)
+            {
+                throw new ResourceNotFoundException($"Tour log {request.TourLogId} could not be found");
+            }
+            
+            await tourLogRepository.Delete(tourLog);
+
+            return Task.CompletedTask;
+        }
+    }
+}
+
+﻿using Tourplanner.DTOs;
+using Tourplanner.Exceptions;
+using Tourplanner.Infrastructure;
+using Tourplanner.Repositories;
+using Tourplanner.Services;
+
+namespace Tourplanner.Entities.TourLogs
+{
+    public record GetSingleTourLogRequest(int LogId) : IRequest;
+
+    public class GetSingleTourLogRequestHandler(
+        TourContext ctx,
+        ITourLogRepository tourLogRepository,
+        ITourRepository tourRepository,
+        IRatingService ratingService)
+        : RequestHandler<GetSingleTourLogRequest, TourLogDto>(ctx)
+    {
+        public override async Task<TourLogDto> Handle(GetSingleTourLogRequest request)
+        {
+            var log = await tourLogRepository.Get(request.LogId);
+            var logs = (await tourRepository.GetTourWithLogs(log.TourId)).TourLogs;
+            var tour = await tourRepository.Get(log.TourId);
+
+            if (log is null)
+            {
+                throw new ResourceNotFoundException($"Log {request.LogId} doesn't seem to exist");
+            }
+
+            var tourLogDto =
+                new TourLogDto(
+                    id: log.TourLogId,
+                    tourId: log.TourId,
+                    dateTime: log.Date,
+                    comment: log.Comment,
+                    difficulty: log.Difficulty,
+                    totalTime: log.Duration,
+                    rating: log.Rating,
+                    tourName: tour.Name,
+                    tour: new TourDto(
+                        id: tour.Id,
+                        name: tour.Name,
+                        description: tour.Description,
+                        from: tour.From,
+                        to: tour.To,
+                        transportType: tour.TransportType,
+                        distance: tour.Distance,
+                        timespan: tour.EstimatedTime,
+                        popularity: tour.Popularity,
+                        childfriendliness: tour.ChildFriendliness,
+                        routeImage: tour.ImagePath
+                    ));
+            return tourLogDto;
+        }
+    }
+}﻿using Tourplanner.DTOs;
+using Tourplanner.Infrastructure;
+using Tourplanner.Repositories;
+using Tourplanner.Exceptions;
+
+namespace Tourplanner.Entities.TourLogs.Commands
+{
+    public record GetTourLogsRequest(int TourId) : IRequest;
+
+    public class GetTourLogsRequestHandler(
+        TourContext ctx,
+        ITourLogRepository tourLogRepository,
+        ITourRepository tourRepository)
+        : RequestHandler<GetTourLogsRequest, IEnumerable<TourLogDto>>(ctx)
+    {
+        public override async Task<IEnumerable<TourLogDto>> Handle(GetTourLogsRequest request)
+        {
+            var tourLogs = await tourLogRepository.GetTourLogsForTour(request.TourId);
+            var tour = await tourRepository.Get(request.TourId);
+
+            if (tourLogs is null || tour is null)
+            {
+                throw new ResourceNotFoundException("Cant find tour log / tour");
+            }
+
+            var tourLogDtos = new List<TourLogDto>();
+
+            foreach (var log in tourLogs)
+            {
+                tourLogDtos.Add(new TourLogDto(
+                    id: log.TourLogId,
+                    tourId: log.TourId,
+                    dateTime: log.Date,
+                    comment: log.Comment,
+                    difficulty: log.Difficulty,
+                    totalTime: log.Duration,
+                    rating: log.Rating,
+                    tourName: tour.Name,
+                    tour: new TourDto(
+                        id: tour.Id,
+                        name: tour.Name,
+                        description: tour.Description,
+                        from: tour.From,
+                        to: tour.To,
+                        transportType: tour.TransportType,
+                        distance: tour.Distance,
+                        timespan: tour.EstimatedTime,
+                        popularity: tour.Popularity,
+                        childfriendliness: tour.ChildFriendliness,
+                        routeImage: tour.ImagePath
+                    )
+                ));
+            }
+            return await Task.FromResult<IEnumerable<TourLogDto>>(tourLogDtos.ToList());
+        }
+    }
+}
+
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Tourplanner.DTOs;
+using Tourplanner.Entities.Tours;
+
+namespace Tourplanner.Entities.TourLogs
+{
+    public class TourLog
+    {
+        public int TourLogId { get; set; }
+        public float Difficulty { get; set; }
+        public float Duration { get; set; }
+        public float Rating { get; set; }
+    
+        [MaxLength(500)]
+        public string Comment { get; set; } = String.Empty;
+        public int TourId { get; set; }
+
+        public Tour Tour { get; set; } = null!;
+
+        public DateTime Date { get; set; }
+    }
+
+    public static class TourLogExtensionMethods
+    {
+        public static TourLogDto ToTourLogDto(this TourLog log)
+        {
+            return new TourLogDto(
+                log.TourLogId,
+                log.TourId,
+                log.Date,
+                log.Comment,
+                log.Difficulty,
+                log.Duration,
+                log.Rating,
+                log.Tour.Name,
+                log.Tour.ToTourDto());
+        }
+    }
+}﻿using Tourplanner.Exceptions;
+using Tourplanner.Infrastructure;
+using Tourplanner.Repositories;
+
+namespace Tourplanner.Entities.TourLogs.Commands
+{
+    public record UpdateTourLogCommand(
+        int TourLogId,
+        DateTime DateTime,
+        string Comment,
+        float Difficulty,
+        float TotalTime,
+        float Rating
+    ) : IRequest;
+    
+    public class UpdateTourLogCommandHandler(
+        TourContext ctx,
+        ITourLogRepository tourLogRepository)
+    : RequestHandler<UpdateTourLogCommand, Task>(ctx)
+    {
+        public override async Task<Task> Handle(UpdateTourLogCommand request)
+        {
+            var tourLog = await tourLogRepository.Get(request.TourLogId);
+
+            if (tourLog is null)
+            {
+                throw new ResourceNotFoundException($"Tour log entry {request.TourLogId} doesn't seem to exist");
+            }
+            
+            tourLog.Date = request.DateTime;
+            tourLog.Comment = request.Comment;
+            tourLog.Difficulty = request.Difficulty;
+            tourLog.Duration = request.TotalTime;
+            tourLog.Rating = request.Rating;
+            tourLog.TourLogId = request.TourLogId;
+
+            await tourLogRepository.UpdateAsync(tourLog);
+
+            return Task.CompletedTask;
+        }
+    }
+}
+
+﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Tourplanner.DTOs;
+using Tourplanner.Infrastructure;
+using Tourplanner.Models;
+using Tourplanner.Repositories;
+using Tourplanner.Services;
+
+namespace Tourplanner.Entities.Tours
+{
+    public record CreateTourCommand
+    (
+        string Name,
+        string Description,
+        string From,
+        string To,
+        TransportType TransportType
+    ): IRequest;
+
+    public class CreateTourCommandHandler(
+        TourContext ctx,
+        ITourRepository tourRepository,
+        IChildFriendlinessService childFriendlinessService) : RequestHandler<CreateTourCommand, Task>(ctx)
+    {
+        public override async Task<Task> Handle(CreateTourCommand request)
+        {
+            var tour = new Tour();
+            tour.Name = request.Name;
+            tour.Description = request.Description;
+            tour.From = request.From;
+            tour.To = request.To;
+            tour.TransportType = request.TransportType;
+            tour.Popularity = 0.0f;
+
+            var tourId = await tourRepository.CreateReturnId(tour); // TODO return Id
+            tour.ChildFriendliness = await childFriendlinessService.Calculate(tourId);
+            return Task.CompletedTask;
+        }
+    }
+}
+using Tourplanner.Exceptions;
+using Tourplanner.Repositories;
+
+namespace Tourplanner.Entities.Tours;
+
+using Tourplanner.Infrastructure;
+
+public record DeleteTourCommand(int Id) : IRequest;
+
+public class DeleteTourCommandHandler(
+    TourContext ctx,
+    ITourRepository tourRepository)
+    : RequestHandler<DeleteTourCommand, Task>(ctx)
+{
+    public override async Task<Task> Handle(DeleteTourCommand command)
+    {
+        var tour = await tourRepository.Get(command.Id);
+
+        if (tour is null)
+        {
+            throw new ResourceNotFoundException($"Tour {command.Id} could not be found");
+        }
+        
+        await tourRepository.Delete(tour);
+        return Task.CompletedTask;
+    }
+}﻿using Microsoft.EntityFrameworkCore;
+using Tourplanner.Infrastructure;
+using Tourplanner.Services.Search;
+using Tourplanner.DTOs;
+using Tourplanner.Entities.TourLogs;
+using Tourplanner.Repositories;
+
+namespace Tourplanner.Entities.Tours
+{
+    public record GetSearchResultsQuery(
+        string SearchTerm
+    ) : IRequest;
+
+    public class GetSearchResultsQueryHandler(
+        TourContext ctx,
+        ITourRepository tourRepository,
+        ITourLogRepository tourLogRepository,
+        ISearchService searchService)
+        : RequestHandler<GetSearchResultsQuery, IEnumerable<SearchResultsDto<object>>>(ctx)
+    {
+        public override async Task<IEnumerable<SearchResultsDto<object>>> Handle(GetSearchResultsQuery query)
+        {
+            var searchTerm = query.SearchTerm ?? string.Empty;
+            var tours = await tourRepository.GetAll();
+            var tourlogs = await tourLogRepository.GetAll();
+
+            var searchables = new List<string>();
+            var results = new List<SearchResultsDto<object>>();
+
+            var tourMatches = await ctx.Tours.Where(tour =>
+                    EF.Functions.ILike(tour.Name, $"%{searchTerm}%") ||
+                    EF.Functions.ILike(tour.Description, $"%{searchTerm}%") ||
+                    EF.Functions.ILike(tour.From, $"%{searchTerm}%") ||
+                    EF.Functions.ILike(tour.To, $"%{searchTerm}%"))
+                .Select(match => match.ToTourDto())
+                .ToListAsync();
+
+            var tourSearchResults = new SearchResultsDto<object>(query.SearchTerm, "Tours", tourMatches);
+
+            var tourLogMatches = await ctx.TourLogs
+                .Where(log =>
+                    EF.Functions.ILike(log.Comment, $"%{searchTerm}%"))
+                .Select(log => log.ToTourLogDto())
+                .ToListAsync();
+
+            var logSearchResults = new SearchResultsDto<object>(query.SearchTerm, "TourLogs", tourLogMatches);
+
+            results.Add(tourSearchResults);
+            results.Add(logSearchResults);
+
+            return results;
+        }
+    }
+}using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Tourplanner.DTOs;
+using Tourplanner.Exceptions;
+using Tourplanner.Models;
+using Tourplanner.Repositories;
+using Tourplanner.Infrastructure;
+using Tourplanner.Services;
+
+namespace Tourplanner.Entities.Tours
+{
+    public record GetTourByIdRequest(int Id) : IRequest;
+
+    public class GetTourByIdCommandHandler(
+        TourContext ctx,
+        ITourRepository tourRepository,
+        ITourLogRepository tourLogRepository,
+        IRatingService ratingService,
+        IChildFriendlinessService childFriendlinessService)
+        : RequestHandler<GetTourByIdRequest, TourDto>(ctx)
+    {
+        public override async Task<TourDto> Handle(GetTourByIdRequest request)
+        {
+            var tour = await tourRepository.GetTourWithLogs(request.Id);
+
+            if (tour is null)
+            {
+                throw new ResourceNotFoundException($"Tour {request.Id} doesn't seem to exist.");
+            }
+
+            var childFriendliness = await childFriendlinessService.Calculate(tour.Id);
+            var popularity = ratingService.Calculate(tour.TourLogs);
+            
+            return await Task.FromResult(new TourDto(
+                tour.Id,
+                tour.Name,
+                tour.Description,
+                tour.From,
+                tour.To,
+                tour.TransportType,
+                tour.Distance,
+                tour.EstimatedTime,
+                popularity,
+                childFriendliness,
+                tour.ImagePath));
+            
+        }
+    }
+}﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.OpenApi.Extensions;
+using Tourplanner.DTOs;
+using Tourplanner.Models;
+using Tourplanner.Infrastructure;
+using Tourplanner.Repositories;
+using Tourplanner.Services;
+
+namespace Tourplanner.Entities.Tours
+{
+    public record GetToursRequest : IRequest
+    {
+    }
+
+    public class GetToursCommandHandler(
+        TourContext ctx,
+        ITourRepository tourRepository,
+        IChildFriendlinessService childFriendlinessService)
+        : RequestHandler<GetToursRequest, IEnumerable<TourDto>>(ctx)
+    {
+        
+        public override async Task<IEnumerable<TourDto>> Handle(GetToursRequest request)
+        {
+            var tourEntities = await tourRepository.GetAll();
+            var tourDtos = new List<TourDto>();
+            
+            foreach (var tour in tourEntities)
+            {
+                var childFriendliness = childFriendlinessService.Calculate(tour.Id);
+                tourDtos.Add(new TourDto(
+                    tour.Id,
+                    tour.Name,
+                    tour.Description,
+                    tour.From,
+                    tour.To,
+                    tour.TransportType,
+                    tour.Distance,
+                    tour.EstimatedTime,
+                    tour.Popularity,
+                    tour.ChildFriendliness,
+                    tour.ImagePath
+                ));
+            }
+            // TODO 
+            // var tourDtos = tourEntities.Select(
+            //     tour =>
+            //         new TourDto(
+            //             tour.TourId,
+            //             tour.Description,
+            //             tour.Name,
+            //             tour.From,
+            //             tour.To,
+            //             tour.TransportType,
+            //             tour.Distance,
+            //             tour.EstimatedTime,
+            //             tour.Popularity,
+            //             tour.ChildFriendliness,
+            //             tour.ImagePath
+            //         ));
+            return await Task.FromResult(tourDtos);
+        }
+    }
+}﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using Tourplanner.DTOs;
+using Tourplanner.Models;
+using Tourplanner.Entities.TourLogs;
+
+namespace Tourplanner.Entities.Tours
+{
+
+    public class Tour
+    {
+        public Tour()
+        {
+            TourLogs = new List<TourLog>();
+        }
+
+        public int Id { get; set; }
+
+        [MaxLength(60)] public string Name { get; set; }
+
+        [MaxLength(150)] public string From { get; set; }
+
+        [MaxLength(150)] public string To { get; set; }
+
+        public float Distance { get; set; }
+
+        [MaxLength(500)] public string Description { get; set; }
+
+        public float EstimatedTime { get; set; }
+
+        [MaxLength(150)] public string ImagePath { get; set; } = string.Empty;
+
+        public float Popularity { get; set; }
+
+        public float ChildFriendliness { get; set; }
+
+        public ICollection<TourLog> TourLogs { get; set; }
+
+        public TransportType TransportType { get; set; }
+    }
+
+    public static class TourExtensionMethods
+    {
+        public static TourDto ToTourDto(this Tour tour)
+        {
+            return new TourDto(
+                tour.Id,
+                tour.Name,
+                tour.Description,
+                tour.From,
+                tour.To,
+                tour.TransportType,
+                tour.Distance,
+                tour.EstimatedTime,
+                tour.Popularity,
+                tour.ChildFriendliness,
+                tour.ImagePath
+                );
+        }
+    }
+    
+}﻿using Tourplanner.Exceptions;
+using Tourplanner.Infrastructure;
+using Tourplanner.Models;
+using Tourplanner.Repositories;
+using Tourplanner.Services;
+
+namespace Tourplanner.Entities.Tours
+{
+    public record UpdateTourCommand(
+        int Id,
+        string Name,
+        string Description,
+        string From,
+        string To,
+        TransportType TransportType
+    ) : IRequest;
+
+    public class UpdateTourCommandHandler(
+        TourContext ctx,
+        ITourRepository tourRepository,
+        IRatingService ratingService,
+        IChildFriendlinessService childFriendlinessService)
+        : RequestHandler<UpdateTourCommand, Task>(ctx)
+    {
+        public override async Task<Task> Handle(UpdateTourCommand command)
+        {
+            var entityToUpdate = await tourRepository.GetTourWithLogs(command.Id);
+
+            if (entityToUpdate is null)
+            {
+                throw new ResourceNotFoundException($"Tour '{command.Name}', #{command.Id} could not be found");
+            }
+
+            entityToUpdate.Name = command.Name;
+            entityToUpdate.Description = command.Description;
+            entityToUpdate.From = command.From;
+            entityToUpdate.To = command.To;
+            entityToUpdate.Popularity = ratingService.Calculate(entityToUpdate.TourLogs);
+            entityToUpdate.ChildFriendliness = await childFriendlinessService.Calculate(entityToUpdate.Id);
+            entityToUpdate.TransportType = command.TransportType;
+
+            await tourRepository.UpdateAsync(entityToUpdate);
+            return Task.CompletedTask;
+        }
+    }
+}
+
+﻿namespace Tourplanner.Exceptions;
+
+public class ResourceNotFoundException : Exception
+{
+    public ResourceNotFoundException(){}
+
+    public ResourceNotFoundException(string message) : base(message)
+    {
+    }
+    public ResourceNotFoundException(string message, Exception inner) : base(message, inner)
+    {
+    }
+}using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Tourplanner.DTOs;
+
+namespace Tourplanner.Infrastructure
+{
+    public interface ICommandHandler
+    {
+    }
+
+    public abstract class RequestHandler<TRequest, TResponse> : ICommandHandler
+        where TRequest : IRequest
+    {
+        protected TourContext dbContext;
+
+        public RequestHandler(TourContext context)
+        {
+            dbContext = context;
+        }
+
+        public abstract Task<TResponse> Handle(TRequest request);
+    }
+
+    public interface IResponse
+    {
+    }
+
+    public interface IPublisher
+    {
+    }
+}namespace Tourplanner.Infrastructure;
+
+public interface IRequest
+{
+    
+}using System.Reflection;
+using Tourplanner.Entities.Tours;
+using Microsoft.EntityFrameworkCore;
+using Tourplanner.DTOs;
+using Tourplanner.Entities;
+using Tourplanner.Entities.TourLogs;
+using Tourplanner.Entities.TourLogs.Commands;
+
+namespace Tourplanner;
+
+using Tourplanner.Infrastructure;
+
+public abstract class IMediator
+{
+    protected Dictionary<string, Type> _CommandCommandHandlerMapping = new Dictionary<string, Type>();
+    protected DbContext _dbContext;
+    private readonly IServiceProvider _serviceProvider;
+
+
+    protected IMediator(DbContext dbContext, IServiceProvider serviceProvider)
+    {
+        _dbContext = dbContext;
+        _serviceProvider = serviceProvider;
+
+        RegisterPublishers();
+    }
+
+    public async Task<object?> Send(IRequest request)
+    {
+        var commandName = request.GetType().Name;
+        if (!_CommandCommandHandlerMapping.TryGetValue(commandName, out Type? commandHandlerType))
+        {
+            throw new Exception($"Command {commandName} unknown");
+        }
+
+        var requestType =
+            commandHandlerType.GetMethod("Handle")!
+                .GetParameters()[0]
+                .ParameterType;
+        var responseType = commandHandlerType.GetMethod("Handle")!
+            .ReturnType;
+
+        var commandHandler = _serviceProvider.GetServices(typeof(ICommandHandler))
+            .First(h => h?.GetType().Name == commandHandlerType.Name);
+            
+        var handleMethod = commandHandlerType.GetMethod("Handle");
+        var commandResultTask = (Task)handleMethod!.Invoke(commandHandler, new object[] { request });
+
+        await commandResultTask.ConfigureAwait(false);
+
+        var commandResult = commandResultTask
+            .GetType()
+            .GetProperty("Result")
+            ?.GetValue(commandResultTask);
+
+        return commandResult;
+    }
+
+    public bool Register<TCommand, TCommandHandler>()
+        where TCommand : IRequest
+    {
+        var commandName = typeof(TCommand).Name;
+        return _CommandCommandHandlerMapping.TryAdd(commandName, typeof(TCommandHandler));
+    }
+
+    public abstract void RegisterPublishers();
+}
+
+public class Mediator : IMediator
+{
+    public Mediator(DbContext context, IServiceProvider serviceProvider) : base(context, serviceProvider)
+    {
+    }
+
+    public override void RegisterPublishers()
+    {
+        Register<GetToursRequest, GetToursCommandHandler>();
+        Register<GetTourByIdRequest, GetTourByIdCommandHandler>();
+        Register<CreateTourCommand, CreateTourCommandHandler>();
+        Register<UpdateTourCommand, UpdateTourCommandHandler>();
+        Register<DeleteTourCommand, DeleteTourCommandHandler>();
+        Register<GetTourLogsRequest, GetTourLogsRequestHandler>();
+        Register<GetSingleTourLogRequest, GetSingleTourLogRequestHandler>();
+        Register<CreateTourLogCommand, CreateTourLogCommandHandler>();
+        Register<UpdateTourLogCommand, UpdateTourLogCommandHandler>();
+        Register<DeleteTourLogCommand, DeleteTourLogCommandHandler>();
+        Register<GetSearchResultsQuery, GetSearchResultsQueryHandler>();
+    }
+
+    public void DiscoverPublishers()
+    {
+    }
+}﻿
+using System;
+using System.Reflection;
+
+[assembly: Microsoft.AspNetCore.Mvc.ApplicationParts.ApplicationPartAttribute("Swashbuckle.AspNetCore.SwaggerGen")]
+
+// Generated by the MSBuild WriteCodeFragment class.
+
+using Tourplanner.Entities;
+using Tourplanner.Entities.TourLogs.Commands;
+using Tourplanner.Services;
+using Tourplanner.Services.Search;
+
+namespace Tourplanner;
+
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using System;
+using Tourplanner.Repositories;
+using Tourplanner.Infrastructure;
+using Entities.Tours;
+using Entities.TourLogs;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+
+internal class Program
+{
+    public static void Main(string[] args)
+    {
+        var builder = WebApplication.CreateBuilder(args);
+
+        builder.Services.AddControllers();
+
+        builder.Services.AddDbContext<TourContext>(options =>
+            options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowAll", policy =>
+            {
+                policy.WithOrigins("*")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+            });
+        });
+
+        // Register other services
+        RegisterServices(builder.Services);
+
+        var app = builder.Build();
+
+        // Configure the HTTP request pipeline.
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
+        }
+
+        app.UseHttpsRedirection();
+        app.UseRouting();
+        app.UseCors("AllowAll");
+        app.UseAuthorization();
+
+        app.MapControllers();
+
+        // Ensure database is created
+        CreateDbIfNotExists(app);
+
+        app.Run();
+    }
+
+    private static void RegisterServices(IServiceCollection services)
+    {
+        services.AddTransient<DbContext, TourContext>();
+        services.AddTransient<IServiceProvider, ServiceProvider>();
+        services.AddTransient<IMediator, Mediator>();
+        services.AddScoped<ISearchService, StringSearchService>();
+        services.AddTransient<IRatingService, RatingService>();
+        services.AddTransient<IChildFriendlinessService, ChildFriendlinessService>();
+        services.AddScoped<ITourLogRepository, TourLogRepository>();
+        services.AddScoped<ITourRepository, TourRepository>();
+
+        services.AddScoped<ICommandHandler, GetToursCommandHandler>();
+        services.AddScoped<ICommandHandler, GetTourByIdCommandHandler>();
+        services.AddScoped<ICommandHandler, CreateTourCommandHandler>();
+        services.AddScoped<ICommandHandler, UpdateTourCommandHandler>();
+        services.AddScoped<ICommandHandler, DeleteTourCommandHandler>();
+        services.AddScoped<ICommandHandler, GetTourLogsRequestHandler>();
+        services.AddScoped<ICommandHandler, GetSingleTourLogRequestHandler>();
+        services.AddScoped<ICommandHandler, CreateTourLogCommandHandler>();
+        services.AddScoped<ICommandHandler, UpdateTourLogCommandHandler>();
+        services.AddScoped<ICommandHandler, DeleteTourLogCommandHandler>();
+        services.AddScoped<ICommandHandler, GetSearchResultsQueryHandler>();
+    }
+
+    private static void CreateDbIfNotExists(WebApplication app)
+    {
+        using (var scope = app.Services.CreateScope())
+        {
+            var services = scope.ServiceProvider;
+            try
+            {
+                var context = services.GetRequiredService<TourContext>();
+                context.Database.EnsureCreated(); // or your custom DbInitializer
+            }
+            catch (Exception ex)
+            {
+                var logger = services.GetRequiredService<ILogger<Program>>();
+                logger.LogError(ex, "An error occurred while creating the database.");
+            }
+        }
+    }
+}﻿namespace Tourplanner.Repositories;
+
+public interface IRepository<T>
+{
+    public Task<T?> Get(int id);
+    public Task<IEnumerable<T>?> GetAll();
+    public Task Delete(T obj);
+    public Task Create(T obj);
+    public Task SaveAsync();
+    public Task UpdateAsync(T obj);
+}﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Tourplanner.Models;
+
+namespace Tourplanner.Repositories;
+
+public abstract class Repository<TEntity> : IRepository<TEntity>, IDisposable
+where TEntity : class
+{
+    protected TourContext context;
+    private bool disposed = false;
+    protected DbSet<TEntity> dbSet;
+
+    public Repository(TourContext tourContext)
+    {
+        context = tourContext;
+        dbSet = context.Set<TEntity>();
+    }
+
+    public virtual async Task<TEntity?> Get(int id)
+    {
+        return await dbSet.FindAsync(id);
+    }
+
+    public virtual async Task<IEnumerable<TEntity>?> GetAll()
+    {
+        return await dbSet.ToListAsync();
+    }
+
+    public virtual async Task Create(TEntity entity)
+    {
+        await dbSet.AddAsync(entity);
+        await SaveAsync();
+    }
+
+    public virtual async Task Delete(TEntity entity)
+    {
+        dbSet.Remove(entity);
+        await SaveAsync();
+    }
+    
+    public async Task SaveAsync()
+    {
+        await context.SaveChangesAsync();
+    }
+
+    public virtual async Task DeleteById(int id)
+    {
+        var entity = dbSet.Find(id);
+        dbSet.Remove(entity);
+        await SaveAsync();
+    }
+
+    public virtual async Task UpdateAsync(TEntity entity)
+    {
+        dbSet.Update(entity);
+        await SaveAsync();
+    }
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!this.disposed)
+        {
+            if (disposing)
+            {
+                context.Dispose();
+            }
+        }
+
+        this.disposed = true;
+    }
+}﻿using Tourplanner.Entities.TourLogs;
+
+namespace Tourplanner.Repositories;
+
+public class TourLogRepository : Repository<TourLog>, ITourLogRepository
+{
+    public TourLogRepository(TourContext tourContext) : base(tourContext)
+    {
+    }
+
+    public async Task<IEnumerable<TourLog>> GetTourLogsForTour(int tourId)
+    {
+        return dbSet.Where(log => log.TourId == tourId).ToList();
+        
+        var logs = await GetAll();
+        return logs;
+    }
+
+
+}
+
+public interface ITourLogRepository : IRepository<TourLog>
+{
+    Task<IEnumerable<TourLog>> GetTourLogsForTour(int tourid);
+}﻿using Microsoft.EntityFrameworkCore;
+using Tourplanner.Entities.Tours;
+
+namespace Tourplanner.Repositories;
+
+public class TourRepository : Repository<Tour>, ITourRepository
+{
+    public TourRepository(TourContext tourContext) : base(tourContext)
+    {
+    }
+
+    public async Task<int> CreateReturnId(Tour tour)
+    {
+        await dbSet.AddAsync(tour);
+        await SaveAsync();
+        return tour.Id;
+    }
+
+    public async Task<Tour?> GetTourWithLogs(int tourId)
+    {
+        // return await Get(tourId);
+        return await dbSet.Include(t => t.TourLogs)
+            .FirstOrDefaultAsync(to => to.Id == tourId);
+    }
+}
+
+public interface ITourRepository : IRepository<Tour>
+{
+    public Task<int> CreateReturnId(Tour tour);
+    public Task<Tour?> GetTourWithLogs(int tourId);
+}﻿using Tourplanner.Entities.Tours;
+using Tourplanner.Entities.TourLogs;
+using Tourplanner.Exceptions;
+using Tourplanner.Repositories;
+using Tourplanner.Entities;
+
+namespace Tourplanner.Services
+{
+    public interface IChildFriendlinessService
+    {
+        public float GetAverageDifficulty(IEnumerable<TourLog> logs);
+        public float GetMaxTourDistance(IEnumerable<Tour> tours);
+        public Task<float> Calculate(int tourId);
+
+    }
+    public class ChildFriendlinessService : IChildFriendlinessService
+    {
+        private ITourRepository _tourRepository;
+        private ITourLogRepository tourLogRepository;
+
+        public ChildFriendlinessService(ITourRepository tourRepository, ITourLogRepository tourLogRepository)
+        {
+            _tourRepository = tourRepository;
+            this.tourLogRepository = tourLogRepository;
+        }
+
+        public float GetAverageDifficulty(IEnumerable<TourLog> logs)
+        {
+            return logs.Any()
+                ? logs.Sum(log => log.Difficulty) / logs.Count()
+                : 0.0f;
+        }
+
+        public float GetMaxTourDistance(IEnumerable<Tour> tours)
+        {
+            return tours.Max(tour => tour.Distance);
+        }
+
+        public async Task<float> Calculate(int tourId)
+        {
+            var tours = await _tourRepository.GetAll();
+            var tour = tours?.SingleOrDefault(t => t.Id == tourId) ?? null;
+
+            if (tours is null || !tours.Any() || tour is null)
+            {
+                throw new ResourceNotFoundException("Tour not found");
+            }
+
+            var maxDistance = tours.Max(tour => tour.Distance);
+            var logs = tour.TourLogs;
+            var avgDifficulty = GetAverageDifficulty(logs);
+            var durationInHours = tour.EstimatedTime / 60;
+            var normalizedDistance = MathUtils.MapRange(tour.Distance, 0.0f, maxDistance, 0f, 10.0f);
+            var normalizedDuration = MathUtils.MapRange(durationInHours, 0f, 60.0f, 0f, 10f);
+            var sum = tour.Distance + tour.EstimatedTime + avgDifficulty;
+            var normalizedSum = MathUtils.MapRange(sum, 0f, 30.0f, 0.0f, 10.0f);
+
+            return normalizedSum;
+        }
+    }
+}﻿namespace Tourplanner.Services.Search
+{
+
+    public class FuzzyMatcher
+    {
+        private int stringLengthWeight;
+        private int sensitivity;
+        private int costInsertion { get; set; }
+        private int costSubstitution { get; set; }
+        private int costDeletion { get; set; }
+        private int minStringLengthToApplyWeight { get; set; }
+
+        public FuzzyMatcher()
+        {
+            this.costInsertion = 1;
+            this.costSubstitution = 1;
+            this.costDeletion = 1;
+            this.stringLengthWeight = 1;
+            this.minStringLengthToApplyWeight = 6;
+            this.sensitivity = 1;
+        }
+
+        private int[,] InitMatrix(int lengthStr1, int lengthStr2)
+        {
+            int[,] arr = new int[lengthStr1 + 1, lengthStr2 + 1];
+
+            for (int i = 0; i <= lengthStr1; i++)
+            {
+                arr[i, 0] = i;
+            }
+
+            for (int j = 0; j <= lengthStr2; j++)
+            {
+                arr[0, j] = j;
+            }
+
+            return arr;
+        }
+
+        public int GetEditDistance(string string1, string string2)
+        {
+            int lengthStr1 = string1.Length;
+            int lengthStr2 = string2.Length;
+
+            if (lengthStr1 == 0)
+            {
+                return lengthStr2;
+            }
+
+            if (lengthStr2 == 0)
+            {
+                return lengthStr1;
+            }
+
+            int[,] arr = InitMatrix(lengthStr1, lengthStr2);
+
+            for (int i = 1; i <= lengthStr1; i++)
+            {
+                for (int j = 1; j <= lengthStr2; j++)
+                {
+                    if (string1[i - 1] == string2[j - 1])
+                    {
+                        arr[i, j] = arr[i - 1, j - 1];
+                    }
+                    else
+                    {
+                        arr[i, j] = Math.Min(
+                            arr[i - 1, j - 1],
+                            Math.Min(arr[i, j - 1], arr[i - 1, j])
+                        ) + 1;
+                    }
+                }
+            }
+
+            int distance = arr[lengthStr1, lengthStr2];
+
+            return distance;
+        }
+    }
+}﻿namespace Tourplanner.Services.Search
+{
+    public interface ISearchService
+    {
+        public List<WordDistanceMap> GetMatches(string provided, List<string> searchables);
+        public List<WordDistanceMap> GetMatches(string userInput);
+        public void SetSearchableWords(List<string> wordlist);
+        
+        public ISearchService SetThreshold(int _threshold);
+    }
+}﻿namespace Tourplanner.Services;
+
+public static class MathUtils
+{
+    public static float MapRange(float value, float inMin, float inMax, float outMin, float outMax)
+    {
+        value = Math.Max(inMin, Math.Min(inMax, value));
+        float normalizedValue = (value - inMin) / (inMax - inMin);
+    
+        return outMin + normalizedValue * (outMax - outMin);
+    }
+}﻿using Tourplanner.Entities.TourLogs;
+using Tourplanner.Repositories;
+
+namespace Tourplanner.Services
+{
+    public interface IRatingService
+    {
+        public float Calculate(IEnumerable<TourLog> tourLogs);
+    }
+    public class RatingService : IRatingService
+    {
+
+        public RatingService()
+        {
+        }
+
+        public float Calculate(IEnumerable<TourLog> tourLogs)
+        {
+            if (tourLogs == null || !tourLogs.Any())
+            {
+                return 0.0f;
+            }
+
+            float totalRating = tourLogs.Sum(t => t.Rating);
+            float averageRating = totalRating / tourLogs.Count();
+
+            return averageRating;
+        }
+    }
+}﻿namespace Tourplanner.Services.Search
+{
+    public class StringSearchService : ISearchService
+    {
+        private Trie prefixTree;
+        private List<string> searchableWords;
+        private bool completedSetup;
+        private FuzzyMatcher fuzzyMatcher;
+        private int threshold;
+
+        public StringSearchService()
+        {
+            fuzzyMatcher = new FuzzyMatcher();
+            prefixTree = new Trie(true);
+            searchableWords = new List<string>();
+            completedSetup = false;
+            threshold = Int32.MaxValue;
+        }
+
+        public void SetSearchableWords(List<string> words)
+        {
+            searchableWords = words.Select(word => word.ToLower()).ToList();
+            prefixTree.Init(words);
+            completedSetup = true;
+        }
+
+        public void UpdatePrefixTree(List<string> searchables)
+        {
+            foreach (var word in searchables)
+            {
+                prefixTree.Insert(word);
+            }
+        }
+
+        private int CbSortByDistanceAsc(WordDistanceMap currentWord, WordDistanceMap nextWord)
+        {
+            return currentWord.Distance <= nextWord.Distance ? -1 : 1;
+        }
+
+        private int CbSortByPrefixAsc(WordDistanceMap currentWord, WordDistanceMap nextWord)
+        {
+            if (currentWord.IsPrefix && !nextWord.IsPrefix)
+                return -1;
+            if (!currentWord.IsPrefix && nextWord.IsPrefix)
+                return 1;
+            if (!currentWord.IsPrefix && !nextWord.IsPrefix)
+                return 0;
+            if (currentWord.IsPrefix && currentWord.Distance <= nextWord.Distance)
+                return -1;
+            return 1;
+        }
+
+        private List<WordDistanceMap> SortSuggestions(List<WordDistanceMap> distanceMappings)
+        {
+            var sorted = distanceMappings.OrderBy(word => word.Distance).ToList();
+            sorted.Sort(CbSortByPrefixAsc);
+            return sorted;
+        }
+
+        /// <summary>
+        /// Boundary for Levenstein distance where matches get dropped if their distance exceeds the threshold.
+        /// Higher threshold => more forgiving => more search results
+        /// Lower threshold => less forgiving => fewer search results 
+        /// </summary>
+        /// <param name="_threshold"></param>
+        /// <returns>Instance itself (for method chaining)</returns>
+        public ISearchService SetThreshold(int _threshold)
+        {
+            threshold = _threshold;
+            return this;
+        }
+        
+        /// <summary>
+        /// Gets possible matches for a provided search term.
+        /// Use this implementation if you don't plan to reuse the wordlist.
+        /// </summary>
+        /// <param name="userInput">Search term.</param>
+        /// <param name="searchables">List of searchable words.</param>
+        /// <returns></returns>
+        public List<WordDistanceMap> GetMatches(string userInput, List<string> searchables)
+        {
+            SetSearchableWords(searchables);
+            searchables = searchables.Select(word => word.ToLower()).ToList();
+            var stringDistanceMappings = CreateDistanceMappingsForWordList(searchables, userInput);
+            stringDistanceMappings = SortSuggestions(stringDistanceMappings);
+            var matches = stringDistanceMappings
+                .Where(mapping => mapping.Distance <= threshold).ToList();
+            
+            Reset();
+
+            return matches;
+        }
+        
+        /// <summary>
+        /// Gets possible matches for a provided search term.
+        /// Use this implementation if you already defined a list of searchable words using
+        /// the method SetSearchableWords.
+        /// </summary>
+        /// <param name="userInput">Search term.</param>
+        /// <returns>List of possible matches.</returns>
+        /// <exception cref="Exception">Throws exception if setup is incomplete (e.g. no list of searchable
+        /// words provided.</exception>
+        public List<WordDistanceMap> GetMatches(string userInput)
+        {
+            if (!completedSetup)
+                throw new Exception("Setup incomplete!");
+            
+            var matches = searchableWords.Select(word => word.ToLower()).ToList();
+            var stringDistanceMappings = CreateDistanceMappingsForWordList(matches, userInput);
+            stringDistanceMappings = SortSuggestions(stringDistanceMappings);
+
+            return stringDistanceMappings.Where(mapping => mapping.Distance <= threshold).ToList();
+        }
+
+        private string LimitWordLength(string word, int length)
+        {
+            return word.Substring(0, Math.Min(length, word.Length));
+        }
+
+        private int GetShorterDistance(string userInput, string word)
+        {
+            int userInputLength = userInput.Length;
+            string trimmedWord = word.Substring(0, Math.Min(userInputLength, word.Length));
+            int trimmedWordDistance = fuzzyMatcher.GetEditDistance(userInput, trimmedWord);
+            int untrimmedWordDistance = fuzzyMatcher.GetEditDistance(userInput, word);
+
+            return Math.Min(trimmedWordDistance, untrimmedWordDistance);
+        }
+
+        private List<WordDistanceMap> CreateDistanceMappingsForWordList(List<string> searchables, string userInput)
+        {
+            bool existsAsPrefix = prefixTree.PrefixExists(userInput);
+
+            return searchables.Select(word =>
+            {
+                bool isPrefix = existsAsPrefix && word.StartsWith(userInput);
+                int distance = GetShorterDistance(userInput, word);
+                return new WordDistanceMap(word, distance, isPrefix);
+            }).ToList();
+        }
+
+        private void Reset()
+        {
+            completedSetup = false;
+            searchableWords = new List<string>();
+            prefixTree = new Trie(true);
+            threshold = Int32.MaxValue;
+        }
+    }
+}﻿namespace Tourplanner.Services.Search
+{
+    public class Trie
+    {
+        private TrieNode root;
+        private bool ignoreCase;
+
+        public Trie(bool caseInsensitive)
+        {
+            root = new TrieNode();
+            ignoreCase = caseInsensitive;
+        }
+
+        public void Init(List<string> wordList)
+        {
+            foreach (var word in wordList)
+            {
+                Insert(word);
+            }
+        }
+
+        private int CharToIndex(char character)
+        {
+            return ignoreCase
+                ? char.ToLower(character) - 'a'
+                : character - 'a';
+        }
+
+        public bool Insert(string word)
+        {
+            try
+            {
+                if (WordExists(word))
+                    return true;
+
+                TrieNode node = root;
+
+                foreach (var character in word)
+                {
+                    int index = CharToIndex(character);
+
+                    if (node.Children.ElementAtOrDefault(index) is null)
+                    {
+                        node.Children[index] = new TrieNode();
+                    }
+
+                    node = node.Children.ElementAt(index);
+                }
+
+                node.IsTerminal = true;
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return false;
+            }
+        }
+
+        public bool WordExists(string word)
+        {
+            TrieNode node = root;
+
+            foreach (var character in word)
+            {
+                int index = CharToIndex(character);
+
+                if (node.Children.ElementAtOrDefault(index) is null)
+                {
+                    return false;
+                }
+
+                node = node.Children.ElementAt(index);
+            }
+
+            return node.IsTerminal;
+        }
+
+        public bool PrefixExists(string prefix)
+        {
+            TrieNode node = root;
+
+            foreach (var character in prefix)
+            {
+                int index = CharToIndex(character);
+
+                if (node.Children.ElementAtOrDefault(index) is null)
+                {
+                    return false;
+                }
+
+                node = node.Children.ElementAt(index);
+            }
+
+            return true;
+        }
+    }
+}﻿namespace Tourplanner.Services.Search
+{
+    public class TrieNode
+    {
+        public TrieNode[] Children { get; set; } = new TrieNode[130];
+        public bool IsTerminal { get; set; }
+
+        public TrieNode(bool isTerminal = false)
+        {
+            IsTerminal = isTerminal;
+        }
+    } 
+}
+﻿namespace Tourplanner.Services.Search
+{
+    public class WordDistanceMap
+    {
+        public string Content { get; set; }
+        public int Distance { get; set; }
+        public bool IsPrefix { get; set; }
+
+        public WordDistanceMap(string content, int distance, bool isPrefix)
+        {
+            Content = content;
+            Distance = distance;
+            IsPrefix = isPrefix;
+        }
+    };
+}using System.Reflection;
+using System.Text.Json.Serialization;
+using Microsoft.EntityFrameworkCore;
+using Tourplanner.DTOs;
+using Tourplanner.Entities;
+using Tourplanner.Entities.Tours;
+using Tourplanner.Entities.TourLogs;
+using Tourplanner.Entities.TourLogs.Commands;
+using Tourplanner.Infrastructure;
+using Tourplanner.Repositories;
+
+namespace Tourplanner;
+
+// https://www.tutorialsteacher.com/core/aspnet-core-startup
+
+public class Startup
+{
+    public IConfiguration Configuration { get; set; }
+
+    public Startup(IConfiguration configuration)
+    {
+        Configuration = configuration;
+    }
+
+
+    public void ConfigureServices(IServiceCollection services)
+    {
+        services.AddDbContext<TourContext>(options =>
+        {
+            options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"));
+        });
+        services.AddControllers().AddJsonOptions(x =>{
+            x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());});
+
+        services.AddTransient<DbContext, TourContext>();
+        services.AddTransient<IServiceProvider, ServiceProvider>();
+        services.AddTransient<IMediator, Mediator>();
+        services.AddScoped<ITourLogRepository, TourLogRepository>();
+        services.AddScoped<ITourRepository, TourRepository>();
+        
+        AddCommandHandlers(services);
+        
+        // services.AddTransient<ICommandHandler, GetToursCommandHandler>();
+    }
+
+    protected void AddCommandHandlers(IServiceCollection services)
+    {
+        services.AddScoped<ICommandHandler, GetToursCommandHandler>();
+        services.AddScoped<ICommandHandler, GetTourByIdCommandHandler>();
+        services.AddScoped<ICommandHandler, CreateTourCommandHandler>();
+        services.AddScoped<ICommandHandler, UpdateTourCommandHandler>();
+        services.AddScoped<ICommandHandler, DeleteTourCommandHandler>();
+        services.AddScoped<ICommandHandler, GetTourLogsRequestHandler>();
+        services.AddScoped<ICommandHandler, GetSingleTourLogRequestHandler>();
+        services.AddScoped<ICommandHandler, CreateTourLogCommandHandler>();
+        services.AddScoped<ICommandHandler, UpdateTourLogCommandHandler>();
+        services.AddScoped<ICommandHandler, DeleteTourLogCommandHandler>();
+    }
+
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    {
+        if (env.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
+        }
+
+        app.UseHttpsRedirection();
+        app.UseRouting();
+        app.UseCors("AllowAll");
+        app.UseAuthorization();
+        app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+    }
+}

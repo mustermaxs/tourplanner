@@ -22,36 +22,7 @@
 }
 else
 {
-    <div class="table-responsive">
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Transport Type</th>
-                <th>From</th>
-                <th>To</th>
-                <th>Popularity</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-                @foreach (var tour in ToursVM.Tours)
-                {
-                    <tr>
-                        <td>
-                            <a class="link" style="cursor:pointer" @onclick='() => TourDetails(tour.Id.ToString())'>@tour.Name</a>
-                        </td>
-                        <td>@tour.Description</td>
-                        <td>@tour.TransportType</td>
-                        <td>@tour.From</td>
-                        <td>@tour.To</td>
-                        <td>@tour.Popularity</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+    <ToursTable Tours="ToursVM.Tours"></ToursTable>
 }
 
 @code {

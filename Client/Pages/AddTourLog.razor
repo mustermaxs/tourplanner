@@ -34,12 +34,12 @@ else
         </div>
     </div>
 
-    <div class="row">
-        <div class="form-group mt-3">
-            <label for="comment">Comment</label>
-            <textarea class="form-control" id="comment" rows="3" @bind="AddLogVM.TourLog.Comment"></textarea>
+        <div class="row">
+            <div class="form-group mt-3">
+                <label for="comment">Comment</label>
+                <textarea maxlength="500" class="form-control" id="comment" rows="3" @bind="AddLogVM.TourLog.Comment"></textarea>
+            </div>
         </div>
-    </div>
 
     <ButtonGroup Layout="ButtonGroup.Position.Center">
         <Button ButtonType="Primary" mt="4" Label="Add" Img="map" OnClickCallback="AddLogVM.AddLog"/>
@@ -54,5 +54,4 @@ else
         AddLogVM.TourLog.Tour.Id = int.Parse(TourId);
         await AddLogVM.InitializeAsync(StateHasChanged);
     }
-
 }

@@ -5,6 +5,7 @@ using Tourplanner.DTOs;
 using Tourplanner.Entities;
 using Tourplanner.Entities.TourLogs;
 using Tourplanner.Entities.TourLogs.Commands;
+using Tourplanner.Infrastructure;
 
 namespace Tourplanner;
 

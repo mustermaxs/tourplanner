@@ -18,7 +18,6 @@ namespace Api.Controllers
     public class ToursController(IMediator mediator) : BaseController(mediator)
     {
         [HttpGet]
-
         public async Task<ActionResult<IResponse>> GetTours()
         {
             var command = new GetToursRequest();
@@ -48,9 +47,15 @@ namespace Api.Controllers
                 createTourDto.From,
                 createTourDto.To,
                 createTourDto.TransportType
-                );
+            );
             return await ResponseAsync(command);
         }
+        //
+        // [HttpGet("search")]
+        // public async Task<ActionResult<IResponse>> SearchInTours([FromBody] SearchDto searchDto)
+        // {
+        //     var query = new GetSearchResultsQuery(searchDto.SearchTerm);
+        // }
 
         [HttpDelete("{tourid}")]
         public async Task<ActionResult<IResponse>> DeleteTour(int tourid)
@@ -88,9 +93,18 @@ namespace Api.Controllers
             var command = new GetSingleTourLogRequest(logid);
             return await ResponseAsync(command);
         }
+        
+        [HttpGet("search")]
+        public async Task<ActionResult<IResponse>> SearchInTours([FromQuery] string q)
+        {
+            var query = new GetSearchResultsQuery(q);
+
+            return await ResponseAsync(query);
+        }
 
         [HttpPost("{tourid}/logs")]
-        public async Task<ActionResult<IResponse>> CreateTourLog([FromBody] CreateTourLogDto createTourLogDto, int tourid)
+        public async Task<ActionResult<IResponse>> CreateTourLog([FromBody] CreateTourLogDto createTourLogDto,
+            int tourid)
         {
             var command = new CreateTourLogCommand(
                 tourid,
@@ -105,11 +119,12 @@ namespace Api.Controllers
         }
 
         [HttpPut("logs/{logid}")]
-        public async Task<ActionResult<IResponse>> CreateTourLog([FromBody] UpdateTourLogDto updateTourLogDto, int logid)
+        public async Task<ActionResult<IResponse>> CreateTourLog([FromBody] UpdateTourLogDto updateTourLogDto,
+            int logid)
         {
             var command = new UpdateTourLogCommand(
                 TourLogId: logid,
-                DateTime: DateTime.UtcNow, 
+                DateTime: DateTime.UtcNow,
                 Comment: updateTourLogDto.Comment,
                 Difficulty: updateTourLogDto.Difficulty,
                 TotalTime: updateTourLogDto.TotalTime,
@@ -120,7 +135,8 @@ namespace Api.Controllers
 
 
         [HttpDelete("logs/{logid}")]
-        public async Task<ActionResult<IResponse>> DeleteTourLog([FromBody] DeleteTourLogCommand deleteTourLogCommand, int logid)
+        public async Task<ActionResult<IResponse>> DeleteTourLog([FromBody] DeleteTourLogCommand deleteTourLogCommand,
+            int logid)
         {
             var command = new DeleteTourLogCommand(logid);
 
