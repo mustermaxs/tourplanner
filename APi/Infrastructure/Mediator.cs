@@ -7,6 +7,9 @@ using Tourplanner.Entities.TourLogs;
 using Tourplanner.Entities.TourLogs.Commands;
 using Tourplanner.Infrastructure;
 
+using Tourplanner.Entities.Tours.Commands;
+
+
 namespace Tourplanner;
 
 using Tourplanner.Infrastructure;
@@ -85,7 +88,10 @@ public class Mediator : IMediator
         Register<CreateTourLogCommand, CreateTourLogCommandHandler>();
         Register<UpdateTourLogCommand, UpdateTourLogCommandHandler>();
         Register<DeleteTourLogCommand, DeleteTourLogCommandHandler>();
-        Register<GetGeoAutoCompleteQuery, GetGeoAutoCompleteQueryHandler>();
+        Register<GetTourReportRequest, GetTourReportCommandHandler>();
+        Register<GetSummaryReportRequest, GetSummaryReportCommandHandler>();
+        Register<GetSearchResultsQuery, GetSearchResultsQueryHandler>();
+
     }
 
     public void DiscoverPublishers()

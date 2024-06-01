@@ -25,7 +25,7 @@ public class HttpService : IHttpService
 
     public async Task<TDto> Get<TDto>(string url)
     {
-        var response = await client.GetAsync(baseUrl + url); // Properly awaited
+        var response = await client.GetAsync(baseUrl + url);
 
         if (response.IsSuccessStatusCode)
         {

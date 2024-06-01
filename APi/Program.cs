@@ -1,5 +1,6 @@
 using Tourplanner.Entities;
 using Tourplanner.Entities.TourLogs.Commands;
+using Tourplanner.Entities.Tours.Commands;
 using Tourplanner.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Components.Web;
@@ -43,12 +44,10 @@ internal class Program
             });
         });
 
-        // Register other services
         RegisterServices(builder.Services);
 
         var app = builder.Build();
 
-        // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
@@ -74,6 +73,7 @@ internal class Program
         services.AddTransient<IMediator, Mediator>();
         services.AddTransient<IRatingService, RatingService>();
         services.AddTransient<IChildFriendlinessService, ChildFriendlinessService>();
+        services.AddTransient<IReportService, ReportService>();
         services.AddScoped<ITourLogRepository, TourLogRepository>();
         services.AddScoped<ITourRepository, TourRepository>();
         services.AddTransient<IOpenRouteService, OpenRouteService>();
@@ -88,7 +88,9 @@ internal class Program
         services.AddScoped<ICommandHandler, CreateTourLogCommandHandler>();
         services.AddScoped<ICommandHandler, UpdateTourLogCommandHandler>();
         services.AddScoped<ICommandHandler, DeleteTourLogCommandHandler>();
-        services.AddScoped<ICommandHandler, GetGeoAutoCompleteQueryHandler>();
+        services.AddScoped<ICommandHandler, GetTourReportCommandHandler>();
+        services.AddScoped<ICommandHandler, GetSummaryReportCommandHandler>();
+        services.AddScoped<ICommandHandler, GetSearchResultsQueryHandler>();
     }
 
     private static void CreateDbIfNotExists(WebApplication app)

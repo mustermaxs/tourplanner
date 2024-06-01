@@ -10,12 +10,14 @@ public class TourDetailsPageViewModel : BaseViewModel
     private ITourLogDao _tourLogDao;
     private readonly PopupViewModel _popupViewModel;
     public int tourId;
+    private IReportService _reportService;
 
-    public TourDetailsPageViewModel(ITourDao tourDao, ITourLogDao TourLogDao, PopupViewModel popupViewModel)
+    public TourDetailsPageViewModel(ITourDao tourDao, ITourLogDao TourLogDao, PopupViewModel popupViewModel, IReportService reportService)
     {
         _tourDao = tourDao;
         _tourLogDao = TourLogDao;
         _popupViewModel = popupViewModel;
+        _reportService = reportService;
     }
 
     public Tour Tour { get; set; } = new Tour();
@@ -29,6 +31,20 @@ public class TourDetailsPageViewModel : BaseViewModel
         Tour.Id = tourId;
         Tour = await _tourDao.Read(Tour);
         _notifyStateChanged.Invoke();
+    }
+
+    
+    public async Task DownloadReportAsync()
+    {
+        try
+        {
+            await _reportService.GetTourReport(Tour.Id);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error downloading report: {ex.Message}");
+            throw;
+        }
     }
 
     public async Task DeleteTour()
