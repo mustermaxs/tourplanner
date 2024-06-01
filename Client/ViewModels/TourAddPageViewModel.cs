@@ -1,11 +1,13 @@
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 using Microsoft.AspNetCore.Components;
 using Client.Dao;
 using Client.Models;
 using Client.Utils;
 using Client.Components;
+using Client.Services;
 using Microsoft.AspNetCore.Components.Web;
 
 public class TourAddPageViewModel
@@ -13,6 +15,7 @@ public class TourAddPageViewModel
     private readonly ITourDao _tourDao;
     private PopupViewModel _popupVm;
     private readonly IHttpService _httpService;
+    private readonly IGeoService _geoService;
     private readonly NavigationManager _navigationManager;
     public Tour Tour { get; set; } = new Tour();
     private string test { get; set; }
@@ -26,16 +29,17 @@ public class TourAddPageViewModel
         }
     }
 
-    public List<GeoSuggestion> Suggestions { get; private set; } = new List<GeoSuggestion>{new GeoSuggestion("blabla", new Coordinates(1.9d, 2.0d))};
+    public List<Location> Suggestions { get; private set; } = new List<Location>{new Location("blabla", new Coordinates(1.9d, 2.0d))};
     private Action _notifyStateChanged;
 
     public TourAddPageViewModel(NavigationManager navigationManager, ITourDao tourDao, PopupViewModel popupVm,
-        IHttpService httpService)
+        IHttpService httpService, IGeoService geoService)
     {
         _navigationManager = navigationManager;
         _tourDao = tourDao;
         _popupVm = popupVm;
         _httpService = httpService;
+        _geoService = geoService;
     }
 
     public async Task Initialize(Action notifySateChanged)
@@ -48,7 +52,7 @@ public class TourAddPageViewModel
         try
         {
             var tourSpecification = new AddTourSpecification();
-
+            // Tour.From = GetLocationFromLabel()
             if (tourSpecification.IsSatisfiedBy(Tour))
             {
                 await _tourDao.Create(Tour);
@@ -69,41 +73,25 @@ public class TourAddPageViewModel
         }
     }
 
+    private async Task<Location> GetLocationFromLabel(string label)
+    {
+        var location = (await _geoService.SearchLocation(label)).SingleOrDefault();
+
+        if (location is null)
+        {
+            throw new Exception($"Couldn't find location {label}.");
+            _popupVm.Open("Error", $"Couldn't find location {label}", PopupStyle.Error);
+        }
+
+        return location;
+    }
+
     public async Task GetSuggestion(string userInput)
     {
         Console.WriteLine(userInput);
-        await Debouncer.Debounce<string>(GetGeoSuggestion, userInput, 1000);
+        var locations = await Debouncer.Debounce<string, List<Location>>(_geoService.SearchLocation, userInput, 1000);
+        Suggestions = locations.Any() ? locations : new List<Location>();
+        
         _notifyStateChanged.Invoke();
-    }
-
-    private async Task GetGeoSuggestion(string userInput)
-    {
-        var json = await _httpService.Get<JsonElement>($"Tours/geosuggestion?location={userInput}");
-
-        var features = json.GetProperty("features");
-
-        foreach (JsonElement feature in features.EnumerateArray())
-        {
-            var jsonCoordinates = feature.GetProperty("geometry").GetProperty("coordinates").EnumerateArray();
-            var longitude = jsonCoordinates.ElementAt(0).GetDouble();
-            var lattitute = jsonCoordinates.ElementAt(1).GetDouble();
-            var coordinates = new Coordinates(longitude, lattitute);
-            var properties = feature.GetProperty("properties");
-            try
-            {
-                Suggestions.Add(
-                    new GeoSuggestion(
-                        properties.GetProperty("label").GetString(),
-                        coordinates
-                    )
-                );
-            }
-            catch (KeyNotFoundException e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
-
-        }
     }
 }

@@ -2,7 +2,7 @@
 {
     public record Coordinates(double Longitude, double Latitude);
     
-    public record GeoSuggestion(
+    public record Location(
         string Label,
         Coordinates Coordinates
     );   

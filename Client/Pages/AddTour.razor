@@ -8,46 +8,36 @@
 <div class="mb-4">
     <PageHeader Icon="route">Add Tour</PageHeader>
 </div>
-    <div class="form-group mt-3">
-        <div class="row">
-            @* Tour name *@
-            <div class="col">
-                <label for="name">Name</label>
-                <input aria-invalid="True" type="text" class="form-control" id="name" placeholder="Enter name" @bind="AddTourVM.Tour.Name">
-            </div>
-            @* Transport Type *@
-            <div class="col">
-                <label for="transporttype">Transport Type</label>
-                <select class="form-control" id="transporttype" @bind="AddTourVM.Tour.TransportType">
-                    @foreach (var type in Enum.GetValues<TransportType>())
-                    {
-                        <option value="@type">@type</option>
-                    }
-                </select>
-            </div>
-
+<div class="form-group mt-3">
+    <div class="row">
+        @* Tour name *@
+        <div class="col">
+            <label for="name">Name</label>
+            <input aria-invalid="True" type="text" class="form-control" id="name" placeholder="Enter name" @bind="AddTourVM.Tour.Name">
         </div>
+        @* Transport Type *@
+        <div class="col">
+            <label for="transporttype">Transport Type</label>
+            <select class="form-control" id="transporttype" @bind="AddTourVM.Tour.TransportType">
+                @foreach (var type in Enum.GetValues<TransportType>())
+                {
+                    <option value="@type">@type</option>
+                }
+            </select>
+        </div>
+
     </div>
+</div>
 
 <div class="form-group mt-3">
     <div class="row">
         @* From *@
         <div class="col">
-            <label for="from">From</label>
-            <input list="from_list" type="text" @ref="FromInput" class="form-control" id="from" @oninput="(ev) => AddTourVM.GetSuggestion(ev.Value.ToString())" placeholder="Enter start" @bind="AddTourVM.Tour.From">
-
-                <datalist @ref="FromInputDataList" id="from_list">
-                    @foreach (var suggestion in AddTourVM.Suggestions)
-                    {
-                        <option value="@suggestion.Label"></option>
-                    }
-                </datalist>
+            <AutoComplete OnInput="(val) => { AddTourVM.GetSuggestion(val); AddTourVM.Tour.From = val; }" Options="() => AddTourVM.Suggestions.Select(s => s.Label)" Label="Enter starting location" Id="from"></AutoComplete>
         </div>
         @* To *@
         <div class="col">
-            <label for="to">To</label>
-            <input type="text" class="form-control" id="to" placeholder="Enter destination"
-                   @bind="AddTourVM.Tour.To">
+            <AutoComplete OnInput="(val) => { AddTourVM.GetSuggestion(val); AddTourVM.Tour.To = val; }" Options="() => AddTourVM.Suggestions.Select(s => s.Label)" Label="Enter destination" Id="to"></AutoComplete>
         </div>
     </div>
 </div>
@@ -57,20 +47,18 @@
     <label for="description">Description</label>
     <textarea class="form-control" id="description" placeholder="Enter description"
             @bind="AddTourVM.Tour.Description"></textarea>
-    </div>
+</div>
 
-    <Button ButtonType="Primary" mt="4" Label="Add" Img="map" OnClickCallback="AddTourVM.AddTour"/>
+<Button ButtonType="Primary" mt="4" Label="Add" Img="map" OnClickCallback="AddTourVM.AddTour"/>
 
 
 @code
 {
     public ElementReference FromInput;
     public ElementReference FromInputDataList;
-    
+
     protected override async Task OnInitializedAsync()
     {
         await AddTourVM.Initialize(StateHasChanged);
     }
 }
-
-
