@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Client.Models;
 using Client.Dao;
+using Client.ViewModels;
 using Moq;
 using NUnit.Framework;
 

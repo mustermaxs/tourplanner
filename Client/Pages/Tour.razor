@@ -3,6 +3,7 @@
 @inject NavigationManager NavManager
 @inject TourDetailsPageViewModel TourVM
 @using Client.Components
+@using Client.ViewModels
 @inject IJSRuntime JS
 
 <PageTitle>@TourVM.Tour.Name</PageTitle>
@@ -177,8 +178,8 @@ else
     protected override async Task OnInitializedAsync()
     {
         int id = Convert.ToInt32(TourId);
-        await TourVM.InitializeAsync(Convert.ToInt32(TourId));
-        StateHasChanged();
+        TourVM.tourId = Convert.ToInt32(TourId);
+        await TourVM.InitializeAsync(StateHasChanged);
     }
 
     private void EditTour()

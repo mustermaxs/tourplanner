@@ -3,6 +3,7 @@
 @inject TourLogAddPageViewModel AddLogVM
 @inject NavigationManager NavManager
 @using Client.Components
+@using Client.ViewModels
 
 <PageTitle>Add Tour Log</PageTitle>
 
@@ -10,44 +11,48 @@
 
 @if (AddLogVM.TourLog == null)
 {
-    <p><em>Loading...</em></p>
+    <p>
+        <em>Loading...</em>
+    </p>
 }
 else
 {
     <h5>Tour: @AddLogVM.TourLog.Tour.Name</h5>
 
-        <div class="row">
-            <div class="col mt-3">
-                <label for="date">Date</label>
-                <input type="datetime-local" class="form-control" id="date" @bind="AddLogVM.TourLog.DateTime">
-            </div>
-            <div class="col mt-3">
-                <label for="difficulty">Difficulty</label>
-                <input type="number" max="10" class="form-control" id="difficulty" @bind="AddLogVM.TourLog.Difficulty">
-            </div>
-            <div class="col mt-3">
-                <label for="rating">Rating</label>
-                <input type="number" max="10" class="form-control" id="rating" @bind="AddLogVM.TourLog.Rating">
-            </div>
+    <div class="row">
+        <div class="col mt-3">
+            <label for="date">Date</label>
+            <input type="datetime-local" class="form-control" id="date" @bind="AddLogVM.TourLog.DateTime">
         </div>
-
-        <div class="row">
-            <div class="form-group mt-3">
-                <label for="comment">Comment</label>
-                <textarea class="form-control" id="comment" rows="3" @bind="AddLogVM.TourLog.Comment"></textarea>
-            </div>
+        <div class="col mt-3">
+            <label for="difficulty">Difficulty</label>
+            <input type="number" max="10" step="1" min="0" class="form-control" id="difficulty" @bind="AddLogVM.TourLog.Difficulty">
         </div>
+        <div class="col mt-3">
+            <label for="rating">Rating</label>
+            <input type="number" max="10" step="1" min="0" class="form-control" id="rating" @bind="AddLogVM.TourLog.Rating">
+        </div>
+    </div>
 
-    <Button ButtonType="Primary" mt="4" Label="Add" Img="map" OnClickCallback="AddLogVM.AddLog"/>
+    <div class="row">
+        <div class="form-group mt-3">
+            <label for="comment">Comment</label>
+            <textarea class="form-control" id="comment" rows="3" @bind="AddLogVM.TourLog.Comment"></textarea>
+        </div>
+    </div>
+
+    <ButtonGroup Layout="ButtonGroup.Position.Center">
+        <Button ButtonType="Primary" mt="4" Label="Add" Img="map" OnClickCallback="AddLogVM.AddLog"/>
+    </ButtonGroup>
 }
 
 @code {
-    [Parameter]
-    public string TourId { get; set; }
-    
+    [Parameter] public string TourId { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
-        await AddLogVM.InitializeAsync(int.Parse(TourId));
-        StateHasChanged();
+        AddLogVM.TourLog.Tour.Id = int.Parse(TourId);
+        await AddLogVM.InitializeAsync(StateHasChanged);
     }
+
 }

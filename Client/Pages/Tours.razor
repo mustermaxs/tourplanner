@@ -5,6 +5,7 @@
 @inject NavigationManager NavManager
 @using Client.Components
 @using Client.Pages;
+@using Client.ViewModels
 
 <PageTitle>Tours</PageTitle>
 
@@ -56,9 +57,8 @@ else
 @code {
     protected override async Task OnInitializedAsync()
     {
+        ToursVM.InitializeAsync(StateHasChanged);
         await ToursVM.GetToursAsync();
-        
-        StateHasChanged();
     }
 
     private void AddTour()

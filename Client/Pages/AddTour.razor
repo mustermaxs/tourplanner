@@ -3,6 +3,7 @@
 @inject TourAddPageViewModel AddTourVM
 @using Client.Components
 @using Client.Models
+@using Client.ViewModels
 
 <PageTitle>Add Tour</PageTitle>
 <div class="mb-4">
@@ -49,7 +50,9 @@
             @bind="AddTourVM.Tour.Description"></textarea>
 </div>
 
-<Button ButtonType="Primary" mt="4" Label="Add" Img="map" OnClickCallback="AddTourVM.AddTour"/>
+<ButtonGroup Layout="ButtonGroup.Position.Center">
+    <Button ButtonType="Primary" mt="4" Label="Add" Img="map" OnClickCallback="AddTourVM.AddTour"/>
+</ButtonGroup>
 
 
 @code
@@ -59,6 +62,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-        await AddTourVM.Initialize(StateHasChanged);
+        await AddTourVM.InitializeAsync(StateHasChanged);
     }
 }

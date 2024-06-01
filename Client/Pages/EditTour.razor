@@ -3,6 +3,7 @@
 @inject TourEditPageViewModel EditTourVM
 @using Client.Models
 @using Client.Components
+@using Client.ViewModels
 
 <PageTitle>Edit Tour</PageTitle>
 
@@ -58,7 +59,8 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        await EditTourVM.InitializeAsync(Convert.ToInt32(TourId));
+        EditTourVM.SetTourId(Convert.ToInt32(TourId));
+        await EditTourVM.InitializeAsync(StateHasChanged);
         StateHasChanged();
     }
 }

@@ -2,6 +2,7 @@ using Moq;
 using Microsoft.AspNetCore.Components;
 using Client.Models;
 using Client.Dao;
+using Client.ViewModels;
 
 namespace Client.Tests.ViewModels
 {

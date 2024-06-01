@@ -1,16 +1,13 @@
-using System.Text.Json;
-using System.Text.Json.Nodes;
-using System.Text.Json.Serialization;
-using System.Text.Json.Serialization.Metadata;
-using Microsoft.AspNetCore.Components;
+using Client.Components;
 using Client.Dao;
 using Client.Models;
-using Client.Utils;
-using Client.Components;
 using Client.Services;
-using Microsoft.AspNetCore.Components.Web;
+using Client.Utils;
+using Microsoft.AspNetCore.Components;
 
-public class TourAddPageViewModel
+namespace Client.ViewModels;
+
+public class TourAddPageViewModel : BaseViewModel
 {
     private readonly ITourDao _tourDao;
     private PopupViewModel _popupVm;
@@ -30,7 +27,6 @@ public class TourAddPageViewModel
     }
 
     public List<Location> Suggestions { get; private set; } = new List<Location>{new Location("blabla", new Coordinates(1.9d, 2.0d))};
-    private Action _notifyStateChanged;
 
     public TourAddPageViewModel(NavigationManager navigationManager, ITourDao tourDao, PopupViewModel popupVm,
         IHttpService httpService, IGeoService geoService)
@@ -42,16 +38,14 @@ public class TourAddPageViewModel
         _geoService = geoService;
     }
 
-    public async Task Initialize(Action notifySateChanged)
-    {
-        _notifyStateChanged = notifySateChanged;
-    }
-
     public async Task AddTour()
     {
         try
         {
-            var tourSpecification = new AddTourSpecification();
+            _notifyStateChanged.Invoke();
+            var from = (await _geoService.SearchLocation(Tour.From)).FirstOrDefault();
+            var to = (await _geoService.SearchLocation(Tour.To)).FirstOrDefault();
+            var tourSpecification = new AddTourSpecification(from, to);
             
             if (tourSpecification.IsSatisfiedBy(Tour))
             {

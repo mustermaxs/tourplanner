@@ -1,6 +1,7 @@
 using Moq;
 using Client.Dao;
 using Client.Models;
+using Client.ViewModels;
 
 namespace Client.Tests.ViewModels
 {
