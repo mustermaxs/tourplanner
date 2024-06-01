@@ -52,7 +52,7 @@ public class TourAddPageViewModel
         try
         {
             var tourSpecification = new AddTourSpecification();
-            // Tour.From = GetLocationFromLabel()
+            
             if (tourSpecification.IsSatisfiedBy(Tour))
             {
                 await _tourDao.Create(Tour);
