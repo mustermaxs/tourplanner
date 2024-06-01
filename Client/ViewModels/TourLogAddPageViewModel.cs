@@ -13,7 +13,8 @@ public class TourLogAddPageViewModel : BaseViewModel
     private ITourLogDao _tourLogDao;
     private readonly PopupViewModel _popupViewModel;
 
-    public TourLogAddPageViewModel(NavigationManager navigationManager, ITourLogDao tourLogDao, PopupViewModel popupViewModel)
+    public TourLogAddPageViewModel(NavigationManager navigationManager, ITourLogDao tourLogDao,
+        PopupViewModel popupViewModel)
     {
         _navigationManager = navigationManager;
         _tourLogDao = tourLogDao;
@@ -23,18 +24,27 @@ public class TourLogAddPageViewModel : BaseViewModel
 
     public async Task AddLog()
     {
-        var addLogSpec = new TourLogSpecification();
+        try
+        {
+            var addLogSpec = new TourLogSpecification();
 
-        if (addLogSpec.IsSatisfiedBy(TourLog))
-        {
-            await _tourLogDao.Create(TourLog);
-            _navigationManager.NavigateTo($"/tours/{TourLog.Tour.Id}");
-            TourLog = new TourLog();
+            if (addLogSpec.IsSatisfiedBy(TourLog))
+            {
+                await _tourLogDao.Create(TourLog);
+                _navigationManager.NavigateTo($"/tours/{TourLog.Tour.Id}");
+                TourLog = new TourLog();
+            }
+            else
+            {
+                _popupViewModel.Open("Error", "Failed to create tour log.", PopupStyle.Error);
+                _notifyStateChanged.Invoke();
+            }
         }
-        else
+        catch (Exception e)
         {
+            Console.WriteLine(e);
             _popupViewModel.Open("Error", "Failed to create tour log.", PopupStyle.Error);
-            _notifyStateChanged.Invoke();
+            throw;
         }
     }
 };
