@@ -152,6 +152,9 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+
+
+    
     }
 
     protected override async Task OnParametersSetAsync()
@@ -178,8 +181,7 @@ else
         NavManager.NavigateTo("/tours");
     }
 
-    private string FormatEstimatedTime(double minutes) // TODO ins ViewModel geben
-    {
+    private string FormatEstimatedTime(double minutes)
         double hours = minutes / 60;
         if (hours % 1 == 0)
         {

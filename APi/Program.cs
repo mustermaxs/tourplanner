@@ -75,6 +75,7 @@ internal class Program
         services.AddScoped<ISearchService, StringSearchService>();
         services.AddTransient<IRatingService, RatingService>();
         services.AddTransient<IChildFriendlinessService, ChildFriendlinessService>();
+        services.AddTransient<IMigrationService, MigrationService>();
         services.AddScoped<ITourLogRepository, TourLogRepository>();
         services.AddScoped<ITourRepository, TourRepository>();
 
