@@ -26,7 +26,12 @@ internal class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        builder.Services.AddControllers();
+        builder.Services.AddControllers().AddNewtonsoftJson(options =>
+        {
+            options.SerializerSettings.ContractResolver =
+                new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver();
+            options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+        });
 
         builder.Services.AddDbContext<TourContext>(options =>
             options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));

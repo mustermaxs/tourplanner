@@ -36,13 +36,13 @@ public class ToursPageViewModel : BaseViewModel
     {
         try
         {
-            Tours = await tourDao.ReadMultiple();
+            Tours = await _tourDao.ReadMultiple();
             _notifyStateChanged.Invoke();
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Error fetching tours: {ex.Message}");
-            popupViewModel.Open("Error", "Failed to get tours.", PopupStyle.Error);
+            _popupViewModel.Open("Error", "Failed to get tours.", PopupStyle.Error);
             throw;
         }
     }
