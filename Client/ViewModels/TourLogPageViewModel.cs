@@ -1,8 +1,10 @@
-using Microsoft.AspNetCore.Components;
 using Client.Dao;
 using Client.Models;
+using Microsoft.AspNetCore.Components;
 
-public class TourLogPageViewModel
+namespace Client.ViewModels;
+
+public class TourLogPageViewModel : BaseViewModel
 {
     public TourLog TourLog { get; set; }
     private NavigationManager NavigationManager;
@@ -14,30 +16,30 @@ public class TourLogPageViewModel
         this._tourLogDao = tourLogDao;
     }
 
-    public async Task InitializeAsync(int tourId, int logId)
+    
+    
+    public async Task Init(int tourId, int logId)
     {
         TourLog = new TourLog();
         TourLog.Id = logId;
         TourLog.Tour.Id = tourId;
         TourLog = await _tourLogDao.Read(TourLog);
+        _notifyStateChanged.Invoke();
     }
 
     public async Task DeleteLog()
     {
-        try
-        {
+        try {
+        
             await _tourLogDao.Delete(TourLog);
             NavigationManager.NavigateTo($"/tours/{TourLog.Tour.Id}");
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             Console.WriteLine(e);
         }
     }
 
     public async Task UpdateLog()
     {
-        // TODO validation
         await _tourLogDao.Update(TourLog);
         NavigationManager.NavigateTo($"/tours/{TourLog.Tour.Id}");
     }

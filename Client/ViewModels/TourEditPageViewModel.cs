@@ -1,19 +1,21 @@
 using Client.Components;
-using Microsoft.AspNetCore.Components;
 using Client.Dao;
 using Client.Models;
-using Client.Utils;
-public class TourEditPageViewModel
+using Microsoft.AspNetCore.Components;
+
+namespace Client.ViewModels;
+
+public class TourEditPageViewModel : BaseViewModel
 {
     private readonly ITourDao _tourDao;
-    private IPopupService _popupService;
+    private readonly PopupViewModel _popupViewModel;
     private readonly NavigationManager _navigationManager;
 
-    public TourEditPageViewModel(NavigationManager navigationManager, ITourDao tourDao, IPopupService popupService)
+    public TourEditPageViewModel(NavigationManager navigationManager, ITourDao tourDao, PopupViewModel popupViewModel) : base()
     {
         _navigationManager = navigationManager;
         _tourDao = tourDao;
-        _popupService = popupService;
+        _popupViewModel = popupViewModel;
     }
 
     public Tour Tour { get; set; } = new Tour();
@@ -22,27 +24,33 @@ public class TourEditPageViewModel
     {
         try
         {
-            // TODO validation
             await _tourDao.Update(Tour);
             _navigationManager.NavigateTo($"/tours/{Tour.Id}");
+            _popupViewModel.Open("Success", "Updated tour!", PopupStyle.Normal);
         }
         catch (HttpRequestException e)
         {
             Console.WriteLine($"Request error: {e.Message}");
-
+            _popupViewModel.Open("Error", "Failed to update tour.", PopupStyle.Error);
         }
         catch (Exception e)
         {
             Console.WriteLine($"Unexpected error: {e.Message}");
+            _popupViewModel.Open("Error", "Failed to update tour.", PopupStyle.Error);
         }
     }
 
-    public async Task InitializeAsync(int id)
+    public void SetTourId(int id)
     {
+        Tour = new Tour { Id = id };
+    }
+
+    public async Task InitializeAsync(Action notifySateChanged)
+    {
+        await base.InitializeAsync(notifySateChanged);
+        
         try
         {
-            _popupService.Show();
-            Tour = new Tour { Id = id };
             Tour = await _tourDao.Read(Tour);
         }
         catch (HttpRequestException e)

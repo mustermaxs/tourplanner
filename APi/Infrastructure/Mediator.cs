@@ -5,7 +5,10 @@ using Tourplanner.DTOs;
 using Tourplanner.Entities;
 using Tourplanner.Entities.TourLogs;
 using Tourplanner.Entities.TourLogs.Commands;
+using Tourplanner.Infrastructure;
+
 using Tourplanner.Entities.Tours.Commands;
+
 
 namespace Tourplanner;
 
@@ -88,6 +91,7 @@ public class Mediator : IMediator
         Register<GetTourReportRequest, GetTourReportCommandHandler>();
         Register<GetSummaryReportRequest, GetSummaryReportCommandHandler>();
         Register<GetSearchResultsQuery, GetSearchResultsQueryHandler>();
+
     }
 
     public void DiscoverPublishers()

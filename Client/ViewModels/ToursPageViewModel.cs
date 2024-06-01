@@ -1,18 +1,22 @@
-using Client.Models;
+using Client.Components;
 using Client.Dao;
+using Client.Models;
 using System.Net.Http;
-using System.IO;
 
-public class ToursPageViewModel
+namespace Client.ViewModels;
+
+public class ToursPageViewModel : BaseViewModel
 {
     private ITourDao _tourDao;
     private IReportService _reportService;
     public IEnumerable<Tour> Tours { get; private set; } = new List<Tour>();
+    private PopupViewModel _popupViewModel;
 
-    public ToursPageViewModel(ITourDao tourDao,IReportService reportService)
+    public ToursPageViewModel(ITourDao tourDao,IReportService reportService, PopupViewModel popupViewModel)
     {
         _tourDao = tourDao;
         _reportService = reportService;
+        _popupViewModel = popupViewModel;
     }
 
     public async Task DownloadReportAsync()
@@ -32,11 +36,13 @@ public class ToursPageViewModel
     {
         try
         {
-            Tours = await _tourDao.ReadMultiple();
+            Tours = await tourDao.ReadMultiple();
+            _notifyStateChanged.Invoke();
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Error fetching tours: {ex.Message}");
+            popupViewModel.Open("Error", "Failed to get tours.", PopupStyle.Error);
             throw;
         }
     }
