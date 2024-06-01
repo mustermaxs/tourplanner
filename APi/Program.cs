@@ -2,6 +2,7 @@ using Tourplanner.Entities;
 using Tourplanner.Entities.TourLogs.Commands;
 using Tourplanner.Entities.Tours.Commands;
 using Tourplanner.Services;
+using Tourplanner.Services.Search;
 
 namespace Tourplanner;
 
@@ -24,7 +25,12 @@ internal class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        builder.Services.AddControllers();
+        builder.Services.AddControllers().AddNewtonsoftJson(options =>
+        {
+            options.SerializerSettings.ContractResolver =
+                new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver();
+            options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+        });
 
         builder.Services.AddDbContext<TourContext>(options =>
             options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -57,7 +63,6 @@ internal class Program
 
         app.MapControllers();
 
-        // Ensure database is created
         CreateDbIfNotExists(app);
 
         app.Run();
@@ -68,6 +73,7 @@ internal class Program
         services.AddTransient<DbContext, TourContext>();
         services.AddTransient<IServiceProvider, ServiceProvider>();
         services.AddTransient<IMediator, Mediator>();
+        services.AddScoped<ISearchService, StringSearchService>();
         services.AddTransient<IRatingService, RatingService>();
         services.AddTransient<IChildFriendlinessService, ChildFriendlinessService>();
         services.AddTransient<IReportService, ReportService>();
@@ -86,6 +92,7 @@ internal class Program
         services.AddScoped<ICommandHandler, DeleteTourLogCommandHandler>();
         services.AddScoped<ICommandHandler, GetTourReportCommandHandler>();
         services.AddScoped<ICommandHandler, GetSummaryReportCommandHandler>();
+        services.AddScoped<ICommandHandler, GetSearchResultsQueryHandler>();
     }
 
     private static void CreateDbIfNotExists(WebApplication app)
@@ -96,7 +103,7 @@ internal class Program
             try
             {
                 var context = services.GetRequiredService<TourContext>();
-                context.Database.EnsureCreated(); // or your custom DbInitializer
+                context.Database.EnsureCreated();
             }
             catch (Exception ex)
             {

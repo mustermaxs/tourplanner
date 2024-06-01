@@ -29,14 +29,15 @@
     <script src="_framework/blazor.webassembly.js"></script>
     <script>
         window.downloadFileFromBase64 = (mimeType, fileName, base64Data) => {
-        const linkSource = `data:${mimeType};base64,${base64Data}`;
-        const downloadLink = document.createElement("a");
-        downloadLink.href = linkSource;
-        downloadLink.download = fileName;
-        downloadLink.click();
-};
+          const linkSource = `data:${mimeType};base64,${base64Data}`;
+          const downloadLink = document.createElement("a");
+          downloadLink.href = linkSource;
+          downloadLink.download = fileName;
+          downloadLink.click();
+        };
 
     </script>
+    <script src="scripts/AdjustTableAppearance.js"></script>
 </body>
 
 </html>

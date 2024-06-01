@@ -24,17 +24,20 @@ public class TourLogPageViewModel
 
     public async Task DeleteLog()
     {
-    try {
-        
-        await _tourLogDao.Delete(TourLog);
-        NavigationManager.NavigateTo($"/tours/{TourLog.Tour.Id}");
-        } catch (Exception e) {
+        try
+        {
+            await _tourLogDao.Delete(TourLog);
+            NavigationManager.NavigateTo($"/tours/{TourLog.Tour.Id}");
+        }
+        catch (Exception e)
+        {
             Console.WriteLine(e);
         }
     }
 
     public async Task UpdateLog()
     {
+        // TODO validation
         await _tourLogDao.Update(TourLog);
         NavigationManager.NavigateTo($"/tours/{TourLog.Tour.Id}");
     }

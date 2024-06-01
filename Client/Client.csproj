@@ -47,4 +47,9 @@
       <DependentUpon>Images.resx</DependentUpon>
     </Compile>
   </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.AspNetCore.WebUtilities">
+      <HintPath>..\..\..\..\..\Program Files\dotnet\shared\Microsoft.AspNetCore.App\8.0.4\Microsoft.AspNetCore.WebUtilities.dll</HintPath>
+    </Reference>
+  </ItemGroup>
 </Project>
