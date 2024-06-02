@@ -32,6 +32,9 @@ namespace Tourplanner.Entities.Tours
             tour.Popularity = 0.0f;
 
             var tourId = await tourRepository.CreateReturnId(tour); // TODO return Id
+
+            
+
             tour.ChildFriendliness = await childFriendlinessService.Calculate(tourId);
             return Task.CompletedTask;
         }

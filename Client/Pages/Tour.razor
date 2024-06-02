@@ -177,9 +177,56 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        int id = Convert.ToInt32(TourId);
+        @* int id = Convert.ToInt32(TourId);
         TourVM.tourId = Convert.ToInt32(TourId);
-        await TourVM.InitializeAsync(StateHasChanged);
+        await TourVM.InitializeAsync(StateHasChanged); *@
+
+      double lat1 = 52.5200; // Beispiel: Berlin
+        double lon1 = 13.4050;
+        double lat2 = 48.8566; // Beispiel: Paris
+        double lon2 = 2.3522;
+        int zoom = 10;
+
+        // Kachelnummern berechnen
+        (int x1, int y1) = LatLonToTileNumbers(lat1, lon1, zoom);
+        (int x2, int y2) = LatLonToTileNumbers(lat2, lon2, zoom);
+
+        // Bereich bestimmen
+        int minX = Math.Min(x1, x2);
+        int maxX = Math.Max(x1, x2);
+        int minY = Math.Min(y1, y2);
+        int maxY = Math.Max(y1, y2);
+
+        // Kacheln herunterladen und speichern
+        using (HttpClient client = new HttpClient())
+        {
+            for (int x = minX; x <= maxX; x++)
+            {
+                for (int y = minY; y <= maxY; y++)
+                {
+                    string url = $"https://tile.openstreetmap.org/{zoom}/{x}/{y}.png";
+                    byte[] tileData = await client.GetByteArrayAsync(url);
+
+                    string fileName = $"tile_{zoom}_{x}_{y}.png";
+                    await System.IO.File.WriteAllBytesAsync(fileName, tileData);
+                    Console.WriteLine($"Tile saved as {fileName}");
+                }
+            }
+        }
+    }
+
+    static (int, int) LatLonToTileNumbers(double lat, double lon, int zoom)
+    {
+        double latRad = DegToRad(lat);
+        double n = Math.Pow(2.0, zoom);
+        int xtile = (int)((lon + 180.0) / 360.0 * n);
+        int ytile = (int)((1.0 - Math.Log(Math.Tan(latRad) + 1.0 / Math.Cos(latRad)) / Math.PI) / 2.0 * n);
+        return (xtile, ytile);
+    }
+
+    static double DegToRad(double deg)
+    {
+        return deg * (Math.PI / 180.0);
     }
 
     private void EditTour()

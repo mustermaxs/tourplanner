@@ -3,6 +3,7 @@ using Client.Models;
 
 namespace Client.Services
 {
+
     public interface IGeoService
     {
         public Task<List<Location>> SearchLocation(string location);
@@ -54,5 +55,6 @@ namespace Client.Services
 
             return locations;
         }
+
     }
 }

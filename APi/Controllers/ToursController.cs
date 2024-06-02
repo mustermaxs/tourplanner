@@ -41,14 +41,19 @@ namespace Api.Controllers
         [HttpPost]
         public async Task<ActionResult<IResponse>> CreateTour([FromBody] CreateTourDto createTourDto)
         {
-            var command = new CreateTourCommand(
+            var createTourCommand = new CreateTourCommand(
                 createTourDto.Name,
                 createTourDto.Description,
                 createTourDto.From,
                 createTourDto.To,
                 createTourDto.TransportType
             );
-            return await ResponseAsync(command);
+
+
+            // var saveMapImageCommand = new SaveMapImageCommand();
+            // await mediator.Send(saveMapImageCommand);
+            
+            return await ResponseAsync(createTourCommand);
         }
         //
         // [HttpGet("search")]
