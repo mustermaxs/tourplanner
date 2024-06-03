@@ -33,7 +33,6 @@ namespace Tourplanner.Entities.TourLogs
                 log.Difficulty,
                 log.Duration,
                 log.Rating,
-                log.Tour.Name,
                 log.Tour.ToTourDto());
         }
     }

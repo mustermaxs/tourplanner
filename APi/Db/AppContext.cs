@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations;
+using Tourplanner.Entities;
 using Tourplanner.Entities.Tours;
 using Tourplanner.Entities.TourLogs;
 using Tourplanner.Models;
@@ -9,6 +11,8 @@ public class TourContext : DbContext
 {
     public DbSet<Tour> Tours { get; set; }
     public DbSet<TourLog> TourLogs { get; set; }
+    public DbSet<Map> Maps { get; set; }
+    public DbSet<Tile> Tiles { get; set; }
 
     public TourContext(DbContextOptions<TourContext> options)
         : base(options)
@@ -17,66 +21,70 @@ public class TourContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // modelBuilder.Entity<Tour>()
-        //     .HasData(
-        //         new
-        //         {
-        //             TourId = 1,
-        //             Name = "Example Tour 1",
-        //             From = "Origin 1",
-        //             To = "Destination 1",
-        //             Distance = 100.0f,
-        //             Description = "This is an example tour 1.",
-        //             EstimatedTime = 2.0f,
-        //             ImagePath = "example1.jpg",
-        //             Popularity = 4.5f,
-        //             ChildFriendliness = 4.0f,
-        //             TransportType = TransportType.Car
-        //         }
-        //     );
-        // modelBuilder.Entity<TourLog>()
-        //     .HasData(
-        //         new TourLog
-        //         {
-        //             TourLogId = 1,
-        //             Difficulty = 3.5f,
-        //             Duration = 2.0f,
-        //             Rating = 4.0f,
-        //             Comment = "This was a great tour!",
-        //             TourId = 1,
-        //             Date = DateTime.Now
-        //         });
-        
-        // modelBuilder.Entity<Tour>()
-        //     .Property(t => t.TransportType)
-        //     .HasConversion<int>();
-        // //
-        // modelBuilder.Entity<TourLog>()
-        //     .Property(x => x.TourId)
-        //     .HasColumnName("TourId");
-        //
-        // modelBuilder.Entity<Tour>()
-        //     .HasMany<TourLog>(t => t.TourLogs)
-        //     .WithOne(to => to.Tour)
-        //     .HasForeignKey(t => t.TourId);
-        // //
-        // modelBuilder.Entity<TourLog>()
-        //     .HasOne<Tour>(t => t.Tour)
-        //     .WithMany(t => t.TourLogs)
-        //     .HasForeignKey(t => t.TourId);
-        modelBuilder.Entity<TourLog>()
-            .HasOne(tl => tl.Tour)
-            .WithMany(t => t.TourLogs)
-            .HasForeignKey(tl => tl.TourId)
-            .OnDelete(DeleteBehavior.Cascade); // Or whatever behavior you want
+        modelBuilder.Entity<Tour>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Name)
+                .IsRequired()
+                .HasMaxLength(60);
+            entity.Property(e => e.From)
+                .IsRequired()
+                .HasMaxLength(150);
+            entity.Property(e => e.To)
+                .IsRequired()
+                .HasMaxLength(150);
+            entity.Property(e => e.Distance);
+            entity.Property(e => e.Description)
+                .HasMaxLength(500);
+            entity.Property(e => e.EstimatedTime);
+            entity.Property(e => e.Date);
+            entity.Property(e => e.Popularity);
+            entity.Property(e => e.ChildFriendliness);
+            entity.HasOne(e => e.Map)
+                .WithOne(m => m.Tour)
+                .HasForeignKey<Map>(e => e.TourId);
+            entity.HasMany<TourLog>()
+                .WithOne(e => e.Tour)
+                .HasForeignKey(e => e.TourId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<TourLog>(entity =>
+        {
+            entity.HasKey(e => e.TourLogId);
+            entity.Property(e => e.Difficulty);
+            entity.Property(e => e.Duration);
+            entity.Property(e => e.Rating);
+            entity.Property(e => e.Comment).HasMaxLength(500);
+            entity.HasOne(e => e.Tour)
+                .WithMany(e => e.TourLogs)
+                .HasForeignKey(e => e.TourId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<Map>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Path);
+                entity.Property(e => e.Zoom);
+                entity.OwnsOne<Bbox>(e => e.Bbox);
+                entity.HasOne(e => e.Tour)
+                    .WithOne(e => e.Map)
+                    .HasForeignKey<Tour>(e => e.MapId);
+                entity.HasMany(e => e.Tiles)
+                    .WithOne(e => e.Map)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+        modelBuilder.Entity<Tile>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Zoom);
+            entity.Property(e => e.X);
+            entity.Property(e => e.Y);
+            entity.Property(e => e.Order);
+        });
 
         base.OnModelCreating(modelBuilder);
-
-
     }
-
-    // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    // {
-    //     optionsBuilder.UseNpgsql("Host=192.168.0.130;Database=tourplanner;Username=tour_admin;Password=tour_admin123");
-    // }
 }

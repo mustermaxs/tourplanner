@@ -37,6 +37,8 @@ namespace Tourplanner.Entities.Tours
         public ICollection<TourLog> TourLogs { get; set; }
 
         public TransportType TransportType { get; set; }
+        public int? MapId { get; set; }
+        public Map Map { get; set; }
     }
 
     public static class TourExtensionMethods

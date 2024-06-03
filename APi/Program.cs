@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Net.Http.Headers;
 using Tourplanner.Repositories;
 using Tourplanner.Infrastructure;
 using Tourplanner.Entities.Tours;
@@ -34,7 +35,11 @@ internal class Program
         });
         builder.Services.AddDbContext<TourContext>(options =>
             options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-        builder.Services.AddHttpClient();
+        builder.Services.AddHttpClient("TourPlannerClient", client =>
+        {
+            client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("tourplanner", "1.0"));
+        });
+        
         builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
         builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 
@@ -73,13 +78,13 @@ internal class Program
     {
         services.AddScoped<IHttpService, HttpService>();
         services.AddScoped<DbContext, TourContext>();
-        services.AddScoped<FileSystemHandler>();
+        // services.AddScoped<FileSystemHandler>(); // TODO uncomment
         services.AddTransient<IServiceProvider, ServiceProvider>();
         services.AddTransient<IMediator, Mediator>();
         services.AddTransient<IRatingService, RatingService>();
         services.AddTransient<IChildFriendlinessService, ChildFriendlinessService>();
         services.AddTransient<IReportService, ReportService>();
-        services.AddScoped<ITileRepository, TileRepository>();
+        // services.AddScoped<IMapRepository, MapRepository>(); // TODO uncomment
         services.AddScoped<ITourLogRepository, TourLogRepository>();
         services.AddScoped<ITourRepository, TourRepository>();
         services.AddScoped<ITileService, TileService>();

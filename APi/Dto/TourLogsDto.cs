@@ -10,7 +10,6 @@ namespace Tourplanner.DTOs
             float difficulty,
             float totalTime,
             double rating,
-            string tourName,
             TourDto tour
         )
         {
@@ -21,7 +20,6 @@ namespace Tourplanner.DTOs
             Difficulty = difficulty;
             TotalTime = totalTime;
             Rating = rating;
-            TourName = tourName;
             Tour = tour;
         }
 
@@ -32,7 +30,6 @@ namespace Tourplanner.DTOs
         public float Difficulty { get; private set; }
         public float TotalTime { get; private set; }
         public double Rating { get; private set; }
-        public string TourName {get; set;}
         public TourDto Tour {get; set;}
     }
 }

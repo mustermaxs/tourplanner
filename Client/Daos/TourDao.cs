@@ -1,3 +1,4 @@
+using Client.DTOs;
 using Client.Models;
 
 namespace Client.Dao
@@ -21,8 +22,7 @@ namespace Client.Dao
                 to: tour.To,
                 distance: tour.Distance,
                 estimatedTime: tour.EstimatedTime,
-                transportType: tour.TransportType
-            );
+                transportType: tour.TransportType);
             
             await http.Post<CreateTourDto>(createTourDto, $"Tours");
         }

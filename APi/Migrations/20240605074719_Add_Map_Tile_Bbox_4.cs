@@ -5,7 +5,7 @@
 namespace Api.Migrations
 {
     /// <inheritdoc />
-    public partial class TourLogsToTourEntity_9 : Migration
+    public partial class Add_Map_Tile_Bbox_4 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -16,17 +16,7 @@ namespace Api.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "TourLogs");
 
-            migrationBuilder.DropTable(
-                name: "Tiles");
-
-            migrationBuilder.DropTable(
-                name: "Tours");
-
-            migrationBuilder.DropTable(
-                name: "Maps");
         }
     }
 }

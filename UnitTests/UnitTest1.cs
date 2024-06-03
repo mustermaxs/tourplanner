@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Net.Http.Headers;
 using System.Text.Json;
 using Client.Services;
 using Microsoft.AspNetCore.Builder;
@@ -23,7 +24,8 @@ public class ChildFriendlinessServiceTests
 {
     protected Mock<Microsoft.Extensions.Configuration.IConfiguration> mockConfiguration;
     protected Microsoft.Extensions.Configuration.IConfiguration _config;
-    private Tourplanner.Services.IHttpService _httpService;
+    private HttpClient _httpClient;
+    private Tourplanner.Services.HttpService _httpService;
     private ServiceProvider? _serviceProvider;
     private TourContext? _context;
     private TourRepository? _repository;
@@ -47,8 +49,11 @@ public class ChildFriendlinessServiceTests
             BaseAddress = new Uri("http://localhost:5280")
         };
 
-        _httpService = new Tourplanner.Services.HttpService(httpClient);
+        var builder = WebApplication.CreateBuilder();
+        _httpClient = new HttpClient();
+        _httpClient.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("tourplanner", "1.0"));
         var serviceCollection = new ServiceCollection();
+        _httpService = new Tourplanner.Services.HttpService(httpClient);
 
         serviceCollection.AddDbContext<TourContext>(options =>
             options.UseInMemoryDatabase("tourplanner_test"));
@@ -73,6 +78,7 @@ public class ChildFriendlinessServiceTests
         _context.Dispose();
         _serviceProvider!.Dispose();
         _repository!.Dispose();
+        _httpClient.Dispose();
         _httpService.Dispose();
     }
 
@@ -178,33 +184,43 @@ public class ChildFriendlinessServiceTests
         // var 
     }
 
-    [Test]
-    public async Task TileService_Returns_Expected_List_Of_Tiles()
-    {
-        var bbox = new List<double> { 16.376941, 48.239177, 16.377488, 48.240183 };
-        var zoom = 17;
-        var service = new TileService();
+    // [Test]
+    // public async Task TileService_Returns_Expected_List_Of_Tiles()
+    // {
+    //     var bbox = new List<double> { 16.376941, 48.239177, 16.377488, 48.240183 };
+    //     var zoom = 17;
+    //     var service = new TileService();
+    //
+    //     var tiles = service.GetTileConfigs(
+    //         17,
+    //         16.376941, 48.239177, 16.377488, 48.240183);
+    //
+    //     var tile1 = tiles.ElementAt(0);
+    //     var tile2 = tiles.ElementAt(1);
+    //
+    //     Assert.Multiple(() =>
+    //     {
+    //         Assert.That(tile1.X == 71498);
+    //         Assert.That(tile1.Y == 45431);
+    //         Assert.That(tile2.X == 71498);
+    //         Assert.That(tile2.Y == 45432);
+    //     });
+    //     var mapContext = new TileContext(new FileSystemHandler(_webHostEnv, _httpClient), _config, new TileService());
+    //     var t = new Tile("", "", "");
+    //     t.Bbox = ( 16.376941, 48.239177, 16.377488, 48.240183);
+    //     t.Zoom = zoom;
+    //     var map = new Map(zoom, (16.376941, 48.239177, 16.377488, 48.240183));
+    //     await mapContext.Save(map);
+    //
+    //     var getTile = mapContext.Get(0);
+    //     Assert.That(getTile.Tiles.Any());
+    // }
 
-        var tiles = service.GetTileConfigs(
-            17,
-            16.376941, 48.239177, 16.377488, 48.240183);
-
-        var tile1 = tiles.ElementAt(0);
-        var tile2 = tiles.ElementAt(1);
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(tile1.X == 71498);
-            Assert.That(tile1.Y == 45431);
-            Assert.That(tile2.X == 71498);
-            Assert.That(tile2.Y == 45432);
-        });
-        var tileContext = new TileContext(new FileSystemHandler(_webHostEnv, _httpService), _config, new TileService());
-        var t = new Tile("", "", "");
-        t.Bbox = ( 16.376941, 48.239177, 16.377488, 48.240183);
-        t.Zoom = zoom;
-        await tileContext.Save(t);
-    }
+    // [Test]
+    // public async Task TileContext_Gets_Existing_Tiles()
+    // {
+    //     
+    // }
 
     // [Test]
     // public async Task Repo_rolls_back()

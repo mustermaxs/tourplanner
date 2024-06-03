@@ -35,7 +35,6 @@ namespace Tourplanner.Entities.TourLogs
                     difficulty: log.Difficulty,
                     totalTime: log.Duration,
                     rating: log.Rating,
-                    tourName: tour.Name,
                     tour: new TourDto(
                         id: tour.Id,
                         name: tour.Name,

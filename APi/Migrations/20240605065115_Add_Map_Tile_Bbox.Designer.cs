@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Tourplanner;
@@ -11,9 +12,11 @@ using Tourplanner;
 namespace Api.Migrations
 {
     [DbContext(typeof(TourContext))]
-    partial class TourContextModelSnapshot : ModelSnapshot
+    [Migration("20240605065115_Add_Map_Tile_Bbox")]
+    partial class Add_Map_Tile_Bbox
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -72,7 +75,7 @@ namespace Api.Migrations
 
                     b.HasIndex("MapId");
 
-                    b.ToTable("Tiles");
+                    b.ToTable("Tile");
                 });
 
             modelBuilder.Entity("Tourplanner.Entities.TourLogs.TourLog", b =>
@@ -142,7 +145,7 @@ namespace Api.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("character varying(150)");
 
-                    b.Property<int?>("MapId")
+                    b.Property<int>("MapId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Name")
@@ -226,7 +229,9 @@ namespace Api.Migrations
                 {
                     b.HasOne("Tourplanner.Entities.Map", "Map")
                         .WithOne("Tour")
-                        .HasForeignKey("Tourplanner.Entities.Tours.Tour", "MapId");
+                        .HasForeignKey("Tourplanner.Entities.Tours.Tour", "MapId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Map");
                 });

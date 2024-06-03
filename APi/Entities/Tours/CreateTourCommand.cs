@@ -19,9 +19,9 @@ namespace Tourplanner.Entities.Tours
     public class CreateTourCommandHandler(
         TourContext ctx,
         ITourRepository tourRepository,
-        IChildFriendlinessService childFriendlinessService) : RequestHandler<CreateTourCommand, Task>(ctx)
+        IChildFriendlinessService childFriendlinessService) : RequestHandler<CreateTourCommand, int>(ctx)
     {
-        public override async Task<Task> Handle(CreateTourCommand request)
+        public override async Task<int> Handle(CreateTourCommand request)
         {
             var tour = new Tour();
             tour.Name = request.Name;
@@ -33,10 +33,9 @@ namespace Tourplanner.Entities.Tours
 
             var tourId = await tourRepository.CreateReturnId(tour); // TODO return Id
 
-            
+            tour.ChildFriendliness = await childFriendlinessService.Calculate(tourId); // TODO unnötig hier, wird eh nicht gespeichert
 
-            tour.ChildFriendliness = await childFriendlinessService.Calculate(tourId);
-            return Task.CompletedTask;
+            return tourId;
         }
     }
 }
