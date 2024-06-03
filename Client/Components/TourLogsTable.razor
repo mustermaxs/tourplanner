@@ -40,6 +40,7 @@
     {
         await JS.InvokeVoidAsync("adjustTableCellOverflow");
         base.OnParametersSetAsync();
+        StateHasChanged();
     }
 
 }

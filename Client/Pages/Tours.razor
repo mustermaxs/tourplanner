@@ -6,6 +6,8 @@
 @using Client.Components
 @using Client.Pages;
 @using Client.ViewModels
+@inject IJSRuntime JS
+
 
 <PageTitle>Tours</PageTitle>
 
@@ -33,6 +35,8 @@ else
     {
         ToursVM.InitializeAsync(StateHasChanged);
         await ToursVM.GetToursAsync();
+        await JS.InvokeVoidAsync("adjustTableCellOverflow");
+
     }
 
     private void AddTour()

@@ -4,7 +4,7 @@
 }
 
 <input list="@($"{Id}_list")" type="text" class="form-control" id="@Id" @oninput="OnInputChanged" placeholder="@Placeholder">
-@if (_options.Any())
+@if (_options != null && _options.Any())
 {
     <datalist id="@($"{Id}_list")">
         @foreach (var option in _options)
@@ -14,15 +14,15 @@
     </datalist>
 }
 
-@code { 
+@code {  
     [Parameter] public EventCallback<string> OnInput { get; set; }
 
-    [Parameter] public Func<IEnumerable<string>> Options { get; set; }
+    [Parameter] public Func<IEnumerable<string>>? Options { get; set; }
     [Parameter] public string? Label { get; set; } = string.Empty;
     [Parameter] public string? Placeholder { get; set; } = string.Empty;
     [Parameter] public string? Id { get; set; } = "autocomplete";
 
-    private IEnumerable<string> _options = Enumerable.Empty<string>();
+    private IEnumerable<string>? _options = Enumerable.Empty<string>();
     private string _userInput;
 
     protected override void OnParametersSet()

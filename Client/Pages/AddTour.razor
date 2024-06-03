@@ -34,11 +34,19 @@
     <div class="row">
         @* From *@
         <div class="col">
-            <AutoComplete OnInput="(val) => { AddTourVM.GetSuggestion(val); AddTourVM.Tour.From = val; }" Options="() => AddTourVM.Suggestions.Select(s => s.Label)" Label="Enter starting location" Id="from"></AutoComplete>
+            <AutoComplete
+                OnInput="async (val) => { await AddTourVM.GetSuggestion(val); AddTourVM.Tour.From = val; }"
+                Options="() => AddTourVM.Suggestions ?? new List<string>()"
+                Label="Enter starting location" Id="from">
+            </AutoComplete>
         </div>
         @* To *@
         <div class="col">
-            <AutoComplete OnInput="(val) => { AddTourVM.GetSuggestion(val); AddTourVM.Tour.To = val; }" Options="() => AddTourVM.Suggestions.Select(s => s.Label)" Label="Enter destination" Id="to"></AutoComplete>
+            <AutoComplete
+                OnInput="async (val) => { await AddTourVM.GetSuggestion(val); AddTourVM.Tour.To = val; }"
+                Options="() => AddTourVM.Suggestions ?? new List<string>()"
+                Label="Enter destination" Id="to">
+            </AutoComplete>
         </div>
     </div>
 </div>

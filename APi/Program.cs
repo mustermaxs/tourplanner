@@ -32,7 +32,6 @@ internal class Program
                 new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver();
             options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
         });
-
         builder.Services.AddDbContext<TourContext>(options =>
             options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
         builder.Services.AddHttpClient();
@@ -74,13 +73,17 @@ internal class Program
     {
         services.AddScoped<IHttpService, HttpService>();
         services.AddScoped<DbContext, TourContext>();
+        services.AddScoped<FileSystemHandler>();
         services.AddTransient<IServiceProvider, ServiceProvider>();
         services.AddTransient<IMediator, Mediator>();
         services.AddTransient<IRatingService, RatingService>();
         services.AddTransient<IChildFriendlinessService, ChildFriendlinessService>();
         services.AddTransient<IReportService, ReportService>();
+        services.AddScoped<ITileRepository, TileRepository>();
         services.AddScoped<ITourLogRepository, TourLogRepository>();
         services.AddScoped<ITourRepository, TourRepository>();
+        services.AddScoped<ITileService, TileService>();
+        
         services.AddTransient<IOpenRouteService, OpenRouteService>();
 
         services.AddScoped<ICommandHandler, GetToursCommandHandler>();

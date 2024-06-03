@@ -1,18 +1,20 @@
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Net.Http.Json;
 
 namespace Tourplanner.Services
 {
-    public interface IHttpService
+    public interface IHttpService : IDisposable
     {
         public Task<TDto> Get<TDto>(string url);
         public Task<HttpResponseMessage> Put<TDto>(TDto dto, string url);
         public Task<HttpResponseMessage> Delete(string url);
         public Task<HttpResponseMessage> Post<TDto>(TDto dto, string url);
+        public HttpClient GetClient();
     }
 
-    public class HttpService : IHttpService
+    public class HttpService : IHttpService, IDisposable
     {
         private HttpClient client;
 
@@ -20,7 +22,10 @@ namespace Tourplanner.Services
         {
             client = httpClient;
             client.DefaultRequestHeaders.Add("Access-Control-Allow-Origin", "*");
+            client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("tourplanner", "1.0"));
         }
+
+        public HttpClient GetClient() => client;
 
         public async Task<TDto> Get<TDto>(string url)
         {
@@ -52,6 +57,11 @@ namespace Tourplanner.Services
         public async Task<HttpResponseMessage> Delete(string url)
         {
             return await client.DeleteAsync(url);
+        }
+
+        public void Dispose()
+        {
+            client.Dispose();
         }
     }
 }

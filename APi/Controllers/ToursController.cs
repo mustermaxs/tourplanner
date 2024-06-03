@@ -55,6 +55,9 @@ namespace Api.Controllers
             
             return await ResponseAsync(createTourCommand);
         }
+        
+        // [HttpGet]
+        // public async Task<string>
         //
         // [HttpGet("search")]
         // public async Task<ActionResult<IResponse>> SearchInTours([FromBody] SearchDto searchDto)
@@ -90,6 +93,12 @@ namespace Api.Controllers
         {
             var command = new GetTourLogsRequest(tourid);
             return await ResponseAsync(command);
+        }
+        
+        [HttpGet("{tourid}/tiles")] // TODO implement
+        public async Task<ActionResult<IResponse>> GetTilesForTour(int tourid)
+        {
+            throw new NotImplementedException();
         }
 
         [HttpGet("logs/{logid}")]
