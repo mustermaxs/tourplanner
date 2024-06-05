@@ -1,3 +1,48 @@
+using Microsoft.EntityFrameworkCore;
+using Tourplanner.Entities;
+using Tourplanner.Services;
+using Tourplanner.Exceptions;
+
+namespace Tourplanner.Repositories
+{
+    public interface IMapRepository : IRepository<Map>
+    {
+        public Task<int> CreateReturnId(Map map);
+    }
+    public class MapRepository : Repository<Map>, IMapRepository
+    {
+        private IImageService _imageService;
+
+        public MapRepository(TourContext ctx, IImageService imageService) : base(ctx)
+        {
+            _imageService = imageService;
+        }
+
+        public async Task<int> CreateReturnId(Map map)
+        {
+            await dbSet.AddAsync(map);
+            await SaveAsync();
+            return map.Id;
+        }
+
+        public async Task<Map?> GetMapWithTiles(int mapId)
+        {
+            var map = await dbSet.Include(m => m.Tiles)
+            .FirstOrDefaultAsync(m => m.Id == mapId);
+
+            if (map is null) return null;
+
+            map.Tiles.Select(t => t.Base64Encoded = _imageService.ReadImageAsBase64(t.Path));
+
+            return map;
+        }
+     }
+
+}
+
+
+
+
 // using System.Buffers.Text;
 // using System.Composition.Convention;
 // using Tourplanner.Exceptions;

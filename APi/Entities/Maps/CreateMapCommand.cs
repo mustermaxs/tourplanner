@@ -1,20 +1,74 @@
-// namespace Tourplanner.Entities.Maps
-// {
-//     using Tourplanner.Infrastructure;
-//     using Tourplanner.Services;
+namespace Tourplanner.Entities.Maps
+{
+    using Tourplanner.DTOs;
+    using Tourplanner.Infrastructure;
+    using Tourplanner.Repositories;
+    using Tourplanner.Models;
+    using Tourplanner.Services;
+    using Tourplanner.Entities.Tours;
 
-//     public record CreateMapCommand(Tour Tour) : IRequest;
+    public record CreateMapCommand(int TourId,
+    Coordinates From,
+    Coordinates To,
+    TransportType TransportType) : IRequest;
 
-//     public class CreateMapCommandHandler(
-//         TourContext ctx,
-//         IMapRepository mapRepository,
-//         ITileRepository tileRepository,
-//         ITileService tileService) : RequestHandler<CreateMapCommand, Task>(ctx);
-//     {
-//         public override async Task Handle(CreateMapCommand cmd)
-//         {
-//             var tileConfigs = 
-//         }
-//     }
+    public class CreateMapCommandHandler(
+        TourContext ctx,
+        IMapRepository mapRepository,
+        IImageService imageService,
+        ITileCalculator tileCalculator,
+        IOpenRouteService openRouteService)
+        : RequestHandler<CreateMapCommand, Task>(ctx)
+    {
 
-// }
+        public override async Task<Task> Handle(CreateMapCommand request)
+        {
+            var routeSummary = await openRouteService.RouteInfo(request.From, request.To, request.TransportType);
+            var bboxValues = routeSummary.OrsBbox;
+            var bbox = new Bbox(bboxValues[0], bboxValues[1], bboxValues[2], bboxValues[3]);
+            List<TileConfig> tileConfigs = new List<TileConfig>();
+            
+            int zoomLevel = 17;
+            
+            do
+            {
+                tileConfigs = tileCalculator.GetTileConfigs(zoomLevel--, bbox);
+            } while (tileConfigs.Count() >= 6);
+
+            string savePath = $"Assets/{request.TourId}";
+            
+            var imagePaths = await imageService.FetchImages(savePath, tileConfigs);
+            var tiles = new List<Tile>();
+
+            for (var i = 0; i < tileConfigs.Count(); i++)
+            {
+                var tile = new Tile();
+                tile.X = tileConfigs.ElementAt(i).X;
+                tile.Y = tileConfigs.ElementAt(i).Y;
+                tile.Zoom = zoomLevel;
+                tile.Path = imagePaths.ElementAt(i);
+                tiles.Add(tile);
+            }
+
+            var map = new Map
+            {
+                TourId = request.TourId,
+                Zoom = zoomLevel,
+                Tiles = tiles,
+                Bbox = bbox
+            };
+
+            
+
+            //create tiles with coordinates and saved tile url
+
+
+            // create map with tiles
+
+            //pass map to maprepository, maprepository saves tiles and map in db and returns mapid
+
+            return Task.CompletedTask;
+        }
+
+    }
+}

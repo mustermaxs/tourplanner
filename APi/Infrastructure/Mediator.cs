@@ -1,17 +1,15 @@
-using System.Reflection;
 using Tourplanner.Entities.Tours;
 using Microsoft.EntityFrameworkCore;
-using Tourplanner.DTOs;
 using Tourplanner.Entities;
 using Tourplanner.Entities.TourLogs;
 using Tourplanner.Entities.TourLogs.Commands;
-using Tourplanner.Infrastructure;
 
 using Tourplanner.Entities.Tours.Commands;
 
 
 namespace Tourplanner;
 
+using Tourplanner.Entities.Maps;
 using Tourplanner.Infrastructure;
 
 public abstract class IMediator
@@ -92,7 +90,7 @@ public class Mediator : IMediator
         Register<GetSummaryReportRequest, GetSummaryReportCommandHandler>();
         Register<GetSearchResultsQuery, GetSearchResultsQueryHandler>();
         Register<GetGeoAutoCompleteQuery, GetGeoAutoCompleteQueryHandler>();
-
+        Register<CreateMapCommand, CreateMapCommandHandler>();
     }
 
     public void DiscoverPublishers()

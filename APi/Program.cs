@@ -16,6 +16,7 @@ using Tourplanner.Entities.Tours;
 using Tourplanner.Entities.TourLogs;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Tourplanner.Entities.Maps;
 
 namespace Tourplanner;
 
@@ -78,17 +79,16 @@ internal class Program
     {
         services.AddScoped<IHttpService, HttpService>();
         services.AddScoped<DbContext, TourContext>();
-        // services.AddScoped<FileSystemHandler>(); // TODO uncomment
-        services.AddTransient<IServiceProvider, ServiceProvider>();
         services.AddTransient<IMediator, Mediator>();
         services.AddTransient<IRatingService, RatingService>();
         services.AddTransient<IChildFriendlinessService, ChildFriendlinessService>();
         services.AddTransient<IReportService, ReportService>();
-        // services.AddScoped<IMapRepository, MapRepository>(); // TODO uncomment
+        services.AddScoped<IMapRepository, MapRepository>(); // TODO uncomment
         services.AddScoped<ITourLogRepository, TourLogRepository>();
         services.AddScoped<ITourRepository, TourRepository>();
-        // services.AddScoped<ITileService, TileService>();
         
+        services.AddScoped<ITileCalculator, TileCalculator>();
+        services.AddScoped<IImageService, ImageService>();
         services.AddTransient<IOpenRouteService, OpenRouteService>();
 
         services.AddScoped<ICommandHandler, GetToursCommandHandler>();
@@ -105,6 +105,7 @@ internal class Program
         services.AddScoped<ICommandHandler, GetSummaryReportCommandHandler>();
         services.AddScoped<ICommandHandler, GetSearchResultsQueryHandler>();
         services.AddScoped<ICommandHandler, GetGeoAutoCompleteQueryHandler>();
+        services.AddScoped<ICommandHandler, CreateMapCommandHandler>();
     }
 
     private static void CreateDbIfNotExists(WebApplication app)

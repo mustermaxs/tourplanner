@@ -7,12 +7,15 @@ namespace Tourplanner.Entities
     public class Tile
     {
         public int Id { get; set; }
+        public string Base64Encoded { get; set; }
         public int Order { get; set; }
         public int MapId { get; set; }
         public Map Map { get; set; }
         public int Zoom { get; set; }
         public int X { get; set; }
         public int Y { get; set; }
+        public string Path { get; set; }
+        
     }
 
     public class Bbox
@@ -21,6 +24,19 @@ namespace Tourplanner.Entities
         public double MinY { get; set; }
         public double MaxX { get; set; }
         public double MaxY { get; set; }
+
+        public Bbox(double minX, double minY, double maxX, double maxY)
+        {
+            MinX = minX;
+            MinY = minY;
+            MaxX = maxX;
+            MaxY = maxY;
+        }
+
+        public Bbox()
+        {
+            
+        }
         
         public void Deconstruct(out double minX, out double minY, out double maxX, out double maxY)
         {
@@ -36,7 +52,6 @@ namespace Tourplanner.Entities
         public int Id { get; set; }
         public int TourId { get; set; }
         public Tour Tour { get; set; }
-        public string Path { get; set; }
         public int Zoom { get; set; }
         public Bbox Bbox { get; set; }
         public ICollection<Tile> Tiles { get; set; }

@@ -8,6 +8,7 @@ using Tourplanner.Infrastructure;
 using Microsoft.AspNetCore.Cors;
 using Tourplanner.Entities;
 using Tourplanner.Entities.TourLogs.Commands;
+using Tourplanner.Entities.Maps;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -41,15 +42,26 @@ namespace Api.Controllers
         [HttpPost]
         public async Task<ActionResult<IResponse>> CreateTour([FromBody] CreateTourDto createTourDto)
         {
-            var createTourCommand = new CreateTourCommand(
-                createTourDto.Name,
-                createTourDto.Description,
-                createTourDto.From,
-                createTourDto.To,
-                createTourDto.TransportType
-            );
-
-            return await ResponseAsync(createTourCommand);
+            try
+            {
+                var createTourCommand = new CreateTourCommand(
+                    createTourDto.Name,
+                    createTourDto.Description,
+                    createTourDto.From,
+                    createTourDto.To,
+                    createTourDto.TransportType
+                );
+                
+                var tourId = Convert.ToInt32(await mediator.Send(createTourCommand));
+                var createMapCommand = new CreateMapCommand(tourId, createTourDto.Start, createTourDto.Destination, createTourDto.TransportType);
+                await mediator.Send(createMapCommand);
+                        
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
 

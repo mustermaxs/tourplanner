@@ -42,7 +42,11 @@ public class TourContext : DbContext
             entity.HasOne(e => e.Map)
                 .WithOne(m => m.Tour)
                 .HasForeignKey<Map>(e => e.TourId);
-            entity.OwnsOne<Coordinates>(e => e.Coordinates);
+            entity.OwnsOne(e => e.Coordinates, navigationBuilder =>
+            {
+                navigationBuilder.Property(c => c.Longitude).HasColumnName("Longitude");
+                navigationBuilder.Property(c => c.Latitude).HasColumnName("Latitude");
+            });
             entity.HasMany<TourLog>()
                 .WithOne(e => e.Tour)
                 .HasForeignKey(e => e.TourId)
@@ -66,7 +70,6 @@ public class TourContext : DbContext
         modelBuilder.Entity<Map>(entity =>
             {
                 entity.HasKey(e => e.Id);
-                entity.Property(e => e.Path);
                 entity.Property(e => e.Zoom);
                 entity.OwnsOne<Bbox>(e => e.Bbox);
                 entity.HasOne(e => e.Tour)
@@ -84,7 +87,9 @@ public class TourContext : DbContext
             entity.Property(e => e.X);
             entity.Property(e => e.Y);
             entity.Property(e => e.Order);
+            entity.Ignore(e => e.Base64Encoded);
         });
+
 
         base.OnModelCreating(modelBuilder);
     }

@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using Tourplanner.Entities.Tours;
 using Tourplanner.Services;
 
 namespace Tourplanner.DTOs
@@ -7,6 +8,9 @@ namespace Tourplanner.DTOs
     {
         [JsonPropertyName("summary")]
         public OrsDirectionsSummaryDto Summary { get; set; }
+        
+        [JsonPropertyName("bbox")]
+        public List<double> OrsBbox {get; set;}
     }
 
     public class OrsDirectionsSummaryDto
@@ -51,11 +55,12 @@ namespace Tourplanner.DTOs
         {
             get
             {
+            //TODO: FIX THIS
                 if (_coordinates == null && RawCoordinates is { Count: >= 2 })
                 {
                     _coordinates = new Coordinates(RawCoordinates[0], RawCoordinates[1]);
                 }
-                return _coordinates ?? new Coordinates(0, 0); // Return a default value if coordinates are null
+                return _coordinates ?? new Coordinates(0, 0);
             }
         }
     }

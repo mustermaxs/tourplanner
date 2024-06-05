@@ -10,15 +10,17 @@ namespace Client.Dtos
             string description,
             string from,
             string to,
-            TransportType transportType,
-            Coordinates? coordinates = null)
+            Coordinates start,
+            Coordinates destination,
+            TransportType transportType)
         {
             Name = name;
             Description = description;
             From = from;
             To = to;
             TransportType = transportType;
-            Coordinates = coordinates;
+            Start = start;
+            Destination = destination;
         }
 
         public string Name { get; set; }
@@ -26,6 +28,7 @@ namespace Client.Dtos
         public string From { get; set; }
         public string To { get; set; }
         public TransportType TransportType { get; set; }
-        public Coordinates? Coordinates { get; set; }
+        public Coordinates? Start { get; set; }
+        public Coordinates? Destination { get; set; }
     }
 }

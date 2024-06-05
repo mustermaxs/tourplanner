@@ -23,13 +23,15 @@ namespace Tourplanner.Entities.Tours
     {
         public override async Task<int> Handle(CreateTourCommand request)
         {
-            var tour = new Tour();
-            tour.Name = request.Name;
-            tour.Description = request.Description;
-            tour.From = request.From;
-            tour.To = request.To;
-            tour.TransportType = request.TransportType;
-            tour.Popularity = 0.0f;
+            var tour = new Tour
+            {
+                Name = request.Name,
+                Description = request.Description,
+                From = request.From,
+                To = request.To,
+                TransportType = request.TransportType,
+                Popularity = 0.0f
+            };
 
             var tourId = await tourRepository.CreateReturnId(tour);
             // var createMapCommand = new CreateMapCommand();
