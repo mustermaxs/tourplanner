@@ -22,7 +22,7 @@ namespace Client.Models
             Distance = distance;
         }
         public int Id { get; set; }
-        public DateTime DateTime { get; set; }
+        public DateTime DateTime { get; set; } = DateTime.Now;
         public string Comment { get; set; } = "";
         public float Difficulty { get; set; } = 0;
         public float Duration { get; set; } = 0;
