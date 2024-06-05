@@ -43,11 +43,11 @@ namespace Tourplanner.Services
                             column.Spacing(10);
 
                             // Image
-                            if (!string.IsNullOrEmpty(tourEntity.ImagePath))
-                            {
-                                column.Item().Image(tourEntity.ImagePath);
-                            }
-                            else
+                            // if (!string.IsNullOrEmpty(tourEntity.ImagePath))
+                            // {
+                            //     column.Item().Image(tourEntity.ImagePath);
+                            // }
+                            // else
                             {
                                 column.Item().Element(ContainerWithPadding).Image("Assets/img/map.png");
                             }
@@ -136,7 +136,7 @@ namespace Tourplanner.Services
                                 // Table content
                                 foreach (var log in tourEntity.TourLogs)
                                 {
-                                    table.Cell().Element(CellStyle).Text(log.Date.ToString("dd.MM.yyyy hh:mm"));
+                                    table.Cell().Element(CellStyle).Text(log.DateTime.ToString("dd.MM.yyyy hh:mm"));
                                     table.Cell().Element(CellStyle).Text(log.Comment);
                                     table.Cell().Element(CellStyle).Text(log.Difficulty.ToString());
                                     table.Cell().Element(CellStyle).Text(log.Duration.ToString() + " min");

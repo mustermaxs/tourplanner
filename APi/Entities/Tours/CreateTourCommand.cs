@@ -31,7 +31,8 @@ namespace Tourplanner.Entities.Tours
             tour.TransportType = request.TransportType;
             tour.Popularity = 0.0f;
 
-            var tourId = await tourRepository.CreateReturnId(tour); // TODO return Id
+            var tourId = await tourRepository.CreateReturnId(tour);
+            // var createMapCommand = new CreateMapCommand();
 
             tour.ChildFriendliness = await childFriendlinessService.Calculate(tourId); // TODO unnötig hier, wird eh nicht gespeichert
 

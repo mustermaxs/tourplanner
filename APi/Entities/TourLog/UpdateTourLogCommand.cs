@@ -9,8 +9,9 @@ namespace Tourplanner.Entities.TourLogs.Commands
         DateTime DateTime,
         string Comment,
         float Difficulty,
-        float TotalTime,
-        float Rating
+        float Rating,
+        float Duration,
+        float Distance
     ) : IRequest;
     
     public class UpdateTourLogCommandHandler(
@@ -27,12 +28,13 @@ namespace Tourplanner.Entities.TourLogs.Commands
                 throw new ResourceNotFoundException($"Tour log entry {request.TourLogId} doesn't seem to exist");
             }
             
-            tourLog.Date = request.DateTime;
+            tourLog.DateTime = request.DateTime;
             tourLog.Comment = request.Comment;
             tourLog.Difficulty = request.Difficulty;
-            tourLog.Duration = request.TotalTime;
             tourLog.Rating = request.Rating;
             tourLog.TourLogId = request.TourLogId;
+            tourLog.Duration = request.Duration;
+            tourLog.Distance = request.Distance;
 
             await tourLogRepository.UpdateAsync(tourLog);
 

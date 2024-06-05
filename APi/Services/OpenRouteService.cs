@@ -7,7 +7,7 @@ using Tourplanner.Models;
 
 namespace Tourplanner.Services
 {
-    public record Coordinates(double Longitude, double Lattitude);
+    public record Coordinates(double Longitude, double Latitude);
 
     public record RouteInfo(Coordinates From, Coordinates To, float Duration, float Distance, TransportType TransportType);
 
@@ -64,7 +64,7 @@ namespace Tourplanner.Services
             };
             // TODO write helper method to build uri
             var json = await _httpService.Get<JsonElement>(
-                $"{_baseUrl}{_routeInfoUrl}{profile}?api_key={_apiKey}&start={CoordinateToString(from.Longitude)},{CoordinateToString(from.Lattitude)}&end={CoordinateToString(to.Longitude)},{CoordinateToString(to.Lattitude)}");
+                $"{_baseUrl}{_routeInfoUrl}{profile}?api_key={_apiKey}&start={CoordinateToString(from.Longitude)},{CoordinateToString(from.Latitude)}&end={CoordinateToString(to.Longitude)},{CoordinateToString(to.Latitude)}");
 
             var feature = json.GetProperty("features").EnumerateArray().ElementAt(0);
 
@@ -99,7 +99,7 @@ namespace Tourplanner.Services
             };
             // TODO write helper method to build uri
             var json = await _httpService.Get<OrsRouteSummary>(
-                $"{_baseUrl}{_routeInfoUrl}{profile}?api_key={_apiKey}&start={CoordinateToString(from.Longitude)},{CoordinateToString(from.Lattitude)}&end={CoordinateToString(to.Longitude)},{CoordinateToString(to.Lattitude)}");
+                $"{_baseUrl}{_routeInfoUrl}{profile}?api_key={_apiKey}&start={CoordinateToString(from.Longitude)},{CoordinateToString(from.Latitude)}&end={CoordinateToString(to.Longitude)},{CoordinateToString(to.Latitude)}");
 
             return json;
         }

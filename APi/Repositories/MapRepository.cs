@@ -166,19 +166,19 @@
 //     //  
 //     //  
 //     
-//     /*
-//          * TODO CREATE TOUR WITH MAP
-//          * Handle within CreateTourCommand
-//          * CreateTourCommand uses other commands and repositories itself
-//      * 
-//      * Create Tour  ->  return TourId
-//      * Fetch Images  ->  return image names
-//      *      store them with the image name they got from the OSM API
-//      * Create Map   ->  return MapId
-//      * Create Tiles ->  return TileIds
-//      *  
-//      * 
-//      */
+    /*
+         * TODO CREATE TOUR WITH MAP
+         * Handle within CreateTourCommand
+         * CreateTourCommand uses other commands and repositories itself
+     * 
+     * Create Tour  ->  return TourId
+     * Fetch Images  ->  return image names
+     *      store them with the image name they got from the OSM API
+     * Create Map   ->  return MapId
+     * Create Tiles ->  return TileIds
+     *  
+     * 
+     */
 //     public class MapRepository(TourContext ctx, ITileContext tileContext) : Repository<Map>(ctx), IMapRepository
 //     {
 //         public override async Task Create(Map map)

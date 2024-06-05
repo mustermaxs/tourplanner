@@ -4,7 +4,7 @@ using Client.Models;
 using Client.Services;
 using Client.Utils;
 using Microsoft.AspNetCore.Components;
-using Client.DTOs;
+using Client.Dtos;
 
 namespace Client.ViewModels;
 
@@ -68,19 +68,6 @@ public class TourAddPageViewModel : BaseViewModel
             _popupVm.Open("Error", "Failed to add tour.", PopupStyle.Error);
         }
     }
-
-    // private async Task<OrsPropertiesDto> GetLocationFromLabel(string label)
-    // {
-    //     var location = (await _geoService.SearchLocation(label)).SingleOrDefault();
-    //
-    //     if (location is null)
-    //     {
-    //         throw new Exception($"Couldn't find location {label}.");
-    //         _popupVm.Open("Error", $"Couldn't find location {label}", PopupStyle.Error);
-    //     }
-    //
-    //     return location;
-    // }
 
     public async Task GetSuggestion(string userInput)
     {

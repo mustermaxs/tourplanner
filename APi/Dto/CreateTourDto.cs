@@ -1,4 +1,5 @@
-﻿using Tourplanner.Models;
+﻿using Tourplanner.Entities.Tours;
+using Tourplanner.Models;
 
 namespace Tourplanner.DTOs
 {
@@ -9,6 +10,7 @@ namespace Tourplanner.DTOs
             string description,
             string from,
             string to,
+            Coordinates coordinates,
             float estimatedTime,
             TransportType transportType
         )
@@ -17,6 +19,7 @@ namespace Tourplanner.DTOs
             Description = description;
             From = from;
             To = to;
+            Coordinates = coordinates;
             EstimatedTime = estimatedTime;
             TransportType = transportType;
         }
@@ -25,6 +28,7 @@ namespace Tourplanner.DTOs
         public string Description { get; set; }
         public string From { get; set; }
         public string To { get; set; }
+        public Coordinates Coordinates { get; set; }
         public float EstimatedTime { get; set; }
         public TransportType TransportType { get; set; }
     }

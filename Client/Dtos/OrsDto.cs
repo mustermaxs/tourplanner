@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using Client.Models;
 
-namespace Client.DTOs
+namespace Client.Dtos
 {
     public class OrsRouteSummary
     {

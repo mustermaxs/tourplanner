@@ -27,31 +27,31 @@ namespace Tourplanner.Entities.TourLogs.Commands
 
             foreach (var log in tourLogs)
             {
-                tourLogDtos.Add(new TourLogDto(
+                tourLogDtos.Add(new TourLogDto(     // TODO extension method verwenden
                     id: log.TourLogId,
                     tourId: log.TourId,
-                    dateTime: log.Date,
+                    dateTime: log.DateTime,
                     comment: log.Comment,
+                    distance: log.Distance,
                     difficulty: log.Difficulty,
-                    totalTime: log.Duration,
+                    duration: log.Duration,
                     rating: log.Rating,
-                    tour: new TourDto(
+                    tour: new TourDto(              // TODO extension method verwenden
                         id: tour.Id,
                         name: tour.Name,
                         description: tour.Description,
                         from: tour.From,
                         to: tour.To,
+                        coordinates: tour.Coordinates,
                         transportType: tour.TransportType,
                         distance: tour.Distance,
                         timespan: tour.EstimatedTime,
                         popularity: tour.Popularity,
-                        childfriendliness: tour.ChildFriendliness,
-                        routeImage: tour.ImagePath
-                    )
+                        childfriendliness: tour.ChildFriendliness
+                        )
                 ));
             }
             return await Task.FromResult<IEnumerable<TourLogDto>>(tourLogDtos.ToList());
         }
     }
 }
-

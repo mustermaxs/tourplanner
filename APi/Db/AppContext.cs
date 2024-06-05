@@ -37,12 +37,12 @@ public class TourContext : DbContext
             entity.Property(e => e.Description)
                 .HasMaxLength(500);
             entity.Property(e => e.EstimatedTime);
-            entity.Property(e => e.Date);
             entity.Property(e => e.Popularity);
             entity.Property(e => e.ChildFriendliness);
             entity.HasOne(e => e.Map)
                 .WithOne(m => m.Tour)
                 .HasForeignKey<Map>(e => e.TourId);
+            entity.OwnsOne<Coordinates>(e => e.Coordinates);
             entity.HasMany<TourLog>()
                 .WithOne(e => e.Tour)
                 .HasForeignKey(e => e.TourId)
@@ -55,6 +55,7 @@ public class TourContext : DbContext
             entity.Property(e => e.Difficulty);
             entity.Property(e => e.Duration);
             entity.Property(e => e.Rating);
+            entity.Property(e => e.DateTime);
             entity.Property(e => e.Comment).HasMaxLength(500);
             entity.HasOne(e => e.Tour)
                 .WithMany(e => e.TourLogs)

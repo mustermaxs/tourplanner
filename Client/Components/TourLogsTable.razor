@@ -9,6 +9,7 @@
         <th>Difficulty</th>
         <th>Duration (hrs)</th>
         <th>Rating</th>
+        <th>Distance (km)</th>
     </tr>
     </thead>
     <tbody>
@@ -20,6 +21,7 @@
             <td><span>@log.Difficulty</span></td>
             <td><span>@log.Duration</span></td>
             <td><span>@log.Rating</span></td>
+            <td><span>@log.Distance</span></td>
         </tr>
     }
     </tbody>
@@ -33,13 +35,13 @@
 
     protected override async Task OnInitializedAsync()
     {
-        base.OnInitializedAsync();
+        await base.OnInitializedAsync();
     }
 
     protected override async Task OnParametersSetAsync()
     {
         await JS.InvokeVoidAsync("adjustTableCellOverflow");
-        base.OnParametersSetAsync();
+        await base.OnParametersSetAsync();
         StateHasChanged();
     }
 

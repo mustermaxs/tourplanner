@@ -75,8 +75,8 @@
         <value>#ffffff</value>
     </data>
     <data name="api_base_url" type="System.String">
-        <value>http://localhost:5161/api/</value>
-        <!-- <value>https://loclhost:5161/api/</value> -->
+        <!-- <value>http://localhost:5161/api/</value> -->
+        <value>https://1css5fx6-5161.euw.devtunnels.ms/api/</value>
     </data>
 
 </root>

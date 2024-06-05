@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 using Client.Models;
-using Client.DTOs;
+using Client.Dtos;
 
 namespace Client.Services
 {

@@ -17,7 +17,6 @@ public class TourLogPageViewModel : BaseViewModel
     }
 
     
-    
     public async Task Init(int tourId, int logId)
     {
         TourLog = new TourLog();

@@ -36,12 +36,12 @@ namespace Tourplanner.Entities.Tours
                 tour.Description,
                 tour.From,
                 tour.To,
+                tour.Coordinates,
                 tour.TransportType,
                 tour.Distance,
                 tour.EstimatedTime,
                 popularity,
-                childFriendliness,
-                tour.ImagePath));
+                childFriendliness));
             
         }
     }

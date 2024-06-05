@@ -12,8 +12,8 @@ using Tourplanner;
 namespace Api.Migrations
 {
     [DbContext(typeof(TourContext))]
-    [Migration("20240605072035_Add_Map_Tile_Bbox_3")]
-    partial class Add_Map_Tile_Bbox_3
+    [Migration("20240605140759_Add_Duration_to_TourLog")]
+    partial class Add_Duration_to_TourLog
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -91,10 +91,13 @@ namespace Api.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");
 
-                    b.Property<DateTime>("Date")
+                    b.Property<DateTime>("DateTime")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<float>("Difficulty")
+                        .HasColumnType("real");
+
+                    b.Property<float>("Distance")
                         .HasColumnType("real");
 
                     b.Property<float>("Duration")
@@ -136,11 +139,6 @@ namespace Api.Migrations
                         .HasColumnType("real");
 
                     b.Property<string>("From")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("character varying(150)");
-
-                    b.Property<string>("ImagePath")
                         .IsRequired()
                         .HasMaxLength(150)
                         .HasColumnType("character varying(150)");
@@ -230,6 +228,28 @@ namespace Api.Migrations
                     b.HasOne("Tourplanner.Entities.Map", "Map")
                         .WithOne("Tour")
                         .HasForeignKey("Tourplanner.Entities.Tours.Tour", "MapId");
+
+                    b.OwnsOne("Tourplanner.Entities.Tours.Coordinates", "Coordinates", b1 =>
+                        {
+                            b1.Property<int>("TourId")
+                                .HasColumnType("integer");
+
+                            b1.Property<double>("Latitude")
+                                .HasColumnType("double precision");
+
+                            b1.Property<double>("Longitude")
+                                .HasColumnType("double precision");
+
+                            b1.HasKey("TourId");
+
+                            b1.ToTable("Tours");
+
+                            b1.WithOwner()
+                                .HasForeignKey("TourId");
+                        });
+
+                    b.Navigation("Coordinates")
+                        .IsRequired();
 
                     b.Navigation("Map");
                 });

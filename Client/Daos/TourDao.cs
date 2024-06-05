@@ -1,4 +1,4 @@
-using Client.DTOs;
+using Client.Dtos;
 using Client.Models;
 
 namespace Client.Dao
@@ -13,18 +13,9 @@ namespace Client.Dao
         {
         }
 
-        public override async Task Create(Tour tour)
+        public override async Task<HttpResponseMessage> Create(Tour tour)
         {
-            var createTourDto = new CreateTourDto(
-                name: tour.Name,
-                description: tour.Description,
-                from: tour.From,
-                to: tour.To,
-                distance: tour.Distance,
-                estimatedTime: tour.EstimatedTime,
-                transportType: tour.TransportType);
-            
-            await http.Post<CreateTourDto>(createTourDto, $"Tours");
+            return await http.Post(tour.ToCreateTourDto(), $"Tours");
         }
 
         public override async Task<Tour> Read(Tour tourLog)
@@ -37,16 +28,9 @@ namespace Client.Dao
             return await http.Get<IEnumerable<Tour>>("Tours");
         }
 
-        public override async Task Update(Tour tour)
+        public override async Task<HttpResponseMessage> Update(Tour tour)
         {
-            var updateTourDto = new UpdateTourDto(
-                tour.Name,
-                tour.Description,
-                tour.From,
-                tour.To,
-                tour.TransportType
-            );
-            await http.Put<UpdateTourDto>(updateTourDto, $"Tours/{tour.Id}");
+            return await http.Put(tour.ToUpdateTourDto(), $"Tours/{tour.Id}");
         }
 
         public override async Task Delete(Tour tour)

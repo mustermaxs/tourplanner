@@ -1,5 +1,5 @@
 ﻿using Client.Models;
-using Client.DTOs;
+using Client.Dtos;
 
 namespace Client.Utils;
 using Client.Utils.Specifications;

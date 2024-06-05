@@ -12,8 +12,8 @@ using Tourplanner;
 namespace Api.Migrations
 {
     [DbContext(typeof(TourContext))]
-    [Migration("20240605070534_Add_Map_Tile_Bbox_2")]
-    partial class Add_Map_Tile_Bbox_2
+    [Migration("20240605110259_Add_Coordinates_to_Tour")]
+    partial class Add_Coordinates_to_Tour
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -91,7 +91,7 @@ namespace Api.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");
 
-                    b.Property<DateTime>("Date")
+                    b.Property<DateTime>("DateTime")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<float>("Difficulty")
@@ -145,7 +145,7 @@ namespace Api.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("character varying(150)");
 
-                    b.Property<int>("MapId")
+                    b.Property<int?>("MapId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Name")
@@ -229,8 +229,28 @@ namespace Api.Migrations
                 {
                     b.HasOne("Tourplanner.Entities.Map", "Map")
                         .WithOne("Tour")
-                        .HasForeignKey("Tourplanner.Entities.Tours.Tour", "MapId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("Tourplanner.Entities.Tours.Tour", "MapId");
+
+                    b.OwnsOne("Tourplanner.Entities.Tours.Coordinates", "Coordinates", b1 =>
+                        {
+                            b1.Property<int>("TourId")
+                                .HasColumnType("integer");
+
+                            b1.Property<double>("Lattitude")
+                                .HasColumnType("double precision");
+
+                            b1.Property<double>("Longitude")
+                                .HasColumnType("double precision");
+
+                            b1.HasKey("TourId");
+
+                            b1.ToTable("Tours");
+
+                            b1.WithOwner()
+                                .HasForeignKey("TourId");
+                        });
+
+                    b.Navigation("Coordinates")
                         .IsRequired();
 
                     b.Navigation("Map");

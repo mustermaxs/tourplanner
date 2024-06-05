@@ -87,7 +87,7 @@ internal class Program
         // services.AddScoped<IMapRepository, MapRepository>(); // TODO uncomment
         services.AddScoped<ITourLogRepository, TourLogRepository>();
         services.AddScoped<ITourRepository, TourRepository>();
-        services.AddScoped<ITileService, TileService>();
+        // services.AddScoped<ITileService, TileService>();
         
         services.AddTransient<IOpenRouteService, OpenRouteService>();
 

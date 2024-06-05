@@ -49,21 +49,9 @@ namespace Api.Controllers
                 createTourDto.TransportType
             );
 
-
-            // var saveMapImageCommand = new SaveMapImageCommand();
-            // await mediator.Send(saveMapImageCommand);
-            
             return await ResponseAsync(createTourCommand);
         }
-        
-        // [HttpGet]
-        // public async Task<string>
-        //
-        // [HttpGet("search")]
-        // public async Task<ActionResult<IResponse>> SearchInTours([FromBody] SearchDto searchDto)
-        // {
-        //     var query = new GetSearchResultsQuery(searchDto.SearchTerm);
-        // }
+
 
         [HttpDelete("{tourid}")]
         public async Task<ActionResult<IResponse>> DeleteTour(int tourid)
@@ -125,8 +113,9 @@ namespace Api.Controllers
                 DateTime.UtcNow,
                 createTourLogDto.Comment,
                 createTourLogDto.Difficulty,
-                createTourLogDto.TotalTime,
-                createTourLogDto.Rating
+                createTourLogDto.Rating,
+                createTourLogDto.Duration,
+                createTourLogDto.Distance
             );
 
             return await ResponseAsync(command);
@@ -141,8 +130,10 @@ namespace Api.Controllers
                 DateTime: DateTime.UtcNow,
                 Comment: updateTourLogDto.Comment,
                 Difficulty: updateTourLogDto.Difficulty,
-                TotalTime: updateTourLogDto.TotalTime,
-                Rating: updateTourLogDto.Rating);
+                Rating: updateTourLogDto.Rating,
+                Duration: updateTourLogDto.Duration,
+                Distance: updateTourLogDto.Distance
+                );
 
             return await ResponseAsync(command);
         }
