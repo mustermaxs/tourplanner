@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Reflection;
 using Tourplanner.Repositories;
 using Tourplanner.Infrastructure;
 using Tourplanner.Entities.Tours;
@@ -76,6 +77,7 @@ internal class Program
         services.AddScoped<DbContext, TourContext>();
         services.AddTransient<IServiceProvider, ServiceProvider>();
         services.AddTransient<IMediator, Mediator>();
+        IMediator.DiscoverPublishers(Assembly.GetExecutingAssembly());
         services.AddTransient<IRatingService, RatingService>();
         services.AddTransient<IChildFriendlinessService, ChildFriendlinessService>();
         services.AddTransient<IReportService, ReportService>();
@@ -83,8 +85,8 @@ internal class Program
         services.AddScoped<ITourRepository, TourRepository>();
         services.AddTransient<IOpenRouteService, OpenRouteService>();
 
-        services.AddScoped<ICommandHandler, GetToursCommandHandler>();
-        services.AddScoped<ICommandHandler, GetTourByIdCommandHandler>();
+        services.AddScoped<ICommandHandler, GetToursRequestHandler>();
+        services.AddScoped<ICommandHandler, GetTourByIdRequestHandler>();
         services.AddScoped<ICommandHandler, CreateTourCommandHandler>();
         services.AddScoped<ICommandHandler, UpdateTourCommandHandler>();
         services.AddScoped<ICommandHandler, DeleteTourCommandHandler>();
@@ -93,8 +95,8 @@ internal class Program
         services.AddScoped<ICommandHandler, CreateTourLogCommandHandler>();
         services.AddScoped<ICommandHandler, UpdateTourLogCommandHandler>();
         services.AddScoped<ICommandHandler, DeleteTourLogCommandHandler>();
-        services.AddScoped<ICommandHandler, GetTourReportCommandHandler>();
-        services.AddScoped<ICommandHandler, GetSummaryReportCommandHandler>();
+        services.AddScoped<ICommandHandler, GetTourReportRequestHandler>();
+        services.AddScoped<ICommandHandler, GetSummaryReportRequestHandler>();
         services.AddScoped<ICommandHandler, GetSearchResultsQueryHandler>();
         services.AddScoped<ICommandHandler, GetGeoAutoCompleteQueryHandler>();
     }
