@@ -9,14 +9,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Net.Http.Headers;
+using System.Reflection;
 using Tourplanner.Repositories;
 using Tourplanner.Infrastructure;
 using Tourplanner.Entities.Tours;
 using Tourplanner.Entities.TourLogs;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using Tourplanner.Entities.Maps;
 
 namespace Tourplanner;
 
@@ -34,13 +33,10 @@ internal class Program
                 new Newtonsoft.Json.Serialization.CamelCasePropertyNamesContractResolver();
             options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
         });
+
         builder.Services.AddDbContext<TourContext>(options =>
             options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-        builder.Services.AddHttpClient("TourPlannerClient", client =>
-        {
-            client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("tourplanner", "1.0"));
-        });
-        
+        builder.Services.AddHttpClient();
         builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
         builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 
@@ -79,20 +75,18 @@ internal class Program
     {
         services.AddScoped<IHttpService, HttpService>();
         services.AddScoped<DbContext, TourContext>();
+        services.AddTransient<IServiceProvider, ServiceProvider>();
         services.AddTransient<IMediator, Mediator>();
+        IMediator.DiscoverPublishers(Assembly.GetExecutingAssembly());
         services.AddTransient<IRatingService, RatingService>();
         services.AddTransient<IChildFriendlinessService, ChildFriendlinessService>();
         services.AddTransient<IReportService, ReportService>();
-        services.AddScoped<IMapRepository, MapRepository>(); // TODO uncomment
         services.AddScoped<ITourLogRepository, TourLogRepository>();
         services.AddScoped<ITourRepository, TourRepository>();
-        
-        services.AddScoped<ITileCalculator, TileCalculator>();
-        services.AddScoped<IImageService, ImageService>();
         services.AddTransient<IOpenRouteService, OpenRouteService>();
 
-        services.AddScoped<ICommandHandler, GetToursCommandHandler>();
-        services.AddScoped<ICommandHandler, GetTourByIdCommandHandler>();
+        services.AddScoped<ICommandHandler, GetToursRequestHandler>();
+        services.AddScoped<ICommandHandler, GetTourByIdRequestHandler>();
         services.AddScoped<ICommandHandler, CreateTourCommandHandler>();
         services.AddScoped<ICommandHandler, UpdateTourCommandHandler>();
         services.AddScoped<ICommandHandler, DeleteTourCommandHandler>();
@@ -101,11 +95,10 @@ internal class Program
         services.AddScoped<ICommandHandler, CreateTourLogCommandHandler>();
         services.AddScoped<ICommandHandler, UpdateTourLogCommandHandler>();
         services.AddScoped<ICommandHandler, DeleteTourLogCommandHandler>();
-        services.AddScoped<ICommandHandler, GetTourReportCommandHandler>();
-        services.AddScoped<ICommandHandler, GetSummaryReportCommandHandler>();
+        services.AddScoped<ICommandHandler, GetTourReportRequestHandler>();
+        services.AddScoped<ICommandHandler, GetSummaryReportRequestHandler>();
         services.AddScoped<ICommandHandler, GetSearchResultsQueryHandler>();
         services.AddScoped<ICommandHandler, GetGeoAutoCompleteQueryHandler>();
-        services.AddScoped<ICommandHandler, CreateMapCommandHandler>();
     }
 
     private static void CreateDbIfNotExists(WebApplication app)

@@ -13,7 +13,7 @@ namespace Tourplanner.Entities.Tours
     {
     }
 
-    public class GetToursCommandHandler(
+    public class GetToursRequestHandler(
         TourContext ctx,
         ITourRepository tourRepository,
         IChildFriendlinessService childFriendlinessService)

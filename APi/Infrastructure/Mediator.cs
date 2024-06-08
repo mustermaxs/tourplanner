@@ -1,20 +1,22 @@
+using System.Reflection;
 using Tourplanner.Entities.Tours;
 using Microsoft.EntityFrameworkCore;
+using Tourplanner.DTOs;
 using Tourplanner.Entities;
 using Tourplanner.Entities.TourLogs;
 using Tourplanner.Entities.TourLogs.Commands;
+using Tourplanner.Infrastructure;
 
 using Tourplanner.Entities.Tours.Commands;
 
 
 namespace Tourplanner;
 
-using Tourplanner.Entities.Maps;
 using Tourplanner.Infrastructure;
 
 public abstract class IMediator
 {
-    protected Dictionary<string, Type> _CommandCommandHandlerMapping = new Dictionary<string, Type>();
+    protected static Dictionary<string, Type> _CommandCommandHandlerMapping = new Dictionary<string, Type>();
     protected DbContext _dbContext;
     private readonly IServiceProvider _serviceProvider;
 
@@ -23,8 +25,6 @@ public abstract class IMediator
     {
         _dbContext = dbContext;
         _serviceProvider = serviceProvider;
-
-        RegisterPublishers();
     }
 
     public async Task<object?> Send(IRequest request)
@@ -65,35 +65,40 @@ public abstract class IMediator
         return _CommandCommandHandlerMapping.TryAdd(commandName, typeof(TCommandHandler));
     }
 
-    public abstract void RegisterPublishers();
+    public static void DiscoverPublishers(Assembly assembly)
+    {
+        var assemblyTypes = assembly.GetTypes();
+        var requests = assemblyTypes.Where(t => typeof(IRequest).IsAssignableFrom(t) && !t.IsInterface);
+        var requestHandlers = assemblyTypes.Where(t => IsDerivableFromBaseClass(t) && !t.IsAbstract);
+
+        foreach (var request in requests)
+        {
+            var responsibleHandler = requestHandlers.SingleOrDefault(r => r.Name == $"{request.Name}Handler");
+            if (responsibleHandler is null)
+                throw new Exception($"Mediator couldn't find handler for request type {request.Name}");
+
+            _CommandCommandHandlerMapping.TryAdd(request.Name, responsibleHandler);
+        }
+    }
+    
+    private static bool IsDerivableFromBaseClass(Type toCheck)
+    {
+        while (toCheck != null && toCheck != typeof(object))
+        {
+            var currentType = toCheck.IsGenericType ? toCheck.GetGenericTypeDefinition() : toCheck;
+            if (typeof(RequestHandler<,>) == currentType)
+            {
+                return true;
+            }
+            toCheck = toCheck.BaseType;
+        }
+        return false;
+    }
 }
 
 public class Mediator : IMediator
 {
     public Mediator(DbContext context, IServiceProvider serviceProvider) : base(context, serviceProvider)
-    {
-    }
-
-    public override void RegisterPublishers()
-    {
-        Register<GetToursRequest, GetToursCommandHandler>();
-        Register<GetTourByIdRequest, GetTourByIdCommandHandler>();
-        Register<CreateTourCommand, CreateTourCommandHandler>();
-        Register<UpdateTourCommand, UpdateTourCommandHandler>();
-        Register<DeleteTourCommand, DeleteTourCommandHandler>();
-        Register<GetTourLogsRequest, GetTourLogsRequestHandler>();
-        Register<GetSingleTourLogRequest, GetSingleTourLogRequestHandler>();
-        Register<CreateTourLogCommand, CreateTourLogCommandHandler>();
-        Register<UpdateTourLogCommand, UpdateTourLogCommandHandler>();
-        Register<DeleteTourLogCommand, DeleteTourLogCommandHandler>();
-        Register<GetTourReportRequest, GetTourReportCommandHandler>();
-        Register<GetSummaryReportRequest, GetSummaryReportCommandHandler>();
-        Register<GetSearchResultsQuery, GetSearchResultsQueryHandler>();
-        Register<GetGeoAutoCompleteQuery, GetGeoAutoCompleteQueryHandler>();
-        Register<CreateMapCommand, CreateMapCommandHandler>();
-    }
-
-    public void DiscoverPublishers()
     {
     }
 }
