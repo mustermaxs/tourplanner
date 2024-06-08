@@ -51,6 +51,10 @@ public class TourAddPageViewModel : BaseViewModel
             
             if (tourSpecification.IsSatisfiedBy(Tour))
             {
+                Tour.Start = (await _geoService.SearchLocation(Tour.From)).Features.FirstOrDefault()?.GeometryDto
+                    .Coordinates;
+                Tour.Destination = (await _geoService.SearchLocation(Tour.To)).Features.FirstOrDefault()?.GeometryDto
+                    .Coordinates;
                 await _tourDao.Create(Tour);
                 _popupVm.Open("", "Created new tour.", PopupStyle.Normal);
             }

@@ -62,8 +62,9 @@ namespace Tourplanner.Services
             };
             // TODO write helper method to build uri
             var json = await _httpService.Get<OrsRouteSummary>(
-                $"{_baseUrl}{_routeInfoUrl}{profile}?api_key={_apiKey}&start={CoordinateToString(from.Longitude)},{CoordinateToString(from.Latitude)}&end={CoordinateToString(to.Longitude)},{CoordinateToString(to.Latitude)}");
+                $"{_baseUrl}{_routeInfoUrl}{profile}?api_key={_apiKey}&start={CoordinateToString(from.Latitude)},{CoordinateToString(from.Longitude)}&end={CoordinateToString(to.Latitude)},{CoordinateToString(to.Longitude)}");
 
+            https://api.openrouteservice.org /v2/directions/driving-car? api_key = your-api-key& start = 8.681495,49.41461& end = 8.687872,49.420318
             return json;
         }
     }

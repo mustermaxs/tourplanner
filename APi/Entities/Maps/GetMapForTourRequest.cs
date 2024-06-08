@@ -6,17 +6,18 @@ using Tourplanner.Repositories;
 
 namespace Tourplanner.Entities.Maps
 {
-    public record GetMapRequest(int MapId) : IRequest;
+    public record GetMapForTourRequest(int TourId) : IRequest;
 
-    public class GetMapRequestHandler(
+    public class GetMapForTourRequestHandler(
         TourContext ctx,
         IMapRepository mapRepository,
-        ITileRepository tileRepository) : RequestHandler<GetMapRequest, MapDto>(ctx)
+        ITileRepository tileRepository) : RequestHandler<GetMapForTourRequest, MapDto>(ctx)
     {
-        public override async Task<MapDto> Handle(GetMapRequest request)
+        public override async Task<MapDto> Handle(GetMapForTourRequest forTourRequest)
         {
-            var map = await mapRepository.GetMapWithTiles(request.MapId);
-            return map.ToMapDto();
+            var map = await mapRepository.GetMapWithTilesForTour(forTourRequest.TourId);
+            var mapDto = map.ToMapDto();
+            return mapDto;
         }
     }
 }

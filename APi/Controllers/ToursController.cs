@@ -32,10 +32,10 @@ namespace Api.Controllers
             return await ResponseAsync(command);
         }
 
-        [HttpGet("maps/{mapid}")]
-        public async Task<ActionResult<IResponse>> GetMapForTour(int mapid)
+        [HttpGet("{tourId}/map")]
+        public async Task<ActionResult<IResponse>> GetMapForTour(int tourId)
         {
-            var request = new GetMapRequest(mapid);
+            var request = new GetMapForTourRequest(tourId);
             return await ResponseAsync(request);
         }
 

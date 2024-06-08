@@ -74,9 +74,13 @@ namespace Tourplanner.Entities
     {
         public static MapDto ToMapDto(this Map map)
         {
+            var tiles = map.Tiles.Select(t =>
+            {
+                return new TileDto(t.Base64Encoded, t.X, t.Y);
+            }).ToList();
             return new MapDto(
                 id: map.Id,
-                tileDtos: map.Tiles.Select(t => t.ToTileDto()).ToList(),
+                tiles: tiles,
                 tourId: map.TourId
                 );
         }

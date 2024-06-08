@@ -36,7 +36,7 @@ namespace Tourplanner.Entities.Maps
                 tileConfigs = tileCalculator.GetTileConfigs(zoomLevel--, bbox);
             } while (tileConfigs.Count() >= 6);
 
-            string savePath = $"Assets/{request.TourId}";
+            string savePath = $"Assets";
             
             var imagePaths = await imageService.FetchImages(savePath, tileConfigs);
             var tiles = new List<Tile>();

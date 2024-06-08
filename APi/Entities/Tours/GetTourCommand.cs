@@ -15,18 +15,20 @@ namespace Tourplanner.Entities.Tours
         ITourRepository tourRepository,
         ITourLogRepository tourLogRepository,
         IRatingService ratingService,
-        IChildFriendlinessService childFriendlinessService)
+        IChildFriendlinessService childFriendlinessService,
+        IMapRepository mapRepository)
         : RequestHandler<GetTourByIdRequest, TourDto>(ctx)
     {
         public override async Task<TourDto> Handle(GetTourByIdRequest request)
         {
             var tour = await tourRepository.GetTourWithLogs(request.Id);
-
             if (tour is null)
             {
                 throw new ResourceNotFoundException($"Tour {request.Id} doesn't seem to exist.");
             }
 
+            var map = await mapRepository.GetMapWithTilesForTour((int)tour.MapId!);
+            tour.Map = map;
             var childFriendliness = await childFriendlinessService.Calculate(tour.Id);
             var popularity = ratingService.Calculate(tour.TourLogs);
             

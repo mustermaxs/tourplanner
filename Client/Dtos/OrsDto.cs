@@ -43,20 +43,7 @@ namespace Client.Dtos
     public class OrsGeometryDto
     {
         
-        public List<double>? RawCoordinates { get; set; }
-
-        private Coordinates? _coordinates;
-
-        public Coordinates TPCoordinates
-        {
-            get
-            {
-                if (_coordinates == null && RawCoordinates is { Count: >= 2 })
-                {
-                    _coordinates = new Coordinates(RawCoordinates[0], RawCoordinates[1]);
-                }
-                return _coordinates ?? new Coordinates(0, 0); // Return a default value if coordinates are null
-            }
-        }
+        [JsonPropertyName("coordinates")]
+        public Coordinates Coordinates { get; set; }
     }
 }

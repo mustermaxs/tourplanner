@@ -44,29 +44,23 @@ namespace Tourplanner.DTOs
         public string Label { get; set; }
     }
 
+
     public class OrsGeometryDto
     {
         [JsonPropertyName("coordinates")]
         public List<double>? RawCoordinates { get; set; }
 
-        private Coordinates? _coordinates;
 
-        public Coordinates TPCoordinates
+        [JsonIgnore]
+        public Coordinates Coordinates
         {
             get
-            {
-            //TODO: FIX THIS
-                    var c = new Coordinates();
-                if (_coordinates == null && RawCoordinates is { Count: >= 2 })
+            {  
+                if (RawCoordinates == null)
                 {
-                    c.Longitude = RawCoordinates[0];
-                    c.Latitude = RawCoordinates[1];
-                    _coordinates = c;
+                    return null;
                 }
-                c.Longitude = 0;
-                c.Latitude = 0;
-                
-                return _coordinates ?? c;
+                return new Coordinates(RawCoordinates[1], RawCoordinates[0]);
             }
         }
     }
