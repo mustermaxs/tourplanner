@@ -44,8 +44,8 @@ public class TourContext : DbContext
                 .HasForeignKey<Map>(e => e.TourId);
             entity.OwnsOne(e => e.Coordinates, navigationBuilder =>
             {
-                navigationBuilder.Property(c => c.Longitude).HasColumnName("Longitude");
-                navigationBuilder.Property(c => c.Latitude).HasColumnName("Latitude");
+                navigationBuilder.Property(c => c.Longitude).HasColumnName("Coordinates_Longitude");
+                navigationBuilder.Property(c => c.Latitude).HasColumnName("Coordinates_Latitude");
             });
             entity.HasMany<TourLog>()
                 .WithOne(e => e.Tour)
