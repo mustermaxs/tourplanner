@@ -34,7 +34,6 @@ namespace Tourplanner.Entities.Tours
             };
 
             var tourId = await tourRepository.CreateReturnId(tour);
-            // var createMapCommand = new CreateMapCommand();
 
             tour.ChildFriendliness = await childFriendlinessService.Calculate(tourId); // TODO unnötig hier, wird eh nicht gespeichert
 

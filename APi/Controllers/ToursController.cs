@@ -32,6 +32,13 @@ namespace Api.Controllers
             return await ResponseAsync(command);
         }
 
+        [HttpGet("maps/{mapid}")]
+        public async Task<ActionResult<IResponse>> GetMapForTour(int mapid)
+        {
+            var request = new GetMapRequest(mapid);
+            return await ResponseAsync(request);
+        }
+
         [HttpGet("geosuggestion")]
         public async Task<ActionResult<IResponse>> GetAutoCompleteSuggestionForLocation([FromQuery] string location)
         {

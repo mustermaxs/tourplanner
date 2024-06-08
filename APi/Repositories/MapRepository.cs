@@ -8,6 +8,7 @@ namespace Tourplanner.Repositories
     public interface IMapRepository : IRepository<Map>
     {
         public Task<int> CreateReturnId(Map map);
+        public Task<Map?> GetMapWithTiles(int mapId);
     }
     public class MapRepository : Repository<Map>, IMapRepository
     {

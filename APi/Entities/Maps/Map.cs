@@ -1,8 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Tourplanner.Entities.Tours;
+﻿
 
 namespace Tourplanner.Entities
 {
+    using Microsoft.EntityFrameworkCore;
+    using Tourplanner.Entities.Tours;
+    using Tourplanner.DTOs;
 
     public class Tile
     {
@@ -15,7 +17,18 @@ namespace Tourplanner.Entities
         public int X { get; set; }
         public int Y { get; set; }
         public string Path { get; set; }
-        
+    }
+    
+    public static class TileExtensions
+    {
+        public static TileDto ToTileDto(this Tile tile)
+        {
+            return new TileDto(
+                image: tile.Base64Encoded,
+                x: tile.X,
+                y: tile.Y
+                );
+        }
     }
 
     public class Bbox
@@ -55,6 +68,18 @@ namespace Tourplanner.Entities
         public int Zoom { get; set; }
         public Bbox Bbox { get; set; }
         public ICollection<Tile> Tiles { get; set; }
+    }
+
+    public static class MapExtensions
+    {
+        public static MapDto ToMapDto(this Map map)
+        {
+            return new MapDto(
+                id: map.Id,
+                tileDtos: map.Tiles.Select(t => t.ToTileDto()).ToList(),
+                tourId: map.TourId
+                );
+        }
     }
 
 }

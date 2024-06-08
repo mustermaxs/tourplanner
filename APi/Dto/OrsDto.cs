@@ -56,11 +56,17 @@ namespace Tourplanner.DTOs
             get
             {
             //TODO: FIX THIS
+                    var c = new Coordinates();
                 if (_coordinates == null && RawCoordinates is { Count: >= 2 })
                 {
-                    _coordinates = new Coordinates(RawCoordinates[0], RawCoordinates[1]);
+                    c.Longitude = RawCoordinates[0];
+                    c.Latitude = RawCoordinates[1];
+                    _coordinates = c;
                 }
-                return _coordinates ?? new Coordinates(0, 0);
+                c.Longitude = 0;
+                c.Latitude = 0;
+                
+                return _coordinates ?? c;
             }
         }
     }

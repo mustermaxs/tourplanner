@@ -17,11 +17,12 @@ namespace Tourplanner.Entities.Maps
         IMapRepository mapRepository,
         IImageService imageService,
         ITileCalculator tileCalculator,
-        IOpenRouteService openRouteService)
-        : RequestHandler<CreateMapCommand, Task>(ctx)
+        IOpenRouteService openRouteService,
+        ITileRepository tileRepository)
+        : RequestHandler<CreateMapCommand, int>(ctx)
     {
 
-        public override async Task<Task> Handle(CreateMapCommand request)
+        public override async Task<int> Handle(CreateMapCommand request)
         {
             var routeSummary = await openRouteService.RouteInfo(request.From, request.To, request.TransportType);
             var bboxValues = routeSummary.OrsBbox;
@@ -58,17 +59,11 @@ namespace Tourplanner.Entities.Maps
                 Bbox = bbox
             };
 
-            
+            var mapId = await mapRepository.CreateReturnId(map);
+            var createTilesTask = tiles.Select(async t => await tileRepository.Create(t));
+            await Task.WhenAll(createTilesTask);
 
-            //create tiles with coordinates and saved tile url
-
-
-            // create map with tiles
-
-            //pass map to maprepository, maprepository saves tiles and map in db and returns mapid
-
-            return Task.CompletedTask;
+            return mapId;
         }
-
     }
 }
