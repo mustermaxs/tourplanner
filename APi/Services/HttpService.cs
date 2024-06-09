@@ -29,11 +29,16 @@ namespace Tourplanner.Services
 
         public async Task<TDto> Get<TDto>(string url)
         {
-            var response = await client.GetAsync(url); // Properly awaited
+            var response = await client.GetAsync(url);
 
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
+
+                if (typeof(TDto) == typeof(string))
+                {
+                    return (TDto)(object)content;
+                }
                 return JsonSerializer.Deserialize<TDto>(content,
                     options: new JsonSerializerOptions(JsonSerializerDefaults.Web));
             }

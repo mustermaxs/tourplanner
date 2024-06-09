@@ -51,7 +51,7 @@ public class TourEditPageViewModel : BaseViewModel
         
         try
         {
-            Tour = await _tourDao.Read(Tour);
+            Tour = await _tourDao.Read(Tour.Id);
         }
         catch (HttpRequestException e)
         {

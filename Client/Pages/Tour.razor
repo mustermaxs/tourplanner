@@ -131,10 +131,8 @@ else
         </tbody>
     </table>
 
-    @* Image *@
-    <div class="tour-map">
-        <img src="map.png" alt="Map">
-    </div>
+    <TpMap ViewModel="@TourVM.MapVM"></TpMap>
+
     <ButtonGroup Layout="ButtonGroup.Position.Center">
         <Button Img="add" OnClickCallback="@AddLog" Label="Add Log"/>
         <Button Img="log" Label="Report" OnClickCallback="TourVM.DownloadReportAsync"/>
@@ -142,7 +140,6 @@ else
 
     <div class="d-flex justify-content-between align-items-center">
         <h2>Logs</h2>
-
     </div>
 
     <TourLogsTable TourLogs="@TourVM.TourLogs"></TourLogsTable>

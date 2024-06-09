@@ -4,7 +4,7 @@ namespace Client.Dao
     public interface IDao<TDto>
     {
         Task Create(TDto dto);
-        Task<TDto> Read(TDto tourLog);
+        Task<TDto> Read(int id);
         Task<IEnumerable<TDto>> ReadMultiple();
         Task Update(TDto dto);
         Task Delete(TDto dto);
@@ -16,7 +16,7 @@ namespace Client.Dao
         protected TDto? model;
 
         public abstract Task Create(TDto dto);
-        public abstract Task<TDto> Read(TDto tourLog);
+        public abstract Task<TDto> Read(int id);
         public abstract Task<IEnumerable<TDto>> ReadMultiple();
         public abstract Task Update(TDto dto);
         public abstract Task Delete(TDto dto);

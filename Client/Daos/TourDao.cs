@@ -18,9 +18,9 @@ namespace Client.Dao
             return await http.Post(tour.ToCreateTourDto(), $"Tours");
         }
 
-        public override async Task<Tour> Read(Tour tourLog)
+        public override async Task<Tour> Read(int TourId)
         {
-            return await http.Get<Tour>($"Tours/{tourLog.Id}");
+            return await http.Get<Tour>($"Tours/{TourId}");
         }
 
         public override async Task<IEnumerable<Tour>> ReadMultiple()

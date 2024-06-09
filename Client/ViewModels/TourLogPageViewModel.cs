@@ -22,7 +22,7 @@ public class TourLogPageViewModel : BaseViewModel
         TourLog = new TourLog();
         TourLog.Id = logId;
         TourLog.Tour.Id = tourId;
-        TourLog = await _tourLogDao.Read(TourLog);
+        TourLog = await _tourLogDao.Read(TourLog.Id);
         _notifyStateChanged.Invoke();
     }
 

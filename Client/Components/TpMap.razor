@@ -1,20 +1,20 @@
 ﻿@using Client.Models
+@using Client.ViewModels
 
-<div>1</div>
-<div>2</div>
-<div>3</div>
-<div>4</div>
+
+<div class="tour-map">
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>
+    <div>4</div>
+</div>
 
 @code {
-    // [Parameter] Map? TourMap { get; set; }
-    //
-    // protected override async Task OnInitializedAsync()
-    // {
-    // }
-    //
-    // protected override Task OnParametersSetAsync()
-    // {
-    //     
-    // }
+    [Parameter] MapViewModel MapVM {get; set;}
+    protected override async Task OnParametersSetAsync()
+    {
+        await MapVM!.InitializeAsync(StateHasChanged);
+    }
+
 
 }

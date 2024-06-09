@@ -37,7 +37,7 @@ namespace Tourplanner.Services
 
             await File.WriteAllBytesAsync(filePath, image);
 
-            return filePath;
+            return Path.Combine(savePath, CreateImageName(tileConfig));
         }
 
         public async Task<List<string>> FetchImages(string savePath, List<TileConfig> tileConfigs)
@@ -46,7 +46,7 @@ namespace Tourplanner.Services
             
             // if they already exist don't download them again and return the paths to the already existing ones
             if (!newTiles.Any())
-                return tileConfigs.Select(t => Path.Combine(baseDir, savePath, CreateImageName(t))).ToList();
+                return tileConfigs.Select(t => Path.Combine(savePath, CreateImageName(t))).ToList();
 
             var tasks = newTiles.Select(t => FetchImageFromUrl(savePath, t));
             var results = await Task.WhenAll(tasks);
@@ -60,16 +60,18 @@ namespace Tourplanner.Services
 
         public string ReadImageAsBase64(string filePath)
         {
-            if (!File.Exists(filePath))
+            if (!File.Exists(Path.Combine(baseDir, filePath)))
             {
-                throw new FileNotFoundException("Tile image not found.", filePath);
+                throw new FileNotFoundException("Tile image not found.", Path.Combine(baseDir, filePath));
             }
 
-            byte[] imageBytes = File.ReadAllBytes(filePath);
+            byte[] imageBytes = File.ReadAllBytes(Path.Combine(baseDir, filePath));
             return Convert.ToBase64String(imageBytes);
         }
 
         protected string CreateImageName(TileConfig tileconfig) =>
             $"{tileconfig.Zoom}-{tileconfig.X}-{tileconfig.Y}.png";
+
+            protected string GetAbsoluteImgPath(string fileName, TileConfig tileConfig) => (Path.Combine(baseDir, fileName, CreateImageName(tileConfig)));
     }
 }

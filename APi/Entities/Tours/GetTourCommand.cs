@@ -27,7 +27,13 @@ namespace Tourplanner.Entities.Tours
                 throw new ResourceNotFoundException($"Tour {request.Id} doesn't seem to exist.");
             }
 
-            var map = await mapRepository.GetMapWithTilesForTour((int)tour.MapId!);
+            var map = await mapRepository.GetMapWithTilesForTour(tour.Id);
+
+            if(map is null)
+            {
+                throw new ResourceNotFoundException($"Map for tour {tour.Id} doesn't seem to exist.");
+            }
+
             tour.Map = map;
             var childFriendliness = await childFriendlinessService.Calculate(tour.Id);
             var popularity = ratingService.Calculate(tour.TourLogs);

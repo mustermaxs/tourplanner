@@ -1,6 +1,7 @@
 using Client.Components;
 using Client.Dao;
 using Client.Models;
+using Client.ViewModels;
 
 namespace Client.ViewModels;
 
@@ -11,7 +12,8 @@ public class TourDetailsPageViewModel : BaseViewModel
     private readonly PopupViewModel _popupViewModel;
     public int tourId;
     private IReportService _reportService;
-    private readonly IMapDao _mapDao;
+    public MapViewModel MapVM;
+    private IMapDao _mapDao;
 
 
     public TourDetailsPageViewModel(ITourDao tourDao, ITourLogDao TourLogDao, PopupViewModel popupViewModel, IReportService reportService, IMapDao mapDao)
@@ -33,9 +35,10 @@ public class TourDetailsPageViewModel : BaseViewModel
         TourLogs = (List<TourLog>)await _tourLogDao.ReadMultiple(tourId);
         Tour = new Tour();
         Tour.Id = tourId;
-        Tour = await _tourDao.Read(Tour);
-        Map.TourId = tourId;
-        Map = await _mapDao.Read(Map);
+        Tour = await _tourDao.Read(tourId);
+        
+        MapVM = new MapViewModel(_mapDao, tourId);
+
         _notifyStateChanged.Invoke();
     }
 

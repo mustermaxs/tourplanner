@@ -4,6 +4,7 @@ using System.Text.Json.Serialization;
 using Microsoft.VisualStudio.TextTemplating;
 using Tourplanner.DTOs;
 using Tourplanner.Entities.Tours;
+using Tourplanner.Entities;
 using Tourplanner.Models;
 
 namespace Tourplanner.Services
@@ -11,15 +12,15 @@ namespace Tourplanner.Services
     public class GetGeoAutoCompleteSuggestionDto
     {
         public Dictionary<string, string> Properties { get; set; }
-        
+
     }
 
     public interface IOpenRouteService
     {
         public Task<OrsBaseDto> GetAutoCompleteSuggestions(string query);
-        public Task<OrsRouteSummary> RouteInfo(Coordinates from, Coordinates to, TransportType transportType);
+        public Task<Summary> RouteInfo(Coordinates from, Coordinates to, TransportType transportType);
 
-}
+    }
     public class OpenRouteService : IOpenRouteService
     {
         private readonly IHttpService _httpService;
@@ -47,9 +48,9 @@ namespace Tourplanner.Services
             return await _httpService.Get<OrsBaseDto>($"{_baseUrl}{_autoCompleteUri}api_key={_apiKey}&text={query}");
         }
 
-        private string CoordinateToString(double coordinate) =>  coordinate.ToString().Replace(",", ".");
+        private string CoordinateToString(double coordinate) => coordinate.ToString().Replace(",", ".");
 
-        public async Task<OrsRouteSummary> RouteInfo(Coordinates from, Coordinates to, TransportType transportType)
+        public async Task<Summary> RouteInfo(Coordinates from, Coordinates to, TransportType transportType)
         {
             string profile = transportType switch
             {
@@ -61,11 +62,40 @@ namespace Tourplanner.Services
                 _ => "driving-car"
             };
             // TODO write helper method to build uri
-            var json = await _httpService.Get<OrsRouteSummary>(
+            var json = await _httpService.Get<string>(
                 $"{_baseUrl}{_routeInfoUrl}{profile}?api_key={_apiKey}&start={CoordinateToString(from.Latitude)},{CoordinateToString(from.Longitude)}&end={CoordinateToString(to.Latitude)},{CoordinateToString(to.Longitude)}");
 
-            https://api.openrouteservice.org /v2/directions/driving-car? api_key = your-api-key& start = 8.681495,49.41461& end = 8.687872,49.420318
-            return json;
+            // https://api.openrouteservice.org /v2/directions/driving-car? api_key = your-api-key& start = 8.681495,49.41461& end = 8.687872,49.420318
+            using (JsonDocument doc = JsonDocument.Parse(json))
+            {
+                JsonElement root = doc.RootElement;
+
+                // Extract the bounding box
+                JsonElement bboxElement = root.GetProperty("bbox");
+                double[] bbox = new double[bboxElement.GetArrayLength()];
+                for (int i = 0; i < bboxElement.GetArrayLength(); i++)
+                {
+                    bbox[i] = bboxElement[i].GetDouble();
+                }
+                Console.WriteLine("Bounding Box: " + string.Join(", ", bbox));
+
+                // Get the first feature
+                JsonElement feature = root.GetProperty("features")[0];
+
+                // Extract properties and segments
+                JsonElement properties = feature.GetProperty("properties");
+                JsonElement segments = properties.GetProperty("segments")[0];
+
+                // Extract distance and duration
+                double distance = segments.GetProperty("distance").GetDouble();
+                double duration = segments.GetProperty("duration").GetDouble();
+
+                return new Summary(
+                    new Bbox(bbox[1], bbox[2], bbox[3], bbox[4]),
+                    distance,
+                    duration
+                );
+            }
         }
     }
 }

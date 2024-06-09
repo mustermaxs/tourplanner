@@ -56,7 +56,9 @@ namespace Api.Controllers
                     createTourDto.Description,
                     createTourDto.From,
                     createTourDto.To,
-                    createTourDto.TransportType
+                    createTourDto.TransportType,
+                    createTourDto.Start,
+                    createTourDto.Destination
                 );
                 
                 var tourId = Convert.ToInt32(await mediator.Send(createTourCommand));

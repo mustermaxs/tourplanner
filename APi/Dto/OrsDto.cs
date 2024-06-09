@@ -1,16 +1,45 @@
 ﻿using System.Text.Json.Serialization;
 using Tourplanner.Entities.Tours;
+using Tourplanner.Entities;
 using Tourplanner.Services;
 
 namespace Tourplanner.DTOs
 {
-    public class OrsRouteSummary
+    public class Summary
+    {
+        public Summary(Bbox bbox, double distance, double duration)
+        {
+            Bbox = bbox;
+            Distance = distance;
+            Duration = duration;
+        }
+        public Bbox Bbox {get; set;}
+        public double Distance {get; set;}
+        public double Duration {get; set;}
+    }
+
+    // public class OrsRouteSummary
+    // {
+    //     [JsonPropertyName("features")]
+    //     public List<OrsFeaturesSummary> Features { get; set; }
+
+    //     [JsonPropertyName("bbox")]
+    //     public List<double> OrsBbox { get; set; }
+
+    //     // [JsonIgnore]
+    //     // public OrsFeaturesSummary Summary {get => Features.ElementAt(0)!.Summary;}
+    // }
+
+    public class OrsFeaturesSummary
+    {
+        [JsonPropertyName("properties")]
+        public OrsDirectionsSummaryDto Summary { get; set; }
+    }
+
+    public class OrsFeaturesSummaryProperties
     {
         [JsonPropertyName("summary")]
         public OrsDirectionsSummaryDto Summary { get; set; }
-        
-        [JsonPropertyName("bbox")]
-        public List<double> OrsBbox {get; set;}
     }
 
     public class OrsDirectionsSummaryDto
@@ -33,7 +62,7 @@ namespace Tourplanner.DTOs
 
         [JsonPropertyName("geometry")]
         public OrsGeometryDto GeometryDto { get; set; }
-        
+
         [JsonPropertyName("bbox")]
         public List<double>? Bbox { get; set; }
     }
@@ -55,7 +84,7 @@ namespace Tourplanner.DTOs
         public Coordinates Coordinates
         {
             get
-            {  
+            {
                 if (RawCoordinates == null)
                 {
                     return null;

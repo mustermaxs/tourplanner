@@ -15,9 +15,9 @@ public class MapDao : HttpDao<Map>, IMapDao
         throw new NotImplementedException();
     }
 
-    public override async Task<Map> Read(Map map)
+    public override async Task<Map> Read(int TourId)
     {
-        return await http.Get<Map>($"Tours/{map.TourId}/map");
+        return await http.Get<Map>($"Tours/{TourId}/map");
     }
 
     public override Task<IEnumerable<Map>> ReadMultiple()

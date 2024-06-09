@@ -13,16 +13,21 @@ namespace Tourplanner.Entities.Tours
         string Description,
         string From,
         string To,
-        TransportType TransportType
+        TransportType TransportType,
+        Coordinates Start,
+        Coordinates Destination
     ): IRequest;
 
     public class CreateTourCommandHandler(
         TourContext ctx,
         ITourRepository tourRepository,
-        IChildFriendlinessService childFriendlinessService) : RequestHandler<CreateTourCommand, int>(ctx)
+        IChildFriendlinessService childFriendlinessService,
+        IOpenRouteService openRouteService) : RequestHandler<CreateTourCommand, int>(ctx)
     {
         public override async Task<int> Handle(CreateTourCommand request)
         {
+            var tourRouteInfo = await openRouteService.RouteInfo(request.Start, request.Destination, request.TransportType);
+            
             var tour = new Tour
             {
                 Name = request.Name,
@@ -30,7 +35,9 @@ namespace Tourplanner.Entities.Tours
                 From = request.From,
                 To = request.To,
                 TransportType = request.TransportType,
-                Popularity = 0.0f
+                Popularity = 0.0f,
+                EstimatedTime = tourRouteInfo.Duration,
+                Distance = tourRouteInfo.Distance
             };
 
             var tourId = await tourRepository.CreateReturnId(tour);
