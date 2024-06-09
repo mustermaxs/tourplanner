@@ -5,6 +5,7 @@ using QuestPDF.Infrastructure;
 using QuestPDF.Previewer;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Tourplanner.Services.FormattingUtils;
 
 namespace Tourplanner.Services
 {
@@ -73,7 +74,7 @@ namespace Tourplanner.Services
                                 detailsColumn.Item().Text(text =>
                                 {
                                     text.Span("Estimated Time: ").SemiBold();
-                                    text.Span($"{tourEntity.EstimatedTime.ToString()} h");
+                                    text.Span($"{FormattingUtils.Formatting.SecondsToDaysMinutesHours(tourEntity.EstimatedTime)} h");
                                 });
 
                                 detailsColumn.Item().Text(text =>
@@ -85,7 +86,7 @@ namespace Tourplanner.Services
                                 detailsColumn.Item().Text(text =>
                                 {
                                     text.Span("Distance: ").SemiBold();
-                                    text.Span($"{tourEntity.Distance} km");
+                                    text.Span($"{Formatting.MetersToKmAndMeters(tourEntity.Distance)} km");
                                 });
 
                                 detailsColumn.Item().Text(text =>
@@ -208,7 +209,7 @@ namespace Tourplanner.Services
                                     detailsColumn.Item().Text(text =>
                                     {
                                         text.Span("Estimated Time: ").SemiBold();
-                                        text.Span($"{tour.EstimatedTime.ToString()} h");
+                                        text.Span($"{Formatting.SecondsToDaysMinutesHours(tour.EstimatedTime)}");
                                     });
 
                                     detailsColumn.Item().Text(text =>
@@ -220,7 +221,7 @@ namespace Tourplanner.Services
                                     detailsColumn.Item().Text(text =>
                                     {
                                         text.Span("Distance: ").SemiBold();
-                                        text.Span($"{tour.Distance} km");
+                                        text.Span($"{Formatting.MetersToKmAndMeters(tour.Distance)}");
                                     });
 
                                     detailsColumn.Item().Text(text =>
