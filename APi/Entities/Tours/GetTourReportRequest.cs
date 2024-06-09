@@ -14,7 +14,7 @@ namespace Tourplanner.Entities.Tours.Commands
     public record GetTourReportRequest(int TourId) : IRequest
     {}
     
-    public class GetTourReportCommandHandler(TourContext ctx, ITourRepository tourRepository, IReportService reportService) : RequestHandler<GetTourReportRequest, byte[]>(ctx)
+    public class GetTourReportRequestHandler(TourContext ctx, ITourRepository tourRepository, IReportService reportService) : RequestHandler<GetTourReportRequest, byte[]>(ctx)
     {
         public override async Task<byte[]> Handle(GetTourReportRequest request)
         {

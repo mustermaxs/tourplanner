@@ -10,7 +10,7 @@ namespace Tourplanner.Entities.Tours
 {
     public record GetTourByIdRequest(int Id) : IRequest;
 
-    public class GetTourByIdCommandHandler(
+    public class GetTourByIdRequestHandler(
         TourContext ctx,
         ITourRepository tourRepository,
         ITourLogRepository tourLogRepository,
