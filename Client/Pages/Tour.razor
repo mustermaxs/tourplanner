@@ -29,12 +29,12 @@ else
                 </button>
             </div>
         </div>
+            <TpMap ViewModel="@TourVM.MapVM"></TpMap>
         <hr>
         @* Description *@
         <p>@TourVM.Tour.Description</p>
     </div>
-
-
+    
     <table class="table tour-table">
         <tbody>
         <tr>
@@ -127,11 +127,9 @@ else
                     <div class="progress-text" style="color: @(TourVM.Tour.ChildFriendliness < 5 ? "black" : "white; text-shadow:0px 0px 3px black"); position: absolute; top: 0; left: 0; width: 100%; text-align: center;">@Math.Ceiling(TourVM.Tour.Popularity) / 10</div>
                 </div>
             </td>
-        </tr>
+        </tr>1
         </tbody>
     </table>
-
-    <TpMap ViewModel="@TourVM.MapVM"></TpMap>
 
     <ButtonGroup Layout="ButtonGroup.Position.Center">
         <Button Img="add" OnClickCallback="@AddLog" Label="Add Log"/>

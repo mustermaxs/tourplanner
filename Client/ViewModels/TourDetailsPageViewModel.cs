@@ -1,7 +1,6 @@
 using Client.Components;
 using Client.Dao;
 using Client.Models;
-using Client.ViewModels;
 
 namespace Client.ViewModels;
 
@@ -12,7 +11,7 @@ public class TourDetailsPageViewModel : BaseViewModel
     private readonly PopupViewModel _popupViewModel;
     public int tourId;
     private IReportService _reportService;
-    public MapViewModel MapVM;
+    public MapViewModel MapVM { get; set; }
     private IMapDao _mapDao;
 
 

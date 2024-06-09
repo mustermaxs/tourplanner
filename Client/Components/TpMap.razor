@@ -1,20 +1,53 @@
 ﻿@using Client.Models
 @using Client.ViewModels
+<!-- NICHT DAS VIEWMODEL INJECTEN -->
 
 
-<div class="tour-map">
-    <div>1</div>
-    <div>2</div>
-    <div>3</div>
-    <div>4</div>
+@if (ViewModel is not null && (ViewModel.ImageTiles == null || !ViewModel.ImageTiles.Any()))
+{
+    <p>Loading map...</p>
+}
+else
+{
+<div style="display:flex; justify-content:center; align-items:center;">
+    <div style="display: grid; grid-template-columns: repeat(@MaxX + 1, 1fr); grid-template-rows: repeat(@MaxY + 1, 1fr);">
+
+                @{
+                    var imageWidth = 200;
+                    if (ViewModel?.ImageTiles != null && ViewModel.ImageTiles.Any())
+                    {
+                        var imageCount = ViewModel.ImageTiles.Count();
+                        imageWidth = 800 / imageCount;
+                   
+                        @foreach (var tile in ViewModel?.ImageTiles)
+                        {
+                            <div style="grid-column: @(tile.X + 1); grid-row: @(tile.Y + 1);">
+                                <img src="data:image/png;base64,@tile.Image" style="width: @(imageWidth)px;" />
+                            </div>
+                        }
+
+                    }
+                }
+    </div>
 </div>
+}
 
 @code {
-    [Parameter] MapViewModel MapVM {get; set;}
+
+ [Parameter]
+    public int TourId { get; set; }
+
+    private int MaxX => ViewModel?.ImageTiles?.Any() == true ? ViewModel.ImageTiles.Max(tile => tile.X) : 0;
+    private int MaxY => ViewModel?.ImageTiles?.Any() == true ? ViewModel.ImageTiles.Max(tile => tile.Y) : 0;
+
+    [Parameter] public MapViewModel? ViewModel { get; set; }
+
     protected override async Task OnParametersSetAsync()
     {
-        await MapVM!.InitializeAsync(StateHasChanged);
+        if (ViewModel != null)
+        {
+            await ViewModel.InitializeAsync(StateHasChanged);
+            Console.WriteLine(ViewModel.Map.Tiles);
+        }
     }
-
-
 }

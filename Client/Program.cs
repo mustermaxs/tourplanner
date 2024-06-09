@@ -4,7 +4,6 @@ using Client;
 using Client.Components;
 using Client.Dao;
 using Client.Services;
-using Client.Utils;
 using Client.ViewModels;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
