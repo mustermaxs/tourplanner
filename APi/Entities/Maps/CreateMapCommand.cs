@@ -22,7 +22,7 @@ namespace Tourplanner.Entities.Maps
         : RequestHandler<CreateMapCommand, int>(ctx)
     {
 
-        public override async Task<int> Handle(CreateMapCommand request)
+        public override async Task<int> Handle(CreateMapCommand request)    // TODO tiles Erzeugung etc in service auslagern, wird auch in UpdateMapCommand benötigt
         {
             var routeSummary = await openRouteService.RouteInfo(request.From, request.To, request.TransportType);
             var bboxValues = routeSummary.Bbox;

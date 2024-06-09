@@ -10,14 +10,16 @@ public class UpdateTourDto
         string description,
         string from,
         string to,
-        Coordinates coordinates,
+        Coordinates start,
+        Coordinates destination,
         TransportType transportType)
     {
         Name = name;
         Description = description;
         From = from;
         To = to;
-        Coordinates = coordinates;
+        Start = start;
+        Destination = destination;
     }
 
     public string Name { get; set; }
@@ -26,4 +28,6 @@ public class UpdateTourDto
     public string To { get; set; }
     public Coordinates Coordinates { get; set; }
     public TransportType TransportType { get; set; }
+    public Coordinates Destination {get; set;}
+    public Coordinates Start { get; set; }
 }

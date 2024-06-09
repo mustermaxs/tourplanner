@@ -9,6 +9,7 @@ namespace Tourplanner.Repositories
     {
         public Task<int> CreateReturnId(Map map);
         public Task<Map?> GetMapWithTilesForTour(int tourId);
+        public Task<Map?> GetMapByTourId(int tourId);
     }
     public class MapRepository : Repository<Map>, IMapRepository
     {
@@ -39,6 +40,12 @@ namespace Tourplanner.Repositories
             }
             
             return map;
+        }
+
+        public async Task<Map?> GetMapByTourId(int tourId)
+        {
+            return await dbSet.Include(m => m.Tiles)
+            .FirstOrDefaultAsync(m =>m.TourId == tourId);
         }
      }
 }

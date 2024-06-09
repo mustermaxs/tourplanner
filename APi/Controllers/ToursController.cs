@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Api.Entities.Maps;
+using Microsoft.AspNetCore.Mvc;
 using Tourplanner;
 using Tourplanner.Models;
 using Tourplanner.Entities.Tours;
@@ -93,7 +94,11 @@ namespace Api.Controllers
                 updateTourDto.To,
                 updateTourDto.TransportType
             );
-
+            var deleteMapCommand = new DeleteMapForTourCommand(tourid);
+            await mediator.Send(deleteMapCommand);
+            var createMapCommand = new CreateMapCommand(tourid, updateTourDto.Start, updateTourDto.Destination, updateTourDto.TransportType);
+            await mediator.Send(createMapCommand);
+            
             return await ResponseAsync(command);
         }
 

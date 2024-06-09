@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Net.Http.Headers;
 using System.Reflection;
+using Api.Entities.Maps;
 using Tourplanner.Repositories;
 using Tourplanner.Infrastructure;
 using Tourplanner.Entities.Tours;
@@ -111,6 +112,7 @@ internal class Program
         services.AddScoped<ICommandHandler, GetGeoAutoCompleteQueryHandler>();
         services.AddScoped<ICommandHandler, CreateMapCommandHandler>();
         services.AddScoped<ICommandHandler, GetMapForTourRequestHandler>();
+        services.AddScoped<ICommandHandler, DeleteMapForTourCommandHandler>();
     }
 
     private static void CreateDbIfNotExists(WebApplication app)

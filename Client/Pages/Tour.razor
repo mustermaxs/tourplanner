@@ -5,6 +5,7 @@
 @using Client.Components
 @using Client.ViewModels
 @inject IJSRuntime JS
+@using Client.Services.FormattingUtils
 
 <PageTitle>@TourVM.Tour.Name</PageTitle>
 
@@ -29,12 +30,12 @@ else
                 </button>
             </div>
         </div>
-            <TpMap ViewModel="@TourVM.MapVM"></TpMap>
+        <TpMap ViewModel="@TourVM.MapVM"></TpMap>
         <hr>
         @* Description *@
         <p>@TourVM.Tour.Description</p>
     </div>
-    
+
     <table class="table tour-table">
         <tbody>
         <tr>
@@ -46,7 +47,18 @@ else
                 </div>
             </td>
             <td>Est. time</td>
-            <td>@FormatEstimatedTime(TourVM.Tour.EstimatedTime) h</td>
+            <td>@Formatting.SecondsToDaysMinutesHours(TourVM.Tour.EstimatedTime)</td>
+        </tr>
+        <tr>
+            <td class="icon-td">
+                <div style="width: 1.7rem">
+                    <div class="icon-wrapper">
+                        <Icon Img="route" AltText="#route"></Icon>
+                    </div>
+                </div>
+            </td>
+            <td>Est. time</td>
+            <td>@Formatting.MetersToKmAndMeters(TourVM.Tour.Distance)</td>
         </tr>
         <tr>
             <td class="icon-td">
@@ -127,7 +139,7 @@ else
                     <div class="progress-text" style="color: @(TourVM.Tour.ChildFriendliness < 5 ? "black" : "white; text-shadow:0px 0px 3px black"); position: absolute; top: 0; left: 0; width: 100%; text-align: center;">@Math.Ceiling(TourVM.Tour.Popularity) / 10</div>
                 </div>
             </td>
-        </tr>1
+        </tr>
         </tbody>
     </table>
 
@@ -150,9 +162,9 @@ else
     {
         int id = Convert.ToInt32(TourId);
         TourVM.tourId = Convert.ToInt32(TourId);
-        await TourVM.InitializeAsync(StateHasChanged); 
+        await TourVM.InitializeAsync(StateHasChanged);
 
-      double lat1 = 52.5200; // Beispiel: Berlin
+        double lat1 = 52.5200; // Beispiel: Berlin
         double lon1 = 13.4050;
         double lat2 = 48.8566; // Beispiel: Paris
         double lon2 = 2.3522;
@@ -215,22 +227,4 @@ else
         await TourVM.DeleteTour();
         NavManager.NavigateTo("/tours");
     }
-
-    private string FormatEstimatedTime(double minutes) // TODO ins ViewModel geben
-    {
-        double hours = minutes / 60;
-        if (hours % 1 == 0)
-        {
-            return $"{hours:0}";
-        }
-        else if ((hours * 10) % 10 == 5)
-        {
-            return $"{hours:0.0}";
-        }
-        else
-        {
-            return $"{hours:0.00}";
-        }
-    }
-
 }
