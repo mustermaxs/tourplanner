@@ -16,10 +16,10 @@ namespace Tourplanner.Services
         private HttpClient httpClient;
         private string baseDir;
 
-        public ImageService(IHttpClientFactory httpClientFactory, IWebHostEnvironment webHostEnvironment)
+        public ImageService(IHttpClientFactory httpClientFactory, IConfiguration configuration)
         {
             httpClient = httpClientFactory.CreateClient("TourPlannerClient");
-            baseDir = webHostEnvironment.ContentRootPath;
+            baseDir = configuration["Tiles:BaseDir"];
         }
 
         public async Task<string> FetchImageFromUrl(string savePath, TileConfig tileConfig)
