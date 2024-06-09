@@ -11,17 +11,21 @@ public class TourDetailsPageViewModel : BaseViewModel
     private readonly PopupViewModel _popupViewModel;
     public int tourId;
     private IReportService _reportService;
+    private readonly IMapDao _mapDao;
 
-    public TourDetailsPageViewModel(ITourDao tourDao, ITourLogDao TourLogDao, PopupViewModel popupViewModel, IReportService reportService)
+
+    public TourDetailsPageViewModel(ITourDao tourDao, ITourLogDao TourLogDao, PopupViewModel popupViewModel, IReportService reportService, IMapDao mapDao)
     {
         _tourDao = tourDao;
         _tourLogDao = TourLogDao;
         _popupViewModel = popupViewModel;
         _reportService = reportService;
+        _mapDao = mapDao;
     }
 
     public Tour Tour { get; set; } = new Tour();
     public List<TourLog> TourLogs { get; set; } = new List<TourLog>();
+    public Map Map { get; set; } = new Map();
 
     public override async Task InitializeAsync(Action notifySateChanged)
     {
@@ -30,6 +34,8 @@ public class TourDetailsPageViewModel : BaseViewModel
         Tour = new Tour();
         Tour.Id = tourId;
         Tour = await _tourDao.Read(Tour);
+        Map.TourId = tourId;
+        Map = await _mapDao.Read(Map);
         _notifyStateChanged.Invoke();
     }
 
