@@ -15,35 +15,34 @@
         </tr>
         </thead>
         <tbody>
-        @foreach (var tour in @Tours)
+        @foreach (var tour in Tours)
         {
-        <tr>
-            <td>
-                <a class="link" style="cursor:pointer" @onclick='() => TourDetails(tour.Id.ToString())'>@tour.Name</a>
-            </td>
-            <td>@tour.Description</td>
-            <td>@tour.TransportType</td>
-            <td>@tour.From</td>
-            <td>@tour.To</td>
-            <td>@tour.Popularity</td>
-        </tr>
+            <tr class="hover-row">
+                <td @onclick="@(() => TourDetails(tour.Id.ToString()))">
+                    <a class="link" href="@($"/tours/{tour.Id}")" style="cursor:pointer">@tour.Name</a>
+                </td>
+                <td>@tour.Description</td>
+                <td>@tour.TransportType</td>
+                <td>@tour.From</td>
+                <td>@tour.To</td>
+                <td>@tour.Popularity</td>
+            </tr>
         }
         </tbody>
     </table>
 </div>
+
 @code {
-    [Parameter]
-    public IEnumerable<Tour> Tours { get; set; }
-    
-    protected override async Task OnInitializedAsync()
+    [Parameter] public IEnumerable<Tour> Tours { get; set; }
+
+    protected override Task OnInitializedAsync()
     {
-        StateHasChanged();
+        return Task.CompletedTask;
     }
 
-    protected override async Task OnParametersSetAsync()
+    protected override Task OnParametersSetAsync()
     {
-        base.OnParametersSetAsync();
-        StateHasChanged();
+        return Task.CompletedTask;
     }
 
     private void TourDetails(string tourId)
@@ -51,4 +50,5 @@
         Console.WriteLine($"TOUR ID: {tourId}");
         NavManager.NavigateTo($"/tours/{tourId}");
     }
+
 }

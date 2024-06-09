@@ -9,13 +9,16 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Net.Http.Headers;
 using System.Reflection;
+using Api.Entities.Maps;
 using Tourplanner.Repositories;
 using Tourplanner.Infrastructure;
 using Tourplanner.Entities.Tours;
 using Tourplanner.Entities.TourLogs;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Tourplanner.Entities.Maps;
 
 namespace Tourplanner;
 
@@ -26,7 +29,11 @@ internal class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-
+        builder.Services.AddHttpClient("TourPlannerClient", client =>
+        {
+            client.DefaultRequestHeaders.Add("Access-Control-Allow-Origin", "*");
+            client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("tourplanner", "1.0"));
+        });
         builder.Services.AddControllers().AddNewtonsoftJson(options =>
         {
             options.SerializerSettings.ContractResolver =
@@ -84,6 +91,10 @@ internal class Program
         services.AddScoped<ITourLogRepository, TourLogRepository>();
         services.AddScoped<ITourRepository, TourRepository>();
         services.AddTransient<IOpenRouteService, OpenRouteService>();
+        services.AddTransient<IImageService, ImageService>();
+        services.AddTransient<ITileCalculator, TileCalculator>();
+        services.AddTransient<ITileRepository, TileRepository>();
+        services.AddTransient<IMapRepository, MapRepository>();
 
         services.AddScoped<ICommandHandler, GetToursRequestHandler>();
         services.AddScoped<ICommandHandler, GetTourByIdRequestHandler>();
@@ -99,6 +110,9 @@ internal class Program
         services.AddScoped<ICommandHandler, GetSummaryReportRequestHandler>();
         services.AddScoped<ICommandHandler, GetSearchResultsQueryHandler>();
         services.AddScoped<ICommandHandler, GetGeoAutoCompleteQueryHandler>();
+        services.AddScoped<ICommandHandler, CreateMapCommandHandler>();
+        services.AddScoped<ICommandHandler, GetMapForTourRequestHandler>();
+        services.AddScoped<ICommandHandler, DeleteMapForTourCommandHandler>();
     }
 
     private static void CreateDbIfNotExists(WebApplication app)

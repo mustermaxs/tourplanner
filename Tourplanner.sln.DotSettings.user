@@ -3,8 +3,28 @@
 	<s:Boolean x:Key="/Default/Environment/UnitTesting/CreateUnitTestDialog/ShowAdvancedOptions/@EntryValue">True</s:Boolean>
 	<s:String x:Key="/Default/Environment/UnitTesting/CreateUnitTestDialog/TestProjectMapping/=213AABB1_002D1A37_002D4EEF_002DABDB_002DEC2D787AFB6C/@EntryIndexedValue">8CFD58A0-859F-4911-9A47-3B0ECF523A65</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/CreateUnitTestDialog/TestTemplateMapping/=NUnit3x/@EntryIndexedValue">db4927dd-2e12-48a7-9a84-2b7e3e31b9c8</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=7ff38e62_002D34c9_002D486d_002D8240_002D09c2d1ae0dd3/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from Solution" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=41b374ad_002D9b9c_002D4d5d_002Daf60_002D724b77fbd596/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="TileService_Returns_Expected_List_Of_Tiles #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::8CFD58A0-859F-4911-9A47-3B0ECF523A65::net8.0::UnitTests.ChildFriendlinessServiceTests.TileService_Returns_Expected_List_Of_Tiles&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=7ff38e62_002D34c9_002D486d_002D8240_002D09c2d1ae0dd3/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from Solution" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;Solution /&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=e7de393f_002Db2ba_002D42bb_002Da125_002D1fc7e30fd4f4/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="OpenRouteService_Gets_RouteInfo_For_Given_Route #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::8CFD58A0-859F-4911-9A47-3B0ECF523A65::net8.0::UnitTests.ChildFriendlinessServiceTests.OpenRouteService_Gets_RouteInfo_For_Given_Route&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=ef352fdb_002D0942_002D4238_002D9e0e_002Da63ee5be1209/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="OpenRouteService_Gets_RouteInfo_For_Given_Route" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::8CFD58A0-859F-4911-9A47-3B0ECF523A65::net8.0::UnitTests.ChildFriendlinessServiceTests.OpenRouteService_Gets_RouteInfo_For_Given_Route&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=fe1639f2_002D6c60_002D41db_002D95f8_002Ded0ae98369fd/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="TileService_Returns_Expected_List_Of_Tiles" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::8CFD58A0-859F-4911-9A47-3B0ECF523A65::net8.0::UnitTests.ChildFriendlinessServiceTests.TileService_Returns_Expected_List_Of_Tiles&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Client_002FImages/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/Initialized/@EntryValue">True</s:Boolean>

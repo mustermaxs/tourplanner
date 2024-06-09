@@ -4,6 +4,7 @@ using Client.Models;
 using Client.Services;
 using Client.Utils;
 using Microsoft.AspNetCore.Components;
+using Client.Dtos;
 
 namespace Client.ViewModels;
 
@@ -14,6 +15,7 @@ public class TourAddPageViewModel : BaseViewModel
     private readonly IHttpService _httpService;
     private readonly IGeoService _geoService;
     private readonly NavigationManager _navigationManager;
+    public List<string> ARSCH { get; set; } = new List<string>{"FICK DICH"};
     public Tour Tour { get; set; } = new Tour();
     private string test { get; set; }
     public string Test
@@ -26,7 +28,7 @@ public class TourAddPageViewModel : BaseViewModel
         }
     }
 
-    public List<Location> Suggestions { get; private set; } = new List<Location>{new Location("blabla", new Coordinates(1.9d, 2.0d))};
+    public List<string>? Suggestions { get; private set; } = new List<string>();
 
     public TourAddPageViewModel(NavigationManager navigationManager, ITourDao tourDao, PopupViewModel popupVm,
         IHttpService httpService, IGeoService geoService)
@@ -43,12 +45,16 @@ public class TourAddPageViewModel : BaseViewModel
         try
         {
             _notifyStateChanged.Invoke();
-            var from = (await _geoService.SearchLocation(Tour.From)).FirstOrDefault();
-            var to = (await _geoService.SearchLocation(Tour.To)).FirstOrDefault();
+            var from = (await _geoService.SearchLocation(Tour.From)).Features.FirstOrDefault()?.PropertiesDto;
+            var to = (await _geoService.SearchLocation(Tour.To)).Features.FirstOrDefault().PropertiesDto;
             var tourSpecification = new AddTourSpecification(from, to);
             
             if (tourSpecification.IsSatisfiedBy(Tour))
             {
+                Tour.Start = (await _geoService.SearchLocation(Tour.From)).Features.FirstOrDefault()?.GeometryDto
+                    .Coordinates;
+                Tour.Destination = (await _geoService.SearchLocation(Tour.To)).Features.FirstOrDefault()?.GeometryDto
+                    .Coordinates;
                 await _tourDao.Create(Tour);
                 _popupVm.Open("", "Created new tour.", PopupStyle.Normal);
             }
@@ -67,25 +73,19 @@ public class TourAddPageViewModel : BaseViewModel
         }
     }
 
-    private async Task<Location> GetLocationFromLabel(string label)
-    {
-        var location = (await _geoService.SearchLocation(label)).SingleOrDefault();
-
-        if (location is null)
-        {
-            throw new Exception($"Couldn't find location {label}.");
-            _popupVm.Open("Error", $"Couldn't find location {label}", PopupStyle.Error);
-        }
-
-        return location;
-    }
-
     public async Task GetSuggestion(string userInput)
     {
         Console.WriteLine(userInput);
-        var locations = await Debouncer.Debounce<string, List<Location>>(_geoService.SearchLocation, userInput, 1000);
-        Suggestions = locations.Any() ? locations : new List<Location>();
+        var locations = await Debouncer.Debounce<string, OrsBaseDto>(_geoService.SearchLocation, userInput, 1000);
         
-        _notifyStateChanged.Invoke();
+        if (locations != null && locations.Features.Any())
+        {
+            Suggestions = locations.Features.Select(f => f.PropertiesDto.Label).ToList();
+            _notifyStateChanged.Invoke();
+        }
+        else
+        {
+            
+        }
     }
 }

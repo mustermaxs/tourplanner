@@ -22,6 +22,59 @@ namespace Api.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("Tourplanner.Entities.Map", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("TourId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Zoom")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Maps");
+                });
+
+            modelBuilder.Entity("Tourplanner.Entities.Tile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("MapId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("X")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Y")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Zoom")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MapId");
+
+                    b.ToTable("Tiles");
+                });
+
             modelBuilder.Entity("Tourplanner.Entities.TourLogs.TourLog", b =>
                 {
                     b.Property<int>("TourLogId")
@@ -35,10 +88,13 @@ namespace Api.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");
 
-                    b.Property<DateTime>("Date")
+                    b.Property<DateTime>("DateTime")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<float>("Difficulty")
+                        .HasColumnType("real");
+
+                    b.Property<float>("Distance")
                         .HasColumnType("real");
 
                     b.Property<float>("Duration")
@@ -84,10 +140,8 @@ namespace Api.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("character varying(150)");
 
-                    b.Property<string>("ImagePath")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("character varying(150)");
+                    b.Property<int?>("MapId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -107,7 +161,52 @@ namespace Api.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("MapId")
+                        .IsUnique();
+
                     b.ToTable("Tours");
+                });
+
+            modelBuilder.Entity("Tourplanner.Entities.Map", b =>
+                {
+                    b.OwnsOne("Tourplanner.Entities.Bbox", "Bbox", b1 =>
+                        {
+                            b1.Property<int>("MapId")
+                                .HasColumnType("integer");
+
+                            b1.Property<double>("MaxX")
+                                .HasColumnType("double precision");
+
+                            b1.Property<double>("MaxY")
+                                .HasColumnType("double precision");
+
+                            b1.Property<double>("MinX")
+                                .HasColumnType("double precision");
+
+                            b1.Property<double>("MinY")
+                                .HasColumnType("double precision");
+
+                            b1.HasKey("MapId");
+
+                            b1.ToTable("Maps");
+
+                            b1.WithOwner()
+                                .HasForeignKey("MapId");
+                        });
+
+                    b.Navigation("Bbox")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Tourplanner.Entities.Tile", b =>
+                {
+                    b.HasOne("Tourplanner.Entities.Map", "Map")
+                        .WithMany("Tiles")
+                        .HasForeignKey("MapId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Map");
                 });
 
             modelBuilder.Entity("Tourplanner.Entities.TourLogs.TourLog", b =>
@@ -119,6 +218,47 @@ namespace Api.Migrations
                         .IsRequired();
 
                     b.Navigation("Tour");
+                });
+
+            modelBuilder.Entity("Tourplanner.Entities.Tours.Tour", b =>
+                {
+                    b.HasOne("Tourplanner.Entities.Map", "Map")
+                        .WithOne("Tour")
+                        .HasForeignKey("Tourplanner.Entities.Tours.Tour", "MapId");
+
+                    b.OwnsOne("Tourplanner.Entities.Tours.Coordinates", "Coordinates", b1 =>
+                        {
+                            b1.Property<int>("TourId")
+                                .HasColumnType("integer");
+
+                            b1.Property<double>("Latitude")
+                                .HasColumnType("double precision")
+                                .HasColumnName("Coordinates_Latitude");
+
+                            b1.Property<double>("Longitude")
+                                .HasColumnType("double precision")
+                                .HasColumnName("Coordinates_Longitude");
+
+                            b1.HasKey("TourId");
+
+                            b1.ToTable("Tours");
+
+                            b1.WithOwner()
+                                .HasForeignKey("TourId");
+                        });
+
+                    b.Navigation("Coordinates")
+                        .IsRequired();
+
+                    b.Navigation("Map");
+                });
+
+            modelBuilder.Entity("Tourplanner.Entities.Map", b =>
+                {
+                    b.Navigation("Tiles");
+
+                    b.Navigation("Tour")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Tourplanner.Entities.Tours.Tour", b =>

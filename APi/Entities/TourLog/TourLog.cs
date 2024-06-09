@@ -18,7 +18,8 @@ namespace Tourplanner.Entities.TourLogs
 
         public Tour Tour { get; set; } = null!;
 
-        public DateTime Date { get; set; }
+        public DateTime DateTime { get; set; }
+        public float Distance {get; set;}
     }
 
     public static class TourLogExtensionMethods
@@ -28,13 +29,13 @@ namespace Tourplanner.Entities.TourLogs
             return new TourLogDto(
                 log.TourLogId,
                 log.TourId,
-                log.Date,
+                log.DateTime,
                 log.Comment,
                 log.Difficulty,
-                log.Duration,
                 log.Rating,
-                log.Tour.Name,
-                log.Tour.ToTourDto());
+                log.Tour.ToTourDto(),
+                log.Duration,
+                log.Distance);
         }
     }
 }

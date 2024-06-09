@@ -8,10 +8,10 @@ namespace Tourplanner.DTOs
             DateTime dateTime,
             string comment,
             float difficulty,
-            float totalTime,
             double rating,
-            string tourName,
-            TourDto tour
+            TourDto tour,
+            float duration,
+            float distance
         )
         {
             Id = id;
@@ -19,10 +19,10 @@ namespace Tourplanner.DTOs
             DateTime = dateTime;
             Comment = comment;
             Difficulty = difficulty;
-            TotalTime = totalTime;
             Rating = rating;
-            TourName = tourName;
             Tour = tour;
+            Duration = duration;
+            Distance = distance;
         }
 
         public int Id { get; private set; }
@@ -30,9 +30,9 @@ namespace Tourplanner.DTOs
         public DateTime DateTime { get; private set; }
         public string Comment { get; private set; }
         public float Difficulty { get; private set; }
-        public float TotalTime { get; private set; }
         public double Rating { get; private set; }
-        public string TourName {get; set;}
         public TourDto Tour {get; set;}
+        public float Duration { get; private set;}
+        public float Distance { get; private set; }
     }
 }

@@ -28,36 +28,21 @@ namespace Tourplanner.Entities.Tours
             foreach (var tour in tourEntities)
             {
                 var childFriendliness = childFriendlinessService.Calculate(tour.Id);
+
                 tourDtos.Add(new TourDto(
                     tour.Id,
                     tour.Name,
                     tour.Description,
                     tour.From,
                     tour.To,
+                    tour.Coordinates,
                     tour.TransportType,
                     tour.Distance,
                     tour.EstimatedTime,
                     tour.Popularity,
-                    tour.ChildFriendliness,
-                    tour.ImagePath
+                    tour.ChildFriendliness
                 ));
             }
-            // TODO 
-            // var tourDtos = tourEntities.Select(
-            //     tour =>
-            //         new TourDto(
-            //             tour.TourId,
-            //             tour.Description,
-            //             tour.Name,
-            //             tour.From,
-            //             tour.To,
-            //             tour.TransportType,
-            //             tour.Distance,
-            //             tour.EstimatedTime,
-            //             tour.Popularity,
-            //             tour.ChildFriendliness,
-            //             tour.ImagePath
-            //         ));
             return await Task.FromResult(tourDtos);
         }
     }

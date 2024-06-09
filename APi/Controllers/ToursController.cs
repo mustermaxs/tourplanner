@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Api.Entities.Maps;
+using Microsoft.AspNetCore.Mvc;
 using Tourplanner;
 using Tourplanner.Models;
 using Tourplanner.Entities.Tours;
@@ -8,6 +9,7 @@ using Tourplanner.Infrastructure;
 using Microsoft.AspNetCore.Cors;
 using Tourplanner.Entities;
 using Tourplanner.Entities.TourLogs.Commands;
+using Tourplanner.Entities.Maps;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -31,6 +33,13 @@ namespace Api.Controllers
             return await ResponseAsync(command);
         }
 
+        [HttpGet("{tourId}/map")]
+        public async Task<ActionResult<IResponse>> GetMapForTour(int tourId)
+        {
+            var request = new GetMapForTourRequest(tourId);
+            return await ResponseAsync(request);
+        }
+
         [HttpGet("geosuggestion")]
         public async Task<ActionResult<IResponse>> GetAutoCompleteSuggestionForLocation([FromQuery] string location)
         {
@@ -41,21 +50,30 @@ namespace Api.Controllers
         [HttpPost]
         public async Task<ActionResult<IResponse>> CreateTour([FromBody] CreateTourDto createTourDto)
         {
-            var command = new CreateTourCommand(
-                createTourDto.Name,
-                createTourDto.Description,
-                createTourDto.From,
-                createTourDto.To,
-                createTourDto.TransportType
-            );
-            return await ResponseAsync(command);
+            try
+            {
+                var createTourCommand = new CreateTourCommand(
+                    createTourDto.Name,
+                    createTourDto.Description,
+                    createTourDto.From,
+                    createTourDto.To,
+                    createTourDto.TransportType,
+                    createTourDto.Start,
+                    createTourDto.Destination
+                );
+                
+                var tourId = Convert.ToInt32(await mediator.Send(createTourCommand));
+                var createMapCommand = new CreateMapCommand(tourId, createTourDto.Start, createTourDto.Destination, createTourDto.TransportType);
+                await mediator.Send(createMapCommand);
+                        
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
-        //
-        // [HttpGet("search")]
-        // public async Task<ActionResult<IResponse>> SearchInTours([FromBody] SearchDto searchDto)
-        // {
-        //     var query = new GetSearchResultsQuery(searchDto.SearchTerm);
-        // }
+
 
         [HttpDelete("{tourid}")]
         public async Task<ActionResult<IResponse>> DeleteTour(int tourid)
@@ -76,7 +94,11 @@ namespace Api.Controllers
                 updateTourDto.To,
                 updateTourDto.TransportType
             );
-
+            var deleteMapCommand = new DeleteMapForTourCommand(tourid);
+            await mediator.Send(deleteMapCommand);
+            var createMapCommand = new CreateMapCommand(tourid, updateTourDto.Start, updateTourDto.Destination, updateTourDto.TransportType);
+            await mediator.Send(createMapCommand);
+            
             return await ResponseAsync(command);
         }
 
@@ -85,6 +107,12 @@ namespace Api.Controllers
         {
             var command = new GetTourLogsRequest(tourid);
             return await ResponseAsync(command);
+        }
+        
+        [HttpGet("{tourid}/tiles")] // TODO implement
+        public async Task<ActionResult<IResponse>> GetTilesForTour(int tourid)
+        {
+            throw new NotImplementedException();
         }
 
         [HttpGet("logs/{logid}")]
@@ -111,8 +139,9 @@ namespace Api.Controllers
                 DateTime.UtcNow,
                 createTourLogDto.Comment,
                 createTourLogDto.Difficulty,
-                createTourLogDto.TotalTime,
-                createTourLogDto.Rating
+                createTourLogDto.Rating,
+                createTourLogDto.Duration,
+                createTourLogDto.Distance
             );
 
             return await ResponseAsync(command);
@@ -127,8 +156,10 @@ namespace Api.Controllers
                 DateTime: DateTime.UtcNow,
                 Comment: updateTourLogDto.Comment,
                 Difficulty: updateTourLogDto.Difficulty,
-                TotalTime: updateTourLogDto.TotalTime,
-                Rating: updateTourLogDto.Rating);
+                Rating: updateTourLogDto.Rating,
+                Duration: updateTourLogDto.Duration,
+                Distance: updateTourLogDto.Distance
+                );
 
             return await ResponseAsync(command);
         }

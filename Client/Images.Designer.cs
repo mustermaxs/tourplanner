@@ -69,7 +69,7 @@ namespace Client {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;value&gt;https://loclhost:5161/api/&lt;/value&gt;.
+        ///   Looks up a localized string similar to &lt;value&gt;https://1css5fx6-5161.euw.devtunnels.ms/api/&lt;/value&gt;.
         /// </summary>
         internal static string api_base_url {
             get {

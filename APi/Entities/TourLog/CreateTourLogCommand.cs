@@ -10,8 +10,9 @@ namespace Tourplanner.Entities.TourLogs.Commands
         DateTime DateTime,
         string Comment,
         float Difficulty,
-        float TotalTime,
-        float Rating
+        float Rating,
+        float Duration,
+        float Distance
     ) : IRequest;
     
     public class CreateTourLogCommandHandler(
@@ -25,13 +26,14 @@ namespace Tourplanner.Entities.TourLogs.Commands
         {
             var tourLog = new TourLog();
             tourLog.TourId = request.TourId;
-            tourLog.Date = request.DateTime;
+            tourLog.DateTime = request.DateTime;
             tourLog.Comment = request.Comment;
             tourLog.Difficulty = request.Difficulty;
-            tourLog.Duration = request.TotalTime;
             tourLog.Rating = request.Rating;
+            tourLog.Duration = request.Duration;
+            tourLog.Distance=  request.Distance;
             await tourLogRepository.Create(tourLog);
-
+            
             var tour = await tourRepository.Get(request.TourId);
             tour.Popularity = ratingService.Calculate(await tourLogRepository.GetTourLogsForTour(request.TourId));
             tour.ChildFriendliness = await childFriendlinessService.Calculate(tour.Id);

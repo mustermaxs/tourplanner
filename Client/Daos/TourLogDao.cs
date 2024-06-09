@@ -14,19 +14,11 @@ namespace Client.Dao
         public TourLogDao(IHttpService http) : base(http) { }
         public override async Task Create(TourLog tourLog)
         {
-            var createTourLogDto = new CreateTourLogDto(
-                tourLog.DateTime,
-                tourLog.Comment,
-                tourLog.Difficulty,
-                tourLog.Duration,
-                tourLog.Rating
-                );
-                
-            await http.Post<CreateTourLogDto>(createTourLogDto, $"Tours/{tourLog.Tour.Id}/logs");
+            await http.Post(tourLog.ToCreateTourLogDto(), $"Tours/{tourLog.Tour.Id}/logs");
         }
-        public override async Task<TourLog> Read(TourLog tourLog)
+        public override async Task<TourLog> Read(int tourLogId)
         {
-            return await http.Get<TourLog>($"Tours/logs/{tourLog.Id}");
+            return await http.Get<TourLog>($"Tours/logs/{tourLogId}");
         }
 
         public async Task<IEnumerable<TourLog>> ReadMultiple(int tourid)
@@ -38,18 +30,10 @@ namespace Client.Dao
             throw new NotImplementedException();
         }
 
-        public override async Task<HttpResponseMessage> Update(TourLog model)
+        public override async Task<HttpResponseMessage> Update(TourLog tourLog)
         {
-
-            UpdateTourLogDto updateTourLogDto = new UpdateTourLogDto(
-                 model!.Id,
-                 model!.Comment,
-                 model!.Difficulty,
-                 model!.DateTime,
-                 model!.Rating
-            );
-
-            return await http.Put<UpdateTourLogDto>(updateTourLogDto, $"Tours/logs/{updateTourLogDto!.Id}"); 
+            var dto = tourLog.ToUpdateTourLogDto();
+            return await http.Put(dto, $"Tours/logs/{dto!.Id}"); 
         }
 
         public override async Task Delete(TourLog tourLog)

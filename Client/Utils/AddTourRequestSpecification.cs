@@ -1,4 +1,5 @@
 ﻿using Client.Models;
+using Client.Dtos;
 
 namespace Client.Utils;
 using Client.Utils.Specifications;
@@ -6,10 +7,10 @@ using Client.Utils.Specifications;
 public class AddTourSpecification : CompositeSpecification<Tour>
 {
     private readonly Tour _tour;
-    private readonly Location? _from;
-    private readonly Location? _to;
+    private readonly OrsPropertiesDto? _from;
+    private readonly OrsPropertiesDto? _to;
 
-    public AddTourSpecification(Location? from, Location? to)
+    public AddTourSpecification(OrsPropertiesDto? from, OrsPropertiesDto? to)
     {
         _from = from;
         _to = to;

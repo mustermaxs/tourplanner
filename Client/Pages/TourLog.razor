@@ -25,18 +25,28 @@ else
         </div>
     </div>
     <h5>Tour: @EditLogVM.TourLog.Tour.Name</h5>
-    <div class="row">
-        <div class="col-md-4">
+    <div class="row mt-3">
+        <div class="col-md-6">
             <label for="date">Date</label>
             <input type="datetime-local" class="form-control" id="date" @bind="EditLogVM.TourLog.DateTime">
         </div>
+        <div class="col-md-6">
+            <label for="rating">Rating</label>
+            <input type="number" max="10" class="form-control" id="rating" @bind="EditLogVM.TourLog.Rating">
+        </div>
+    </div>
+    <div class="row mt-3">
         <div class="col-md-4">
             <label for="difficulty">Difficulty</label>
             <input type="number" max="10" class="form-control" id="difficulty" @bind="EditLogVM.TourLog.Difficulty">
         </div>
         <div class="col-md-4">
-            <label for="rating">Rating</label>
-            <input type="number" max="10" class="form-control" id="rating" @bind="EditLogVM.TourLog.Rating">
+            <label for="rating">Distance (km)</label>
+            <input type="number" min="0" step="0.1" class="form-control" id="rating" @bind="EditLogVM.TourLog.Distance">
+        </div>
+        <div class="col-md-4">
+            <label for="rating">Duration</label>
+            <input type="number" min="0" class="form-control" id="duration" @bind="EditLogVM.TourLog.Duration">
         </div>
     </div>
 

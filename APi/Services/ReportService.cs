@@ -5,6 +5,7 @@ using QuestPDF.Infrastructure;
 using QuestPDF.Previewer;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Tourplanner.Services.FormattingUtils;
 
 namespace Tourplanner.Services
 {
@@ -43,11 +44,11 @@ namespace Tourplanner.Services
                             column.Spacing(10);
 
                             // Image
-                            if (!string.IsNullOrEmpty(tourEntity.ImagePath))
-                            {
-                                column.Item().Image(tourEntity.ImagePath);
-                            }
-                            else
+                            // if (!string.IsNullOrEmpty(tourEntity.ImagePath))
+                            // {
+                            //     column.Item().Image(tourEntity.ImagePath);
+                            // }
+                            // else
                             {
                                 column.Item().Element(ContainerWithPadding).Image("Assets/img/map.png");
                             }
@@ -73,7 +74,7 @@ namespace Tourplanner.Services
                                 detailsColumn.Item().Text(text =>
                                 {
                                     text.Span("Estimated Time: ").SemiBold();
-                                    text.Span($"{tourEntity.EstimatedTime.ToString()} h");
+                                    text.Span($"{FormattingUtils.Formatting.SecondsToDaysMinutesHours(tourEntity.EstimatedTime)} h");
                                 });
 
                                 detailsColumn.Item().Text(text =>
@@ -85,7 +86,7 @@ namespace Tourplanner.Services
                                 detailsColumn.Item().Text(text =>
                                 {
                                     text.Span("Distance: ").SemiBold();
-                                    text.Span($"{tourEntity.Distance} km");
+                                    text.Span($"{Formatting.MetersToKmAndMeters(tourEntity.Distance)} km");
                                 });
 
                                 detailsColumn.Item().Text(text =>
@@ -136,7 +137,7 @@ namespace Tourplanner.Services
                                 // Table content
                                 foreach (var log in tourEntity.TourLogs)
                                 {
-                                    table.Cell().Element(CellStyle).Text(log.Date.ToString("dd.MM.yyyy hh:mm"));
+                                    table.Cell().Element(CellStyle).Text(log.DateTime.ToString("dd.MM.yyyy hh:mm"));
                                     table.Cell().Element(CellStyle).Text(log.Comment);
                                     table.Cell().Element(CellStyle).Text(log.Difficulty.ToString());
                                     table.Cell().Element(CellStyle).Text(log.Duration.ToString() + " min");
@@ -208,7 +209,7 @@ namespace Tourplanner.Services
                                     detailsColumn.Item().Text(text =>
                                     {
                                         text.Span("Estimated Time: ").SemiBold();
-                                        text.Span($"{tour.EstimatedTime.ToString()} h");
+                                        text.Span($"{Formatting.SecondsToDaysMinutesHours(tour.EstimatedTime)}");
                                     });
 
                                     detailsColumn.Item().Text(text =>
@@ -220,7 +221,7 @@ namespace Tourplanner.Services
                                     detailsColumn.Item().Text(text =>
                                     {
                                         text.Span("Distance: ").SemiBold();
-                                        text.Span($"{tour.Distance} km");
+                                        text.Span($"{Formatting.MetersToKmAndMeters(tour.Distance)}");
                                     });
 
                                     detailsColumn.Item().Text(text =>
