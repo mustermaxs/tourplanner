@@ -7,15 +7,15 @@ namespace Tourplanner.DTOs
 {
     public class Summary
     {
-        public Summary(Bbox bbox, double distance, double duration)
+        public Summary(Bbox bbox, float distance, float duration)
         {
             Bbox = bbox;
             Distance = distance;
             Duration = duration;
         }
         public Bbox Bbox {get; set;}
-        public double Distance {get; set;}
-        public double Duration {get; set;}
+        public float Distance {get; set;}
+        public float Duration {get; set;}
     }
 
     // public class OrsRouteSummary

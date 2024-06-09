@@ -26,7 +26,7 @@ namespace Tourplanner.Entities.Maps
         {
             var routeSummary = await openRouteService.RouteInfo(request.From, request.To, request.TransportType);
             var bboxValues = routeSummary.Bbox;
-            var bbox = new Bbox(bboxValues[0], bboxValues[1], bboxValues[2], bboxValues[3]);
+            var bbox = new Bbox(bboxValues.MinX, bboxValues.MinY, bboxValues.MaxX, bboxValues.MaxY);
             List<TileConfig> tileConfigs = new List<TileConfig>();
             
             int zoomLevel = 17;

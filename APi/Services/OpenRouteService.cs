@@ -87,11 +87,11 @@ namespace Tourplanner.Services
                 JsonElement segments = properties.GetProperty("segments")[0];
 
                 // Extract distance and duration
-                double distance = segments.GetProperty("distance").GetDouble();
-                double duration = segments.GetProperty("duration").GetDouble();
+                float distance = (float)segments.GetProperty("distance").GetDouble();
+                float duration = (float)segments.GetProperty("duration").GetDouble();
 
                 return new Summary(
-                    new Bbox(bbox[1], bbox[2], bbox[3], bbox[4]),
+                    new Bbox(bbox[0], bbox[1], bbox[2], bbox[3]),
                     distance,
                     duration
                 );
