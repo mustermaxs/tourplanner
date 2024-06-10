@@ -26,7 +26,6 @@ public class UpdateTourDto
     public string Description { get; set; }
     public string From { get; set; }
     public string To { get; set; }
-    public Coordinates Coordinates { get; set; }
     public TransportType TransportType { get; set; }
     public Coordinates Destination {get; set;}
     public Coordinates Start { get; set; }

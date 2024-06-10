@@ -61,11 +61,12 @@ namespace Api.Controllers
                     createTourDto.Start,
                     createTourDto.Destination
                 );
-                
+
                 var tourId = Convert.ToInt32(await mediator.Send(createTourCommand));
-                var createMapCommand = new CreateMapCommand(tourId, createTourDto.Start, createTourDto.Destination, createTourDto.TransportType);
+                var createMapCommand = new CreateMapCommand(tourId, createTourDto.Start, createTourDto.Destination,
+                    createTourDto.TransportType);
                 await mediator.Send(createMapCommand);
-                        
+
                 return Ok();
             }
             catch (Exception e)
@@ -86,20 +87,32 @@ namespace Api.Controllers
         public async Task<ActionResult<IResponse>> UpdateTour([FromBody] UpdateTourDto updateTourDto,
             [FromRoute] int tourid)
         {
-            var command = new UpdateTourCommand(
-                tourid,
-                updateTourDto.Name,
-                updateTourDto.Description,
-                updateTourDto.From,
-                updateTourDto.To,
-                updateTourDto.TransportType
-            );
-            var deleteMapCommand = new DeleteMapForTourCommand(tourid);
-            await mediator.Send(deleteMapCommand);
-            var createMapCommand = new CreateMapCommand(tourid, updateTourDto.Start, updateTourDto.Destination, updateTourDto.TransportType);
-            await mediator.Send(createMapCommand);
-            
-            return await ResponseAsync(command);
+            try
+            {
+                var updateTourCommand = new UpdateTourCommand(
+                    tourid,
+                    updateTourDto.Name,
+                    updateTourDto.Description,
+                    updateTourDto.From,
+                    updateTourDto.To,
+                    updateTourDto.TransportType,
+                    updateTourDto.Start,
+                    updateTourDto.Destination
+                );
+                await mediator.Send(updateTourCommand);
+                var deleteMapCommand = new DeleteMapForTourCommand(tourid);
+                await mediator.Send(deleteMapCommand);
+                var createMapCommand = new CreateMapCommand(tourid, updateTourDto.Start, updateTourDto.Destination,
+                    updateTourDto.TransportType);
+                await mediator.Send(createMapCommand);
+
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return BadRequest("Failed to update tour");
+            }
         }
 
         [HttpGet("{tourid}/logs")]
@@ -108,7 +121,7 @@ namespace Api.Controllers
             var command = new GetTourLogsRequest(tourid);
             return await ResponseAsync(command);
         }
-        
+
         [HttpGet("{tourid}/tiles")] // TODO implement
         public async Task<ActionResult<IResponse>> GetTilesForTour(int tourid)
         {
@@ -121,7 +134,7 @@ namespace Api.Controllers
             var command = new GetSingleTourLogRequest(logid);
             return await ResponseAsync(command);
         }
-        
+
         [HttpGet("search")]
         public async Task<ActionResult<IResponse>> SearchInTours([FromQuery] string q)
         {
@@ -159,7 +172,7 @@ namespace Api.Controllers
                 Rating: updateTourLogDto.Rating,
                 Duration: updateTourLogDto.Duration,
                 Distance: updateTourLogDto.Distance
-                );
+            );
 
             return await ResponseAsync(command);
         }

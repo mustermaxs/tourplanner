@@ -11,15 +11,31 @@ namespace Tourplanner.Services
         public string ReadImageAsBase64(string filePath);
     }
 
+    public interface IFileHandler
+    {
+        public Task<string> SaveFile(string filePath);
+        public Task<string> GetImageAsBase64(string filePath);
+    }
+
+    // public class RemoteFileHandler : IFileHandler
+    // {
+    //     // saves file to remote server
+    //     public async Task<string> SaveFile(string filePath)
+    //     {
+    //         
+    //     }
+    // }
+
     public class ImageService : IImageService
     {
         private HttpClient httpClient;
         private string baseDir;
 
-        public ImageService(IHttpClientFactory httpClientFactory, IConfiguration configuration)
+        public ImageService(IHttpClientFactory httpClientFactory, IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
         {
             httpClient = httpClientFactory.CreateClient("TourPlannerClient");
-            baseDir = configuration["Tiles:BaseDir"];
+            // baseDir = configuration["Tiles:BaseDir"];
+            baseDir = webHostEnvironment.ContentRootPath;
         }
 
         public async Task<string> FetchImageFromUrl(string savePath, TileConfig tileConfig)

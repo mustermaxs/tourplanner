@@ -30,7 +30,7 @@ namespace Tourplanner.Entities.Tours
         [MaxLength(60)] public string Name { get; set; }
         [MaxLength(150)] public string From { get; set; }
         [MaxLength(150)] public string To { get; set; }
-        public Coordinates Coordinates {get; set;}
+        public Coordinates Coordinates {get; set;}  // TODO sollte Start & Destination sein!
         public float Distance { get; set; }
         [MaxLength(500)] public string Description { get; set; }
         public float EstimatedTime { get; set; }
