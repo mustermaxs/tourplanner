@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Dynamic;
 using System.Threading;
 using System.Threading.Tasks;
+using Client.Exceptions;
 
 namespace Client.Utils;
 
@@ -34,8 +35,9 @@ public class Debouncer
                 await cb(arg);
             }
         }
-        catch (TaskCanceledException)
+        catch (TaskCanceledException ex)
         {
+            throw;
         }
     }
     

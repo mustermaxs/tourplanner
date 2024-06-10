@@ -1,0 +1,35 @@
+﻿@using Client.Components.Popup
+@using Client.Exceptions
+@inherits ErrorBoundary
+
+@ChildContent
+
+<Popup></Popup>
+
+@code {
+    List<Exception> receivedExceptions = new();
+    [Inject] PopupViewModel PopupVM { get; set; }
+
+    protected override Task OnErrorAsync(Exception exception)
+    {
+        receivedExceptions.Add(exception);
+        if (exception is UserRelevantException)
+        {
+            PopupVM.Open("User Error", exception.Message, PopupStyle.Error);
+        }
+
+        else
+        {
+            PopupVM.Open("Error", "Something went wrong :(", PopupStyle.Error);
+        }
+
+        return base.OnErrorAsync(exception);
+    }
+
+    public new void Recover()
+    {
+        receivedExceptions.Clear();
+        base.Recover();
+    }
+
+}

@@ -28,7 +28,6 @@ public abstract class BaseController : ControllerBase
                 return NotFound();
             }
 
-
             if (responseObj is JsonObject)
             {
                 var jsonRes = JsonSerializer.Serialize(responseObj);
@@ -39,7 +38,6 @@ public abstract class BaseController : ControllerBase
             {
                 return File(pdfBytes, "application/pdf");
             }
-
 
             return Ok(responseObj);
         }

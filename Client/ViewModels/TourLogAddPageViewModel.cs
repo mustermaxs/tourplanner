@@ -1,5 +1,6 @@
 using Client.Components;
 using Client.Dao;
+using Client.Exceptions;
 using Client.Models;
 using Client.Utils;
 using Microsoft.AspNetCore.Components;
@@ -33,17 +34,17 @@ public class TourLogAddPageViewModel : BaseViewModel
                 await _tourLogDao.Create(TourLog);
                 _navigationManager.NavigateTo($"/tours/{TourLog.Tour.Id}");
                 TourLog = new TourLog();
+                _popupViewModel.Open("Success", "Added tour log.", PopupStyle.Normal);
             }
             else
             {
-                _popupViewModel.Open("Error", "Failed to create tour log.", PopupStyle.Error);
                 _notifyStateChanged.Invoke();
+                throw new InvalidUserInputException("Tour Log input incorrect. Please check the form.");
             }
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
-            _popupViewModel.Open("Error", "Failed to create tour log.", PopupStyle.Error);
             throw;
         }
     }

@@ -1,5 +1,7 @@
 using Client.Dao;
+using Client.Exceptions;
 using Client.Models;
+using Client.Utils;
 using Microsoft.AspNetCore.Components;
 
 namespace Client.ViewModels;
@@ -16,7 +18,7 @@ public class TourLogPageViewModel : BaseViewModel
         this._tourLogDao = tourLogDao;
     }
 
-    
+
     public async Task Init(int tourId, int logId)
     {
         TourLog = new TourLog();
@@ -28,17 +30,36 @@ public class TourLogPageViewModel : BaseViewModel
 
     public async Task DeleteLog()
     {
-        try {
+        try
+        {
             await _tourLogDao.Delete(TourLog);
             NavigationManager.NavigateTo($"/tours/{TourLog.Tour.Id}");
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             Console.WriteLine(e);
+            throw;
         }
     }
 
     public async Task UpdateLog()
     {
-        await _tourLogDao.Update(TourLog);
-        NavigationManager.NavigateTo($"/tours/{TourLog.Tour.Id}");
+        try
+        {
+            var addLogSpec = new TourLogSpecification();
+            if (!addLogSpec.IsSatisfiedBy(TourLog))
+            {
+                throw new InvalidUserInputException("Please check your input. Some fields are missing or incorrect.");
+            }
+
+            await _tourLogDao.Update(TourLog);
+            NavigationManager.NavigateTo($"/tours/{TourLog.Tour.Id}");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+
     }
 }

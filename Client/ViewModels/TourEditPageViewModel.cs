@@ -1,6 +1,7 @@
 using Client.Components;
 using Client.Dao;
 using Client.Dtos;
+using Client.Exceptions;
 using Client.Models;
 using Client.Services;
 using Client.Utils;
@@ -16,7 +17,8 @@ public class TourEditPageViewModel : BaseViewModel
     private IGeoService _geoService;
     public List<string> Suggestions { get; private set; } = new List<string>();
 
-    public TourEditPageViewModel(NavigationManager navigationManager, ITourDao tourDao, PopupViewModel popupViewModel, IGeoService geoService) : base()
+    public TourEditPageViewModel(NavigationManager navigationManager, ITourDao tourDao, PopupViewModel popupViewModel,
+        IGeoService geoService) : base()
     {
         _navigationManager = navigationManager;
         _tourDao = tourDao;
@@ -34,7 +36,7 @@ public class TourEditPageViewModel : BaseViewModel
             var from = (await _geoService.SearchLocation(Tour.From)).Features.FirstOrDefault()?.PropertiesDto;
             var to = (await _geoService.SearchLocation(Tour.To)).Features.FirstOrDefault().PropertiesDto;
             var tourSpecification = new AddTourSpecification(from, to);
-            
+
             if (tourSpecification.IsSatisfiedBy(Tour))
             {
                 Tour.Start = (await _geoService.SearchLocation(Tour.From)).Features.FirstOrDefault()?.GeometryDto
@@ -42,19 +44,23 @@ public class TourEditPageViewModel : BaseViewModel
                 Tour.Destination = (await _geoService.SearchLocation(Tour.To)).Features.FirstOrDefault()?.GeometryDto
                     .Coordinates;
                 await _tourDao.Update(Tour);
-            _navigationManager.NavigateTo($"/tours/{Tour.Id}");
-            _popupViewModel.Open("Success", "Updated tour!", PopupStyle.Normal);
+                _navigationManager.NavigateTo($"/tours/{Tour.Id}");
+                _popupViewModel.Open("Success", "Updated tour!", PopupStyle.Normal);
+            }
+            else
+            {
+                throw new InvalidUserInputException("Failed to update tour. Check your input.");
             }
         }
-        catch (HttpRequestException e)
+        catch (DaoException e)
         {
             Console.WriteLine($"Request error: {e.Message}");
-            _popupViewModel.Open("Error", "Failed to update tour.", PopupStyle.Error);
+            throw;
         }
         catch (Exception e)
         {
             Console.WriteLine($"Unexpected error: {e.Message}");
-            _popupViewModel.Open("Error", "Failed to update tour.", PopupStyle.Error);
+            throw;
         }
     }
 
@@ -66,7 +72,7 @@ public class TourEditPageViewModel : BaseViewModel
     public async Task InitializeAsync(Action notifySateChanged)
     {
         await base.InitializeAsync(notifySateChanged);
-        
+
         try
         {
             Tour = await _tourDao.Read(Tour.Id);
@@ -78,6 +84,7 @@ public class TourEditPageViewModel : BaseViewModel
         catch (Exception e)
         {
             Console.WriteLine($"Unexpected error: {e.Message}");
+            throw;
         }
     }
 
@@ -85,8 +92,9 @@ public class TourEditPageViewModel : BaseViewModel
     {
         if (string.IsNullOrEmpty(userInput))
         {
-             Suggestions = new List<string>();
+            Suggestions = new List<string>();
         }
+
         try
         {
             var locations = await Debouncer.Debounce<string, OrsBaseDto>(_geoService.SearchLocation, userInput, 1000);
@@ -104,6 +112,7 @@ public class TourEditPageViewModel : BaseViewModel
         catch (Exception e)
         {
             Console.WriteLine($"Unexpected error: {e.Message}");
+            throw;
         }
     }
 }

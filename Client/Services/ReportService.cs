@@ -1,5 +1,6 @@
 using Client.Utils;
 using System.Net.Http;
+using Client.Exceptions;
 using Microsoft.JSInterop;
 
 
@@ -36,7 +37,7 @@ public class ReportService : IReportService
         catch (Exception ex)
         {
             Console.WriteLine($"Error downloading report: {ex.Message}");
-            throw;
+            throw new ServiceLayerException("Failed to download tour report", ex);
         }
     }
 
@@ -51,7 +52,7 @@ public class ReportService : IReportService
         catch (Exception ex)
         {
             Console.WriteLine($"Error downloading report: {ex.Message}");
-            throw;
+            throw new ServiceLayerException("Failed to download summary report", ex);
         }
     }
 }

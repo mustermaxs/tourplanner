@@ -5,6 +5,7 @@ using Client.Services;
 using Client.Utils;
 using Microsoft.AspNetCore.Components;
 using Client.Dtos;
+using Client.Exceptions;
 
 namespace Client.ViewModels;
 
@@ -60,7 +61,7 @@ public class TourAddPageViewModel : BaseViewModel
             }
             else
             {
-                throw new Exception();
+                throw new InvalidUserInputException("Failed to add tour.");
             }
 
             Tour = new Tour();
@@ -69,7 +70,7 @@ public class TourAddPageViewModel : BaseViewModel
         catch (Exception ex)
         {
             Console.WriteLine($"Error adding tour: {ex.Message}");
-            _popupVm.Open("Error", "Failed to add tour.", PopupStyle.Error);
+            throw new InvalidUserInputException( "Failed to add tour.");
         }
     }
 

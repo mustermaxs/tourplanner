@@ -42,7 +42,6 @@ public class ToursPageViewModel : BaseViewModel
         catch (Exception ex)
         {
             Console.WriteLine($"Error fetching tours: {ex.Message}");
-            _popupViewModel.Open("Error", "Failed to get tours.", PopupStyle.Error);
             throw;
         }
     }
