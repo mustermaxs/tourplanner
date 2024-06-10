@@ -46,14 +46,14 @@ namespace Tourplanner.Services
                 throw new ResourceNotFoundException("Tour not found");
             }
 
-            var maxDistance = tours.Max(tour => tour.Distance);
+            var maxDistance = 10000f;
             var logs = tour.TourLogs;
             var avgDifficulty = GetAverageDifficulty(logs);
-            var durationInHours = tour.EstimatedTime / 60;
+            var durationInHours = tour.EstimatedTime / 3600;
             var normalizedDistance = MathUtils.MapRange(tour.Distance, 0.0f, maxDistance, 0f, 10.0f);
-            var normalizedDuration = MathUtils.MapRange(durationInHours, 0f, 60.0f, 0f, 10f);
-            var sum = tour.Distance + tour.EstimatedTime + avgDifficulty;
-            var normalizedSum = MathUtils.MapRange(sum, 0f, 30.0f, 0.0f, 10.0f);
+            var normalizedDuration = MathUtils.MapRange(durationInHours, 0f, 2.0f, 0f, 10f);
+            var sum = -normalizedDistance - normalizedDuration - avgDifficulty + 10;
+            var normalizedSum = MathUtils.MapRange(sum, -20f, 30.0f, 0.0f, 10.0f);
 
             return normalizedSum;
         }
