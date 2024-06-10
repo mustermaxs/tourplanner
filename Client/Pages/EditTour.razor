@@ -60,8 +60,9 @@ else
         <label for="description">Description</label>
         <textarea class="form-control" id="description" placeholder="Enter description" @bind="EditTourVM.Tour.Description"></textarea>
     </div>
-
-    <Button ButtonType="Primary" Label="Update" mt="4" Img="map" OnClickCallback="EditTourVM.UpdateTour"/>
+    <ButtonGroup Layout="ButtonGroup.Position.Center">
+        <Button ButtonType="Primary" Label="Update" mt="4" Img="map" OnClickCallback="EditTourVM.UpdateTour"></Button>
+    </ButtonGroup>
 }
 
 @code {
