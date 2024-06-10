@@ -179,8 +179,7 @@ namespace Api.Controllers
 
 
         [HttpDelete("logs/{logid}")]
-        public async Task<ActionResult<IResponse>> DeleteTourLog([FromBody] DeleteTourLogCommand deleteTourLogCommand,
-            int logid)
+        public async Task<ActionResult<IResponse>> DeleteTourLog(int logid)
         {
             var command = new DeleteTourLogCommand(logid);
 

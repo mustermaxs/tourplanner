@@ -38,7 +38,7 @@ public class TourLogPageViewModel : BaseViewModel
         catch (Exception e)
         {
             Console.WriteLine(e);
-            throw;
+            throw new UserActionException("Failed to delete log.", e);
         }
     }
 

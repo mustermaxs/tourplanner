@@ -2,6 +2,7 @@ using System.Net.Http;
 using Client.Utils;
 using System.Text.Json;
 using System.Net.Http.Json;
+using Client.Exceptions;
 using Client.Pages;
 
 public interface IHttpService
@@ -44,7 +45,7 @@ public class HttpService : IHttpService
         }
         else
         {
-            throw new Exception("Something went wrong");
+            throw new ServiceLayerException("HttpService: Failed to get data");
         }
     }
 
