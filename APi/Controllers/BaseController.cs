@@ -7,10 +7,11 @@ using Tourplanner.Exceptions;
 using Tourplanner.Infrastructure;
 
 namespace Api.Controllers;
-
+using Api.Services.Logging;
 public abstract class BaseController : ControllerBase
 {
     private readonly IMediator Mediator;
+    protected ILoggerWrapper Logger = LoggerFactory.GetLogger();
 
     public BaseController(IMediator mediator)
     {
@@ -25,12 +26,14 @@ public abstract class BaseController : ControllerBase
             var responseObj = await Mediator.Send(command);
             if (responseObj is null)
             {
+                Logger.Error($"Response for request {command.GetType().FullName} is null. {command.ToString()}");
                 return NotFound();
             }
 
             if (responseObj is JsonObject)
             {
                 var jsonRes = JsonSerializer.Serialize(responseObj);
+                Logger.Info($"Response for request {command.GetType().FullName} is {jsonRes}");
                 return Content(jsonRes, "application/json");
             }
 
@@ -44,11 +47,13 @@ public abstract class BaseController : ControllerBase
         catch (ResourceNotFoundException rex)
         {
             Console.WriteLine(rex);
+            Logger.Error($"Request {command.GetType().FullName} failed: {rex.Message}. {command.ToString()}");
             return BadRequest(rex.Message);
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
+            Logger.Error($"Request {command.GetType().FullName} failed.  {command.ToString()}. {e.Message}");
             return Problem($"Something went wrong :(");
         }
     }
