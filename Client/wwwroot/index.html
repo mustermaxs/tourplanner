@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="css/app.css" />
     <link rel="icon" type="image/png" href="favicon.png" />
     <link href="Client.styles.css" rel="stylesheet" />
+    <script src="scripts/AdjustTableAppearance.js"></script>
 </head>
 
 <body>
@@ -27,7 +28,19 @@
         <a class="dismiss">🗙</a>
     </div>
     <script src="_framework/blazor.webassembly.js"></script>
-    <script src="scripts/AdjustTableAppearance.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCPYznvdZH1M-wgZxbqnLE7xxZVQ_PTVAU&callback=initMap" async defer></script>
+<script src="js/googleMaps.js"></script>
+    <script>
+        window.downloadFileFromBase64 = (mimeType, fileName, base64Data) => {
+          const linkSource = `data:${mimeType};base64,${base64Data}`;
+          const downloadLink = document.createElement("a");
+          downloadLink.href = linkSource;
+          downloadLink.download = fileName;
+          downloadLink.click();
+        };
+
+    </script>
+    
 </body>
 
 </html>

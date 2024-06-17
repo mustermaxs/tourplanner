@@ -1,4 +1,5 @@
 ﻿using Tourplanner.Entities.TourLogs;
+using Tourplanner.Exceptions;
 
 namespace Tourplanner.Repositories;
 
@@ -10,10 +11,19 @@ public class TourLogRepository : Repository<TourLog>, ITourLogRepository
 
     public async Task<IEnumerable<TourLog>> GetTourLogsForTour(int tourId)
     {
-        return dbSet.Where(log => log.TourId == tourId).ToList();
+        try
+        {
+            return dbSet.Where(log => log.TourId == tourId).ToList();
         
-        var logs = await GetAll();
-        return logs;
+            var logs = await GetAll();
+            return logs;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw new DataAccessLayerException("Failed to fetch tour logs for tour", e);
+        }
+
     }
 
 

@@ -3,41 +3,55 @@
 @inject TourEditPageViewModel EditTourVM
 @using Client.Models
 @using Client.Components
+@using Client.ViewModels
 
 <PageTitle>Edit Tour</PageTitle>
 
 <h1>Edit Tour</h1>
 @if (EditTourVM.Tour == null)
 {
-    <p><em>Loading...</em></p>
+    <p>
+        <em>Loading...</em>
+    </p>
 }
 else
 {
-        <div class="row">
-            <div class="col">
-                <label for="name">Name</label>
-                <input type="text" class="form-control" id="name" placeholder="Enter name" @bind="EditTourVM.Tour.Name">
-            </div>
-            <div class="col">
-                <label for="transporttype">Transport Type</label>
-                <select class="form-control" id="transporttype" @bind="EditTourVM.Tour.TransportType">
-                    @foreach (var type in Enum.GetValues<TransportType>())
-                    {
-                        <option value="@type">@type</option>
-                    }
-                </select>
-            </div>
+    <div class="row">
+        <div class="col">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" placeholder="Enter name" @bind="EditTourVM.Tour.Name">
         </div>
+        <div class="col">
+            <label for="transporttype">Transport Type</label>
+            <select class="form-control" id="transporttype" @bind="EditTourVM.Tour.TransportType">
+                @foreach (var type in Enum.GetValues<TransportType>())
+                {
+                    <option value="@type">@type</option>
+                }
+            </select>
+        </div>
+    </div>
 
     <div class="form-group mt-3">
         <div class="row">
             <div class="col">
                 <label for="from">From</label>
-                <input type="text" class="form-control" id="from" placeholder="Enter start" @bind="EditTourVM.Tour.From">
+
+                <AutoComplete
+                    InitialValue="@EditTourVM.Tour.From"
+                    OnInput="async (val) => { await EditTourVM.GetSuggestions(val); EditTourVM.Tour.From = val; }"
+                    Options="() => EditTourVM.Suggestions ?? new List<string>()"
+                    Label="Enter starting location" Id="from">
+                </AutoComplete>
             </div>
             <div class="col">
                 <label for="to">To</label>
-                <input type="text" class="form-control" id="to" placeholder="Enter destination" @bind="EditTourVM.Tour.To">
+                <AutoComplete
+                    InitialValue="@EditTourVM.Tour.To"
+                    OnInput="async (val) => { await EditTourVM.GetSuggestions(val); EditTourVM.Tour.To = val; }"
+                    Options="() => EditTourVM.Suggestions ?? new List<string>()"
+                    Label="Enter destination" Id="to">
+                </AutoComplete>
             </div>
         </div>
     </div>
@@ -46,19 +60,19 @@ else
         <label for="description">Description</label>
         <textarea class="form-control" id="description" placeholder="Enter description" @bind="EditTourVM.Tour.Description"></textarea>
     </div>
-
-    <Button ButtonType="Primary" Label="Update" mt="4" Img="map" OnClickCallback="EditTourVM.UpdateTour"/> 
-
-
+    <ButtonGroup Layout="ButtonGroup.Position.Center">
+        <Button ButtonType="Primary" Label="Update" mt="4" Img="map" OnClickCallback="EditTourVM.UpdateTour"></Button>
+    </ButtonGroup>
 }
 
 @code {
-    [Parameter]
-    public string TourId { get; set; }
+    [Parameter] public string TourId { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        await EditTourVM.InitializeAsync(Convert.ToInt32(TourId));
+        EditTourVM.SetTourId(Convert.ToInt32(TourId));
+        await EditTourVM.InitializeAsync(StateHasChanged);
         StateHasChanged();
     }
+
 }

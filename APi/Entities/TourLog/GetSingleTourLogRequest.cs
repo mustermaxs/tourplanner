@@ -30,24 +30,24 @@ namespace Tourplanner.Entities.TourLogs
                 new TourLogDto(
                     id: log.TourLogId,
                     tourId: log.TourId,
-                    dateTime: log.Date,
+                    dateTime: log.DateTime,
                     comment: log.Comment,
                     difficulty: log.Difficulty,
-                    totalTime: log.Duration,
                     rating: log.Rating,
-                    tourName: tour.Name,
+                    duration: log.Duration,
+                    distance: log.Distance,
                     tour: new TourDto(
                         id: tour.Id,
                         name: tour.Name,
                         description: tour.Description,
                         from: tour.From,
                         to: tour.To,
+                        coordinates: tour.Coordinates,
                         transportType: tour.TransportType,
                         distance: tour.Distance,
                         timespan: tour.EstimatedTime,
                         popularity: tour.Popularity,
-                        childfriendliness: tour.ChildFriendliness,
-                        routeImage: tour.ImagePath
+                        childfriendliness: tour.ChildFriendliness
                     ));
             return tourLogDto;
         }

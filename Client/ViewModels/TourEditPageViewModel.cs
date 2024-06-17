@@ -1,19 +1,29 @@
 using Client.Components;
-using Microsoft.AspNetCore.Components;
 using Client.Dao;
+using Client.Dtos;
+using Client.Exceptions;
 using Client.Models;
+using Client.Services;
 using Client.Utils;
-public class TourEditPageViewModel
+using Microsoft.AspNetCore.Components;
+
+namespace Client.ViewModels;
+
+public class TourEditPageViewModel : BaseViewModel
 {
     private readonly ITourDao _tourDao;
-    private IPopupService _popupService;
+    private readonly PopupViewModel _popupViewModel;
     private readonly NavigationManager _navigationManager;
+    private IGeoService _geoService;
+    public List<string> Suggestions { get; private set; } = new List<string>();
 
-    public TourEditPageViewModel(NavigationManager navigationManager, ITourDao tourDao, IPopupService popupService)
+    public TourEditPageViewModel(NavigationManager navigationManager, ITourDao tourDao, PopupViewModel popupViewModel,
+        IGeoService geoService) : base()
     {
         _navigationManager = navigationManager;
         _tourDao = tourDao;
-        _popupService = popupService;
+        _popupViewModel = popupViewModel;
+        _geoService = geoService;
     }
 
     public Tour Tour { get; set; } = new Tour();
@@ -22,28 +32,50 @@ public class TourEditPageViewModel
     {
         try
         {
-            // TODO validation
-            await _tourDao.Update(Tour);
-            _navigationManager.NavigateTo($"/tours/{Tour.Id}");
+            _notifyStateChanged.Invoke();
+            var from = (await _geoService.SearchLocation(Tour.From)).Features.FirstOrDefault()?.PropertiesDto;
+            var to = (await _geoService.SearchLocation(Tour.To)).Features.FirstOrDefault().PropertiesDto;
+            var tourSpecification = new AddTourSpecification(from, to);
+
+            if (tourSpecification.IsSatisfiedBy(Tour))
+            {
+                Tour.Start = (await _geoService.SearchLocation(Tour.From)).Features.FirstOrDefault()?.GeometryDto
+                    .Coordinates;
+                Tour.Destination = (await _geoService.SearchLocation(Tour.To)).Features.FirstOrDefault()?.GeometryDto
+                    .Coordinates;
+                await _tourDao.Update(Tour);
+                _navigationManager.NavigateTo($"/tours/{Tour.Id}");
+                _popupViewModel.Open("Success", "Updated tour!", PopupStyle.Normal);
+            }
+            else
+            {
+                throw new InvalidUserInputException("Failed to update tour. Check your input.");
+            }
         }
-        catch (HttpRequestException e)
+        catch (DaoException e)
         {
             Console.WriteLine($"Request error: {e.Message}");
-
+            throw;
         }
         catch (Exception e)
         {
             Console.WriteLine($"Unexpected error: {e.Message}");
+            throw;
         }
     }
 
-    public async Task InitializeAsync(int id)
+    public void SetTourId(int id)
     {
+        Tour = new Tour { Id = id };
+    }
+
+    public async Task InitializeAsync(Action notifySateChanged)
+    {
+        await base.InitializeAsync(notifySateChanged);
+
         try
         {
-            _popupService.Show();
-            Tour = new Tour { Id = id };
-            Tour = await _tourDao.Read(Tour);
+            Tour = await _tourDao.Read(Tour.Id);
         }
         catch (HttpRequestException e)
         {
@@ -52,6 +84,35 @@ public class TourEditPageViewModel
         catch (Exception e)
         {
             Console.WriteLine($"Unexpected error: {e.Message}");
+            throw;
+        }
+    }
+
+    public async Task GetSuggestions(string userInput)
+    {
+        if (string.IsNullOrEmpty(userInput))
+        {
+            Suggestions = new List<string>();
+        }
+
+        try
+        {
+            var locations = await Debouncer.Debounce<string, OrsBaseDto>(_geoService.SearchLocation, userInput, 1000);
+
+            if (locations is not null && locations.Features is not null)
+            {
+                Suggestions = locations.Features.Select(f => f.PropertiesDto.Label).ToList();
+                _notifyStateChanged.Invoke();
+            }
+        }
+        catch (HttpRequestException e)
+        {
+            Console.WriteLine($"Request error: {e.Message}");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Unexpected error: {e.Message}");
+            throw;
         }
     }
 }

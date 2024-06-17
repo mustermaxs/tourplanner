@@ -46,7 +46,7 @@ function clipCellOverflow()
             cell.textContent = cell.textContent.substring(0, maxNbrOfCharsInCell - 3);
             cell.textContent += "...";
         }
-    })
+    });
 }
 
 function getMaxNbrOfChars(screenWidth)

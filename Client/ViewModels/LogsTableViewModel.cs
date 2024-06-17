@@ -2,7 +2,7 @@
 
 namespace Client.ViewModels;
 
-public class LogsTableViewModel
+public class LogsTableViewModel : BaseViewModel
 {
     private IHttpService _httpService { get; set; }
     public IEnumerable<TourLog> TourLogs { get; set; } = new List<TourLog>();

@@ -2,6 +2,7 @@ using System.Net.Http;
 using Client.Utils;
 using System.Text.Json;
 using System.Net.Http.Json;
+using Client.Exceptions;
 using Client.Pages;
 
 public interface IHttpService
@@ -25,16 +26,26 @@ public class HttpService : IHttpService
 
     public async Task<TDto> Get<TDto>(string url)
     {
-        var response = await client.GetAsync(baseUrl + url); // Properly awaited
+        var response = await client.GetAsync(baseUrl + url);
 
         if (response.IsSuccessStatusCode)
         {
             var content = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<TDto>(content, options: new JsonSerializerOptions(JsonSerializerDefaults.Web));
+
+            try
+            {
+                JsonElement jsonElement = JsonSerializer.Deserialize<JsonElement>(content);
+                return JsonSerializer.Deserialize<TDto>(content, options: new JsonSerializerOptions(JsonSerializerDefaults.Web));
+            }
+            catch (JsonException e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
         else
         {
-            throw new Exception("Something went wrong");
+            throw new ServiceLayerException("HttpService: Failed to get data");
         }
     }
 

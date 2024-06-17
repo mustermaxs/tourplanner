@@ -1,0 +1,47 @@
+﻿@if (!string.IsNullOrEmpty(Label))
+{
+    <label for="autocomplete">@Label</label>
+}
+
+<input @bind="_userInput" list="@($"{Id}_list")" type="text" class="form-control" id="@Id" @oninput="OnInputChanged" placeholder="@Placeholder">
+@if (_options != null && _options.Any())
+{
+    <datalist id="@($"{Id}_list")">
+        @foreach (var option in _options)
+        {
+            <option value="@option"></option>
+        }
+    </datalist>
+}
+
+@code {  
+    [Parameter] public EventCallback<string> OnInput { get; set; }
+
+    [Parameter] public Func<IEnumerable<string>>? Options { get; set; }
+    [Parameter] public string? Label { get; set; } = string.Empty;
+    [Parameter] public string? Placeholder { get; set; } = string.Empty;
+    [Parameter] public string? Id { get; set; } = "autocomplete";
+    [Parameter] public string? InitialValue { get; set; } = string.Empty;
+
+    private IEnumerable<string>? _options = Enumerable.Empty<string>();
+    private string _userInput = string.Empty;
+
+    protected override void OnParametersSet()
+    {
+        if (_userInput == string.Empty && !string.IsNullOrEmpty(InitialValue))
+        {
+            _userInput = InitialValue;
+        }
+
+        _options = Options?.Invoke() ?? Enumerable.Empty<string>();
+    }
+
+    private async Task OnInputChanged(ChangeEventArgs e)
+    {
+        _userInput = e.Value.ToString();
+        await OnInput.InvokeAsync(_userInput);
+        _options = Options?.Invoke() ?? Enumerable.Empty<string>();
+        StateHasChanged();
+    }
+
+}

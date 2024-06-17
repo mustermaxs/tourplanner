@@ -1,4 +1,6 @@
-﻿using System.Windows.Input;
+﻿using System.Text.Json;
+using System.Text.Json.Nodes;
+using System.Windows.Input;
 using Microsoft.AspNetCore.Mvc;
 using Tourplanner;
 using Tourplanner.Exceptions;
@@ -25,6 +27,18 @@ public abstract class BaseController : ControllerBase
             {
                 return NotFound();
             }
+
+            if (responseObj is JsonObject)
+            {
+                var jsonRes = JsonSerializer.Serialize(responseObj);
+                return Content(jsonRes, "application/json");
+            }
+
+            if (responseObj is byte[] pdfBytes)
+            {
+                return File(pdfBytes, "application/pdf");
+            }
+
             return Ok(responseObj);
         }
         catch (ResourceNotFoundException rex)

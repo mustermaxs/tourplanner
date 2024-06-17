@@ -4,16 +4,23 @@
 @inject ToursPageViewModel ToursVM
 @inject NavigationManager NavManager
 @using Client.Components
+@using Client.Exceptions
 @using Client.Pages;
+@using Client.ViewModels
+@inject IJSRuntime JS
+
 
 <PageTitle>Tours</PageTitle>
 
 <div class="d-flex justify-content-between align-items-center mb-4">
-
+   
     <PageHeader Icon="map"><span>Tours</span></PageHeader>
 
-    <Button Img="map" Label="Add Tour" OnClickCallback="AddTour"></Button>
-
+    <ButtonGroup Layout="ButtonGroup.Position.Center">
+        <Button Img="log" Label="Report" OnClickCallback="ToursVM.DownloadReportAsync"></Button>
+        <Button Img="map" Label="Add Tour" OnClickCallback="AddTour"></Button>
+    </ButtonGroup>
+    
 </div>
 @if (ToursVM.Tours == null)
 {
@@ -27,9 +34,10 @@ else
 @code {
     protected override async Task OnInitializedAsync()
     {
+        ToursVM.InitializeAsync(StateHasChanged);
         await ToursVM.GetToursAsync();
-        
-        StateHasChanged();
+        await JS.InvokeVoidAsync("adjustTableCellOverflow");
+
     }
 
     private void AddTour()

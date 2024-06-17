@@ -12,7 +12,9 @@ namespace Tourplanner.Entities.Tours
         string Description,
         string From,
         string To,
-        TransportType TransportType
+        TransportType TransportType,
+        Coordinates Start,
+        Coordinates Destination
     ) : IRequest;
 
     public class UpdateTourCommandHandler(

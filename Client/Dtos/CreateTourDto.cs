@@ -1,4 +1,7 @@
-﻿using Client.Models;
+﻿using Client.Dtos;
+using Client.Models;
+
+namespace Client.Dtos;
 
     public class CreateTourDto
     {
@@ -7,7 +10,8 @@
             string description,
             string from,
             string to,
-            float distance,
+            Coordinates start,
+            Coordinates destination,
             float estimatedTime,
             TransportType transportType
         )
@@ -16,7 +20,8 @@
             Description = description;
             From = from;
             To = to;
-            Distance = distance;
+            Start = start;
+            Destination = destination;
             EstimatedTime = estimatedTime;
             TransportType = transportType;
         }
@@ -25,7 +30,8 @@
         public string Description { get; set; }
         public string From { get; set; }
         public string To { get; set; }
-        public float Distance { get; set; }
+        public Coordinates Start { get; set; }
         public float EstimatedTime { get; set; }
-        public TransportType TransportType {get; set;}
-    }
+        public TransportType TransportType { get; set; }
+        public Coordinates Destination {get; set;}
+}

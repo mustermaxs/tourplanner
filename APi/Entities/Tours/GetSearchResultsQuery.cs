@@ -14,8 +14,7 @@ namespace Tourplanner.Entities.Tours
     public class GetSearchResultsQueryHandler(
         TourContext ctx,
         ITourRepository tourRepository,
-        ITourLogRepository tourLogRepository,
-        ISearchService searchService)
+        ITourLogRepository tourLogRepository)
         : RequestHandler<GetSearchResultsQuery, GlobalSearchResultsDto>(ctx)
     {
         public override async Task<GlobalSearchResultsDto> Handle(GetSearchResultsQuery query)

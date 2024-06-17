@@ -1,3 +1,5 @@
+using Client.Dtos;
+using Client.Exceptions;
 using Client.Models;
 
 namespace Client.Dao
@@ -12,44 +14,27 @@ namespace Client.Dao
         {
         }
 
-        public override async Task Create(Tour tour)
+        public override async Task<HttpResponseMessage> OnCreate(Tour tour)
         {
-            var createTourDto = new CreateTourDto(
-                name: tour.Name,
-                description: tour.Description,
-                from: tour.From,
-                to: tour.To,
-                distance: tour.Distance,
-                estimatedTime: tour.EstimatedTime,
-                transportType: tour.TransportType
-            );
-            
-            await http.Post<CreateTourDto>(createTourDto, $"Tours");
+            return await http.Post(tour.ToCreateTourDto(), $"Tours");
         }
 
-        public override async Task<Tour> Read(Tour tourLog)
+        public override async Task<Tour> OnRead(int TourId)
         {
-            return await http.Get<Tour>($"Tours/{tourLog.Id}");
+            return await http.Get<Tour>($"Tours/{TourId}");
         }
 
-        public override async Task<IEnumerable<Tour>> ReadMultiple()
+        public override async Task<IEnumerable<Tour>> OnReadMultiple()
         {
-            return await http.Get<IEnumerable<Tour>>("Tours");
+            return await http.Get<IEnumerable<Tour>>("Toours");
         }
 
-        public override async Task Update(Tour tour)
+        public override async Task<HttpResponseMessage> OnUpdate(Tour tour)
         {
-            var updateTourDto = new UpdateTourDto(
-                tour.Name,
-                tour.Description,
-                tour.From,
-                tour.To,
-                tour.TransportType
-            );
-            await http.Put<UpdateTourDto>(updateTourDto, $"Tours/{tour.Id}");
+            return await http.Put(tour.ToUpdateTourDto(), $"Tours/{tour.Id}");
         }
 
-        public override async Task Delete(Tour tour)
+        public override async Task OnDelete(Tour tour)
         {
             await http.Delete($"Tours/{tour.Id}");
         }

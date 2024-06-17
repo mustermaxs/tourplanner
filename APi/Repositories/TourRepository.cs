@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Tourplanner.Entities.Tours;
+using Tourplanner.Exceptions;
 
 namespace Tourplanner.Repositories;
 
@@ -11,20 +12,44 @@ public class TourRepository : Repository<Tour>, ITourRepository
 
     public async Task<int> CreateReturnId(Tour tour)
     {
-        await dbSet.AddAsync(tour);
-        await SaveAsync();
-        return tour.Id;
+        try
+        {
+            await dbSet.AddAsync(tour);
+            await SaveAsync();
+            return tour.Id;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw new DataAccessLayerException("Failed to create tour", e);
+        }
     }
 
     public async Task<Tour?> GetTourWithLogs(int tourId)
     {
-        return await dbSet.Include(t => t.TourLogs)
-            .FirstOrDefaultAsync(to => to.Id == tourId);
+        try
+        {
+            return await dbSet.Include(t => t.TourLogs)
+                .FirstOrDefaultAsync(to => to.Id == tourId);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw new DataAccessLayerException("Failed to fetch tour with logs", e);
+        }
     }
 
-    public async Task<Tour?> GetTour(int tourId)
+    public async Task<IEnumerable<Tour>> GetToursWithLogs()
     {
-        return await Get(tourId);
+        try
+        {
+            return await dbSet.Include(t => t.TourLogs).ToListAsync();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw new DataAccessLayerException("Failed to fetch tours with logs", e);
+        }
     }
 }
 
@@ -32,5 +57,5 @@ public interface ITourRepository : IRepository<Tour>
 {
     public Task<int> CreateReturnId(Tour tour);
     public Task<Tour?> GetTourWithLogs(int tourId);
-    public Task<Tour?> GetTour(int tourId);
+    public Task<IEnumerable<Tour>> GetToursWithLogs();
 }
