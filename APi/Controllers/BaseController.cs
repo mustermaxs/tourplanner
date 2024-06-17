@@ -3,6 +3,7 @@ using System.Text.Json.Nodes;
 using System.Windows.Input;
 using Microsoft.AspNetCore.Mvc;
 using Tourplanner;
+using Tourplanner.Entities.Tours;
 using Tourplanner.Exceptions;
 using Tourplanner.Infrastructure;
 
@@ -18,12 +19,12 @@ public abstract class BaseController : ControllerBase
         Mediator = mediator;
     }
 
-    protected async Task<ActionResult<IResponse>> ResponseAsync(IRequest command)
+    protected async Task<ActionResult<IResponse>> ResponseAsync(IRequest command)   // TODO refactor
     {
         try
         {
             Console.WriteLine(command.ToString());
-            var responseObj = await Mediator.Send(command);
+            dynamic responseObj = await Mediator.Send(command);
             if (responseObj is null)
             {
                 Logger.Error($"Response for request {command.GetType().FullName} is null. {command.ToString()}");
@@ -37,9 +38,19 @@ public abstract class BaseController : ControllerBase
                 return Content(jsonRes, "application/json");
             }
 
-            if (responseObj is byte[] pdfBytes)
+            // if (command is ExportTourAsJsonCommand) // TODO eigene FileResponse Klasse um file name und file type angeben zu können?
+            // {
+            //     return File(responseObj as byte[], "application/json", "tourexport.json");
+            // }
+            
+            if (responseObj is byte[] pdfBytes) // TODO eigene FileResponse Klasse um file name und file type angeben zu können?
             {
                 return File(pdfBytes, "application/pdf");
+            }
+
+            if (responseObj is FileContentResult)
+            {
+                return responseObj;
             }
 
             return Ok(responseObj);

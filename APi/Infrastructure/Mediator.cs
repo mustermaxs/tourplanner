@@ -30,7 +30,7 @@ public abstract class IMediator
         _serviceProvider = serviceProvider;
     }
 
-    public async Task<object?> Send(IRequest request)
+    public async Task<dynamic?> Send(IRequest request)
     {
         try
         {

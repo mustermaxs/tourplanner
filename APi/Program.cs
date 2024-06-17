@@ -113,6 +113,7 @@ internal class Program
         services.AddScoped<ICommandHandler, CreateMapCommandHandler>();
         services.AddScoped<ICommandHandler, GetMapForTourRequestHandler>();
         services.AddScoped<ICommandHandler, DeleteMapForTourCommandHandler>();
+        services.AddScoped<ICommandHandler, ExportTourAsJsonCommandHandler>();
     }
 
     private static void CreateDbIfNotExists(WebApplication app)

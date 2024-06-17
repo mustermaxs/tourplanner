@@ -207,5 +207,12 @@ namespace Api.Controllers
                 return await ResponseAsync(command);
             }
         }
+
+        [HttpGet("{tourid}/export")]
+        public async Task<ActionResult<IResponse>> ExportTourAsJson(int tourid)
+        {
+            var command = new ExportTourAsJsonCommand(tourid);
+            return await ResponseAsync(command);
+        }
     }
 }
