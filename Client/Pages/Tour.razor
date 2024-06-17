@@ -169,23 +169,6 @@ else
         int maxX = Math.Max(x1, x2);
         int minY = Math.Min(y1, y2);
         int maxY = Math.Max(y1, y2);
-
-        // Kacheln herunterladen und speichern
-        // using (HttpClient client = new HttpClient())
-        // {
-        //     for (int x = minX; x <= maxX; x++)
-        //     {
-        //         for (int y = minY; y <= maxY; y++)
-        //         {
-        //             string url = $"https://tile.openstreetmap.org/{zoom}/{x}/{y}.png";
-        //             byte[] tileData = await client.GetByteArrayAsync(url);
-        //
-        //             string fileName = $"tile_{zoom}_{x}_{y}.png";
-        //             await System.IO.File.WriteAllBytesAsync(fileName, tileData);
-        //             Console.WriteLine($"Tile saved as {fileName}");
-        //         }
-        //     }
-        // }
     }
 
     static (int, int) LatLonToTileNumbers(double lat, double lon, int zoom)

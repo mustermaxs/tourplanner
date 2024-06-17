@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using Client.ViewModels;
+using Microsoft.AspNetCore.Components;
 
 namespace Client.Components
 {
@@ -8,12 +9,8 @@ namespace Client.Components
         Error
     };
 
-    public class PopupViewModel
+    public class PopupViewModel : BaseViewModel
     {
-        public PopupViewModel()
-        {
-        }
-
         public string Title { get; set; } = string.Empty;
         public string Message { get; set; } = String.Empty;
         public bool IsOpen { get; private set; } = false;
@@ -47,29 +44,11 @@ namespace Client.Components
         }
 
         private PopupStyle _style { get; set; } = PopupStyle.Normal;
-        private Action _notifyStateChanged;
 
         public PopupStyle PopupStyle
         {
             get => _style;
             set { _style = value; }
-        }
-
-        public async Task InitializeAsync(Action notifySateChanged)
-        {
-            try
-            {
-                _notifyStateChanged = notifySateChanged;
-                _notifyStateChanged?.Invoke();
-            }
-            catch (HttpRequestException e)
-            {
-                Console.WriteLine($"Request error: {e.Message}");
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Unexpected error: {e.Message}");
-            }
         }
     }
 }

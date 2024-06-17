@@ -24,7 +24,6 @@ namespace Client.Dao
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
                 throw new DaoException($"Failed to {typeof(TDto).Name}");
             }
         }
@@ -37,7 +36,6 @@ namespace Client.Dao
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
                 throw new DaoException($"Failed to read {typeof(TDto).Name}");
             }
         }
@@ -50,7 +48,6 @@ namespace Client.Dao
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
                 throw new DaoException($"Failed to read {typeof(TDto).Name}s");
             }
         }
@@ -63,7 +60,6 @@ namespace Client.Dao
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
                 throw new DaoException($"Failed to update {typeof(TDto).Name}");
             }
         }
@@ -76,7 +72,6 @@ namespace Client.Dao
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
                 throw new DaoException($"Failed to delete {typeof(TDto).Name}");
             }
         }

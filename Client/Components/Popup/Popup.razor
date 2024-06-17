@@ -23,7 +23,6 @@
     protected override Task OnInitializedAsync()
     {
         PopupVM.InitializeAsync(StateHasChanged);
-        Console.WriteLine(PopupVM.IsOpen);
         StateHasChanged();
         return base.OnInitializedAsync();
     }

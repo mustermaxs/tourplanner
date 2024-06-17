@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Client.Exceptions;
 
+
 namespace Client.Utils;
 
 using System;
@@ -37,6 +38,7 @@ public class Debouncer
         }
         catch (TaskCanceledException ex)
         {
+            Console.WriteLine($"Failed to debounce {typeof(TInput).Name} {arg}");
             throw;
         }
     }
@@ -63,7 +65,7 @@ public class Debouncer
         }
         catch (TaskCanceledException)
         {
-            Console.WriteLine("Debouncer failed");
+            Console.WriteLine($"Failed to debounce {typeof(TInput).Name} {arg}");
         }
 
         return default;
@@ -87,6 +89,7 @@ public class Debouncer
         }
         catch (TaskCanceledException)
         {
+            Console.WriteLine($"Failed to debounce {typeof(TInput).Name} {arg}");
             return default;
         }
     }

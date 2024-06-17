@@ -4,10 +4,11 @@ using Client.Models;
 using Client.Utils;
 using Client.Components;
 using Client.Dto;
+using Client.Exceptions;
 
 namespace Client.ViewModels;
 
-public class SearchPageViewModel
+public class SearchPageViewModel : BaseViewModel
 {
     private readonly NavigationManager _navigationManager;
     private IHttpService _httpService;
@@ -19,7 +20,6 @@ public class SearchPageViewModel
     public bool IsSearchSuccessful { get; private set; }
     public bool FoundTours { get; private set; } = false;
     public bool FoundTourLogs { get; set; } = false;
-    private Action _notifyStateChanged;
     public bool SearchCompleted { get; private set; }
     private string SearchTerm { get; set; }
 
@@ -32,11 +32,6 @@ public class SearchPageViewModel
         _navigationManager = navigationManager;
         _httpService = httpService;
         _popupViewModel = popupViewModel;
-    }
-
-    public void Initialize(Action notifySateChanged)
-    {
-        _notifyStateChanged = notifySateChanged;
     }
 
     public async Task GetSearchResults(string? searchTerm)
@@ -59,10 +54,10 @@ public class SearchPageViewModel
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
-            _popupViewModel.Open("Error", "Something went wrong :(", PopupStyle.Error);
+            Console.WriteLine($"Failed to find search results for {searchTerm}. {e.Message}");
             SearchCompleted = true;
             Reset();
+            throw new UserActionException("Search failed");
         }
     }
 

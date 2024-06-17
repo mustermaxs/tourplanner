@@ -1,5 +1,6 @@
 using Client.Utils;
 using System.Net.Http;
+using Client.Dao;
 using Client.Exceptions;
 using Microsoft.JSInterop;
 
@@ -10,48 +11,28 @@ public interface IReportService
     public Task GetSummaryReport();
 }
 
-public class ReportService : IReportService
+public class ReportService(IFileTransferService fileTransferService) : IReportService
 {
-    private String baseUrl;
-    private HttpClient client;
-
-    private IJSRuntime _jsRuntime;
-
-    public ReportService(HttpClient http, IJSRuntime jsRuntime)
-    {
-        baseUrl = StaticResService.GetApiBaseUrl;
-        client = http;
-        client.DefaultRequestHeaders.Add("Access-Control-Allow-Origin", "*");
-        _jsRuntime = jsRuntime;
-    }
-
+    private string _baseUrl = StaticResService.GetApiBaseUrl;
     public async Task GetTourReport(int tourId)
     {
-        try {
-        
-            var report = await client.GetByteArrayAsync($"{baseUrl}reports/tours/{tourId}");
-
-            var base64Report = Convert.ToBase64String(report);
-            await _jsRuntime.InvokeVoidAsync("downloadFileFromBase64", "application/pdf", "TourReport.pdf", base64Report);
-        }   
+        try
+        {
+            await fileTransferService.DownloadFile($"{_baseUrl}reports/tours/{tourId}", "application/pdf", $"Report_Tour_{tourId}.pdf");
+        }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error downloading report: {ex.Message}");
-            throw new ServiceLayerException("Failed to download tour report", ex);
+            throw new ServiceLayerException("Failed to download tour report");
         }
     }
 
     public async Task GetSummaryReport()
     {
         try {
-            var report = await client.GetByteArrayAsync($"{baseUrl}reports/tours/");
-
-            var base64Report = Convert.ToBase64String(report);
-            await _jsRuntime.InvokeVoidAsync("downloadFileFromBase64", "application/pdf", "SummaryReport.pdf", base64Report);
+            fileTransferService.DownloadFile($"{_baseUrl}reports/tours/", "application/pdf", "SummaryReport.pdf");
         }   
         catch (Exception ex)
         {
-            Console.WriteLine($"Error downloading report: {ex.Message}");
             throw new ServiceLayerException("Failed to download summary report", ex);
         }
     }

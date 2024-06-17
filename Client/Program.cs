@@ -15,7 +15,7 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 builder.Services.AddScoped<IHttpService, HttpService>();
 // builder.Services.AddScoped<Debouncer>();
 builder.Services.AddScoped<IGeoService, GeoService>();
-builder.Services.AddTransient<IPopupService, PopupService>();
+builder.Services.AddScoped<IFileTransferService, FileTransferService>();
 builder.Services.AddTransient<ITourDao, TourDao>();
 builder.Services.AddTransient<ITourLogDao, TourLogDao>();
 builder.Services.AddTransient<IReportService, ReportService>();

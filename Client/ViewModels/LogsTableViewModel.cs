@@ -20,7 +20,7 @@ public class LogsTableViewModel : BaseViewModel
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error fetching tour logs. {ex.Message}");
+            Console.WriteLine("Failed to get tour logs");
         }
     }
 
