@@ -1,4 +1,5 @@
 using System.Reflection;
+using Api.Services.Logging;
 using Tourplanner.Entities.Tours;
 using Microsoft.EntityFrameworkCore;
 using Tourplanner.DTOs;
@@ -6,8 +7,9 @@ using Tourplanner.Entities;
 using Tourplanner.Entities.TourLogs;
 using Tourplanner.Entities.TourLogs.Commands;
 using Tourplanner.Infrastructure;
-
+using LoggerFactory = Api.Services.Logging.LoggerFactory;
 using Tourplanner.Entities.Tours.Commands;
+using Tourplanner.Exceptions;
 
 
 namespace Tourplanner;
@@ -19,6 +21,7 @@ public abstract class IMediator
     protected static Dictionary<string, Type> _CommandCommandHandlerMapping = new Dictionary<string, Type>();
     protected DbContext _dbContext;
     private readonly IServiceProvider _serviceProvider;
+    protected ILoggerWrapper Logger = LoggerFactory.GetLogger();
 
 
     protected IMediator(DbContext dbContext, IServiceProvider serviceProvider)
@@ -29,33 +32,42 @@ public abstract class IMediator
 
     public async Task<object?> Send(IRequest request)
     {
-        var commandName = request.GetType().Name;
-        if (!_CommandCommandHandlerMapping.TryGetValue(commandName, out Type? commandHandlerType))
+        try
         {
-            throw new Exception($"Command {commandName} unknown");
+            var commandName = request.GetType().Name;
+            if (!_CommandCommandHandlerMapping.TryGetValue(commandName, out Type? commandHandlerType))
+            {
+                throw new Exception($"Command {commandName} unknown");
+            }
+
+            var requestType =
+                commandHandlerType.GetMethod("Handle")!
+                    .GetParameters()[0]
+                    .ParameterType;
+            var responseType = commandHandlerType.GetMethod("Handle")!
+                .ReturnType;
+
+            var commandHandler = _serviceProvider.GetServices(typeof(ICommandHandler))
+                .First(h => h?.GetType().Name == commandHandlerType.Name);
+
+            var handleMethod = commandHandlerType.GetMethod("Handle");
+            var commandResultTask = (Task)handleMethod!.Invoke(commandHandler, new object[] { request });
+
+            await commandResultTask.ConfigureAwait(false);
+
+            var commandResult = commandResultTask
+                .GetType()
+                .GetProperty("Result")
+                ?.GetValue(commandResultTask);
+
+            return commandResult;
         }
-
-        var requestType =
-            commandHandlerType.GetMethod("Handle")!
-                .GetParameters()[0]
-                .ParameterType;
-        var responseType = commandHandlerType.GetMethod("Handle")!
-            .ReturnType;
-
-        var commandHandler = _serviceProvider.GetServices(typeof(ICommandHandler))
-            .First(h => h?.GetType().Name == commandHandlerType.Name);
-            
-        var handleMethod = commandHandlerType.GetMethod("Handle");
-        var commandResultTask = (Task)handleMethod!.Invoke(commandHandler, new object[] { request });
-
-        await commandResultTask.ConfigureAwait(false);
-
-        var commandResult = commandResultTask
-            .GetType()
-            .GetProperty("Result")
-            ?.GetValue(commandResultTask);
-
-        return commandResult;
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            Logger.Fatal($"Mediator failed: {e.Message}. Request: {request.ToString()} RequestType: {request.GetType().FullName}.");
+            throw new Exception("Mediator failed");
+        }
     }
 
     public bool Register<TCommand, TCommandHandler>()
@@ -80,7 +92,7 @@ public abstract class IMediator
             _CommandCommandHandlerMapping.TryAdd(request.Name, responsibleHandler);
         }
     }
-    
+
     private static bool IsDerivableFromBaseClass(Type toCheck)
     {
         while (toCheck != null && toCheck != typeof(object))
@@ -90,8 +102,10 @@ public abstract class IMediator
             {
                 return true;
             }
+
             toCheck = toCheck.BaseType;
         }
+
         return false;
     }
 }

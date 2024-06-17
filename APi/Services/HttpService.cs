@@ -2,6 +2,9 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Net.Http.Json;
+using Api.Services.Logging;
+using Tourplanner.Exceptions;
+using LoggerFactory = Api.Services.Logging.LoggerFactory;
 
 namespace Tourplanner.Services
 {
@@ -17,6 +20,8 @@ namespace Tourplanner.Services
     public class HttpService : IHttpService, IDisposable
     {
         private HttpClient client;
+        protected ILoggerWrapper Logger = LoggerFactory.GetLogger();
+
 
         public HttpService(HttpClient httpClient)
         {
@@ -29,39 +34,74 @@ namespace Tourplanner.Services
 
         public async Task<TDto> Get<TDto>(string url)
         {
-            var response = await client.GetAsync(url);
-
-            if (response.IsSuccessStatusCode)
+            try
             {
-                var content = await response.Content.ReadAsStringAsync();
+                var response = await client.GetAsync(url);
 
-                if (typeof(TDto) == typeof(string))
+                if (response.IsSuccessStatusCode)
                 {
-                    return (TDto)(object)content;
+                    var content = await response.Content.ReadAsStringAsync();
+
+                    if (typeof(TDto) == typeof(string))
+                    {
+                        return (TDto)(object)content;
+                    }
+
+                    return JsonSerializer.Deserialize<TDto>(content,
+                        options: new JsonSerializerOptions(JsonSerializerDefaults.Web));
                 }
-                return JsonSerializer.Deserialize<TDto>(content,
-                    options: new JsonSerializerOptions(JsonSerializerDefaults.Web));
+                else
+                {
+                    Logger.Warn($"HttpService: Failed to get data. Url: {url}");
+                    throw new DataAccessLayerException("HttpService: Failed to get data");
+                }
             }
-            else
+            catch (Exception e)
             {
-                throw new Exception("Something went wrong");
+                Console.WriteLine(e);
+                Logger.Error($"HttpService: Failed to get data. Url: {url}. Exception: {e.Message}");
+                throw new DataAccessLayerException("HttpService: Failed to get data", e);
             }
         }
 
 
         public async Task<HttpResponseMessage> Post<TDto>(TDto dto, string url)
         {
-            return await client.PostAsJsonAsync(url, dto);
+            try
+            {
+                return await client.PostAsJsonAsync(url, dto);
+            }
+            catch (Exception e)
+            {
+                Logger.Error($"HttpService: [POST] Failed. {url}. Exception: {e.Message}");
+                throw new DataAccessLayerException("HttpService: [POST] Failed", e);
+            }
         }
 
         public async Task<HttpResponseMessage> Put<TDto>(TDto dto, string url)
         {
-            return await client.PutAsJsonAsync(url, dto);
+            try
+            {
+                return await client.PutAsJsonAsync(url, dto);
+            }
+            catch (Exception e)
+            {
+                Logger.Error($"HttpService: [PUT] Failed. {url}. Exception: {e.Message}");
+                throw new DataAccessLayerException("HttpService: [PUT] Failed", e);
+            }
         }
 
         public async Task<HttpResponseMessage> Delete(string url)
         {
-            return await client.DeleteAsync(url);
+            try
+            {
+                return await client.DeleteAsync(url);
+            }
+            catch (Exception e)
+            {
+                Logger.Error($"HttpService: [DELETE] Failed. {url}. Exception: {e.Message}");
+                throw new DataAccessLayerException("HttpService: [DELETE] Failed", e);
+            }
         }
 
         public void Dispose()
