@@ -44,7 +44,7 @@ public class TourLogAddPageViewModel : BaseViewModel
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
+            Console.WriteLine($"Failed to add tour log for tour {TourLog.Tour.Id}. {e.Message}");
             throw;
         }
     }

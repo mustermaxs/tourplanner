@@ -79,7 +79,7 @@ public class TourEditPageViewModel : BaseViewModel
         }
         catch (HttpRequestException e)
         {
-            Console.WriteLine($"Request error: {e.Message}");
+            Console.WriteLine($"Failed to get tour {Tour.Id} {e.Message}");
         }
         catch (Exception e)
         {

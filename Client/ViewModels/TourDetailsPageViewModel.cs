@@ -1,5 +1,6 @@
 using Client.Components;
 using Client.Dao;
+using Client.Exceptions;
 using Client.Models;
 using Client.Services;
 
@@ -62,8 +63,7 @@ public class TourDetailsPageViewModel : BaseViewModel
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error downloading report: {ex.Message}");
-            throw;
+            throw new UserActionException("Failed to download report.");
         }
     }
 
@@ -82,14 +82,13 @@ public class TourDetailsPageViewModel : BaseViewModel
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
-            _popupViewModel.Open("Error", "Failed to delete tour", PopupStyle.Error);
-            throw;
+            throw new UserActionException("Failed to delete tour.");
         }
     }
 
     public async Task ExportTourAsJson()
     {
         await _tourImportExportService.ExportToJsonFile(Tour.Id);
+        _popupViewModel.Open("Success", "Exported tour!", PopupStyle.Normal);
     }
 }

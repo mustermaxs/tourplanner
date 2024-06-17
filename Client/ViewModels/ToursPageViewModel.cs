@@ -27,7 +27,7 @@ public class ToursPageViewModel : BaseViewModel
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error downloading report: {ex.Message}");
+            Console.WriteLine($"Error downloading summary report.");
             throw;
         }
     }

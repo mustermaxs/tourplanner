@@ -39,7 +39,7 @@ public class HttpService : IHttpService
             }
             catch (JsonException e)
             {
-                Console.WriteLine(e);
+                Console.WriteLine($"Failed to deserialize json to {typeof(TDto).Name}. Url: {url}. Error: {e.Message}");
                 throw;
             }
         }

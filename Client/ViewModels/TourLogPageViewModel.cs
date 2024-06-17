@@ -37,7 +37,7 @@ public class TourLogPageViewModel : BaseViewModel
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
+            Console.WriteLine($"Failed to delete log {TourLog.Id}. Tour Id: {TourLog.Tour.Id}. {e.Message}");
             throw new UserActionException("Failed to delete log.", e);
         }
     }
@@ -49,6 +49,7 @@ public class TourLogPageViewModel : BaseViewModel
             var addLogSpec = new TourLogSpecification();
             if (!addLogSpec.IsSatisfiedBy(TourLog))
             {
+                Console.WriteLine("Tour Log input incorrect.");
                 throw new InvalidUserInputException("Please check your input. Some fields are missing or incorrect.");
             }
 
@@ -57,7 +58,7 @@ public class TourLogPageViewModel : BaseViewModel
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
+            Console.WriteLine($"Failed to update log {TourLog.Id}. Tour Id: {TourLog.Tour.Id}. {e.Message}");
             throw;
         }
 

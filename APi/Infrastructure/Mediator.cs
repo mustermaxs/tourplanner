@@ -64,8 +64,6 @@ public abstract class IMediator
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
-            Logger.Fatal($"Mediator failed: {e.Message}. Request: {request.ToString()} RequestType: {request.GetType().FullName}.");
             throw new Exception("Mediator failed");
         }
     }

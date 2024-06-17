@@ -66,6 +66,7 @@ public class TourAddPageViewModel : BaseViewModel
             }
             else
             {
+                Console.WriteLine($"Error adding tour. Input doesn't satisfy specification.");
                 throw new InvalidUserInputException("Failed to add tour.");
             }
 
@@ -81,7 +82,7 @@ public class TourAddPageViewModel : BaseViewModel
 
     public async Task GetSuggestion(string userInput)
     {
-        Console.WriteLine(userInput);
+       
         var locations = await Debouncer.Debounce<string, OrsBaseDto>(_geoService.SearchLocation, userInput, 1000);
 
         if (locations != null && locations.Features.Any())
@@ -120,5 +121,6 @@ public class TourAddPageViewModel : BaseViewModel
     {
         IsImportFromFileModalOpen = false;
         await AddTour();
+        _popupVm.Open("Success", "Uploaded Tour", PopupStyle.Normal);
     }
 }

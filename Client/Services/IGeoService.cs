@@ -29,32 +29,6 @@ namespace Client.Services
             var locations = new List<Location>();
             var json = await _httpService.Get<OrsBaseDto>($"Tours/geosuggestion?location={location}");
             return json;
-            // var features = json.GetProperty("features");
-            //
-            // foreach (JsonElement feature in features.EnumerateArray())
-            // {
-            //     var jsonCoordinates = feature.GetProperty("geometry").GetProperty("coordinates").EnumerateArray();
-            //     var longitude = jsonCoordinates.ElementAt(0).GetDouble();
-            //     var lattitute = jsonCoordinates.ElementAt(1).GetDouble();
-            //     var coordinates = new Coordinates(longitude, lattitute);
-            //     var properties = feature.GetProperty("properties");
-            //     try
-            //     {
-            //         locations.Add(
-            //             new Location(
-            //                 properties.GetProperty("label").GetString(),
-            //                 coordinates
-            //             )
-            //         );
-            //     }
-            //     catch (KeyNotFoundException e)
-            //     {
-            //         Console.WriteLine(e);
-            //         throw;
-            //     }
-            // }
-
-            // return locations;
         }
 
     }

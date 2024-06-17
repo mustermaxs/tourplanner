@@ -1,4 +1,5 @@
-﻿namespace Client.ViewModels;
+﻿
+namespace Client.ViewModels;
 
 public class BaseViewModel
 {
