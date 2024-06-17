@@ -25,7 +25,7 @@ namespace Tourplanner.Services
 
         public async Task<byte[]> ExportTour(int tourId)
         {
-            var tour = await _tourRepository.GetTour(tourId);
+            var tour = await _tourRepository.Get(tourId);
 
             if (tour == null)
             {

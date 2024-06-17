@@ -6,6 +6,8 @@ using Client.Utils;
 using Microsoft.AspNetCore.Components;
 using Client.Dtos;
 using Client.Exceptions;
+using Microsoft.AspNetCore.Components.Forms;
+using System.Text.Json;
 
 namespace Client.ViewModels;
 
@@ -16,9 +18,11 @@ public class TourAddPageViewModel : BaseViewModel
     private readonly IHttpService _httpService;
     private readonly IGeoService _geoService;
     private readonly NavigationManager _navigationManager;
-    public List<string> ARSCH { get; set; } = new List<string>{"FICK DICH"};
+    public List<string> ARSCH { get; set; } = new List<string> { "FICK DICH" };
+    public IBrowserFile? ImportTourFile { get; set; }
     public Tour Tour { get; set; } = new Tour();
     private string test { get; set; }
+
     public string Test
     {
         get => test;
@@ -30,6 +34,7 @@ public class TourAddPageViewModel : BaseViewModel
     }
 
     public List<string>? Suggestions { get; private set; } = new List<string>();
+    public bool IsImportFromFileModalOpen { get; set; } = false;
 
     public TourAddPageViewModel(NavigationManager navigationManager, ITourDao tourDao, PopupViewModel popupVm,
         IHttpService httpService, IGeoService geoService)
@@ -49,7 +54,7 @@ public class TourAddPageViewModel : BaseViewModel
             var from = (await _geoService.SearchLocation(Tour.From)).Features.FirstOrDefault()?.PropertiesDto;
             var to = (await _geoService.SearchLocation(Tour.To)).Features.FirstOrDefault().PropertiesDto;
             var tourSpecification = new AddTourSpecification(from, to);
-            
+
             if (tourSpecification.IsSatisfiedBy(Tour))
             {
                 Tour.Start = (await _geoService.SearchLocation(Tour.From)).Features.FirstOrDefault()?.GeometryDto
@@ -70,7 +75,7 @@ public class TourAddPageViewModel : BaseViewModel
         catch (Exception ex)
         {
             Console.WriteLine($"Error adding tour: {ex.Message}");
-            throw new InvalidUserInputException( "Failed to add tour.");
+            throw new InvalidUserInputException("Failed to add tour.");
         }
     }
 
@@ -78,7 +83,7 @@ public class TourAddPageViewModel : BaseViewModel
     {
         Console.WriteLine(userInput);
         var locations = await Debouncer.Debounce<string, OrsBaseDto>(_geoService.SearchLocation, userInput, 1000);
-        
+
         if (locations != null && locations.Features.Any())
         {
             Suggestions = locations.Features.Select(f => f.PropertiesDto.Label).ToList();
@@ -86,7 +91,34 @@ public class TourAddPageViewModel : BaseViewModel
         }
         else
         {
-            
         }
+    }
+
+    public async Task LoadAndValidateFile(InputFileChangeEventArgs ev)
+    {
+        ImportTourFile = ev.File;
+
+        using (var stream = ImportTourFile.OpenReadStream())
+        using (var streamContent = new StreamContent(stream))
+        {
+            var fileContent = await streamContent.ReadAsStringAsync();
+            try
+            {
+                var tour = (Tour)JsonSerializer.Deserialize<Tour>(fileContent,
+                    options: new JsonSerializerOptions(JsonSerializerDefaults.Web));
+                Tour = tour;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Invalid tour file provided. {e.Message}");
+                throw new InvalidUserInputException($"The file you selected is not a valid tour file.");
+            }
+        }
+    }
+
+    public async Task UploadTour()
+    {
+        IsImportFromFileModalOpen = false;
+        await AddTour();
     }
 }

@@ -68,6 +68,12 @@
     <data name="add" type="System.String">
         <value>plus.png</value>
     </data>
+    <data name="importtour" type="System.String">
+        <value>jsonimport.png</value>
+    </data>
+    <data name="upload" type="System.String">
+        <value>upload.png</value>
+    </data>
     <data name="primary" type="System.String">
         <value>#5E38AA</value>
     </data>

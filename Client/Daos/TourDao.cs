@@ -26,7 +26,7 @@ namespace Client.Dao
 
         public override async Task<IEnumerable<Tour>> OnReadMultiple()
         {
-            return await http.Get<IEnumerable<Tour>>("Toours");
+            return await http.Get<IEnumerable<Tour>>("Tours");
         }
 
         public override async Task<HttpResponseMessage> OnUpdate(Tour tour)

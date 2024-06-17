@@ -6,8 +6,12 @@
 @using Client.ViewModels
 
 <PageTitle>Add Tour</PageTitle>
-<div class="mb-4">
+<div class="d-flex justify-content-between align-items-center mb-4">
     <PageHeader Icon="route">Add Tour</PageHeader>
+
+    <ButtonGroup Layout="ButtonGroup.Position.End">
+        <Button Img="importtour" Label="From File" OnClickCallback="OpenImportFromFileModal"></Button>
+    </ButtonGroup>
 </div>
 <div class="form-group mt-3">
     <div class="row">
@@ -62,6 +66,25 @@
     <Button ButtonType="Primary" mt="4" Label="Add" Img="map" OnClickCallback="AddTourVM.AddTour"/>
 </ButtonGroup>
 
+@if (AddTourVM.IsImportFromFileModalOpen)
+{
+    <div class="tp-popup" id="importFileModal">
+        <div id="decoBar" class="normal">
+            <h6 class="tp-popup-title">Import Tour</h6>
+            <button @onclick="CloseImportFromFileModal" id="close">
+                &#128473;
+            </button>
+        </div>
+        <div id="text">
+            <div class="tp-modal-file-upload-btn">
+                <InputFile OnChange="AddTourVM.LoadAndValidateFile"></InputFile>
+            </div>
+            <ButtonGroup Layout="ButtonGroup.Position.Center">
+                <Button ButtonType="Primary" mt="4" Label="Upload" Img="upload" OnClickCallback="AddTourVM.UploadTour"/>
+            </ButtonGroup>
+        </div>
+    </div>
+}
 
 @code
 {
@@ -71,5 +94,16 @@
     protected override async Task OnInitializedAsync()
     {
         await AddTourVM.InitializeAsync(StateHasChanged);
+    }
+
+
+    protected void OpenImportFromFileModal()
+    {
+        AddTourVM.IsImportFromFileModalOpen = true;
+    }
+
+    protected void CloseImportFromFileModal()
+    {
+        AddTourVM.IsImportFromFileModalOpen = false;
     }
 }

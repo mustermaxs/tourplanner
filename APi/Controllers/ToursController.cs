@@ -7,6 +7,7 @@ using Tourplanner.DTOs;
 using Tourplanner.Entities.TourLogs;
 using Tourplanner.Infrastructure;
 using Microsoft.AspNetCore.Cors;
+using Newtonsoft.Json;
 using Tourplanner.Entities;
 using Tourplanner.Entities.TourLogs.Commands;
 using Tourplanner.Entities.Maps;
@@ -184,6 +185,27 @@ namespace Api.Controllers
             var command = new DeleteTourLogCommand(logid);
 
             return await ResponseAsync(command);
+        }
+
+        [HttpPost("import")]
+        public async Task<ActionResult<IResponse>> ImportTourFromJsonFile([FromForm] IFormFile file)
+        {
+            var serializer = new JsonSerializer();
+            using (var streamReader = new StreamReader(file.OpenReadStream()))
+            {
+                var tour = (CreateTourDto) serializer.Deserialize(streamReader, typeof(CreateTourDto));
+                var command = new CreateTourCommand(
+                    tour.Name,
+                    tour.Description,
+                    tour.From,
+                    tour.To,
+                    tour.TransportType,
+                    tour.Start,
+                    tour.Destination
+                );
+                
+                return await ResponseAsync(command);
+            }
         }
     }
 }
