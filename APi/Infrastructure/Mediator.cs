@@ -32,40 +32,33 @@ public abstract class IMediator
 
     public async Task<dynamic?> Send(IRequest request)
     {
-        try
+        var commandName = request.GetType().Name;
+        if (!_CommandCommandHandlerMapping.TryGetValue(commandName, out Type? commandHandlerType))
         {
-            var commandName = request.GetType().Name;
-            if (!_CommandCommandHandlerMapping.TryGetValue(commandName, out Type? commandHandlerType))
-            {
-                throw new Exception($"Command {commandName} unknown");
-            }
-
-            var requestType =
-                commandHandlerType.GetMethod("Handle")!
-                    .GetParameters()[0]
-                    .ParameterType;
-            var responseType = commandHandlerType.GetMethod("Handle")!
-                .ReturnType;
-
-            var commandHandler = _serviceProvider.GetServices(typeof(ICommandHandler))
-                .First(h => h?.GetType().Name == commandHandlerType.Name);
-
-            var handleMethod = commandHandlerType.GetMethod("Handle");
-            var commandResultTask = (Task)handleMethod!.Invoke(commandHandler, new object[] { request });
-
-            await commandResultTask.ConfigureAwait(false);
-
-            var commandResult = commandResultTask
-                .GetType()
-                .GetProperty("Result")
-                ?.GetValue(commandResultTask);
-
-            return commandResult;
+            throw new Exception($"Command {commandName} unknown");
         }
-        catch (Exception e)
-        {
-            throw new Exception("Mediator failed");
-        }
+
+        var requestType =
+            commandHandlerType.GetMethod("Handle")!
+                .GetParameters()[0]
+                .ParameterType;
+        var responseType = commandHandlerType.GetMethod("Handle")!
+            .ReturnType;
+
+        var commandHandler = _serviceProvider.GetServices(typeof(ICommandHandler))
+            .First(h => h?.GetType().Name == commandHandlerType.Name);
+
+        var handleMethod = commandHandlerType.GetMethod("Handle");
+        var commandResultTask = (Task)handleMethod!.Invoke(commandHandler, new object[] { request });
+
+        await commandResultTask.ConfigureAwait(false);
+
+        var commandResult = commandResultTask
+            .GetType()
+            .GetProperty("Result")
+            ?.GetValue(commandResultTask);
+
+        return commandResult;
     }
 
     public bool Register<TCommand, TCommandHandler>()
