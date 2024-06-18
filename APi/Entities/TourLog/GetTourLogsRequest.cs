@@ -8,10 +8,9 @@ namespace Tourplanner.Entities.TourLogs.Commands
     public record GetTourLogsRequest(int TourId) : IRequest;
 
     public class GetTourLogsRequestHandler(
-        TourContext ctx,
         ITourLogRepository tourLogRepository,
         ITourRepository tourRepository)
-        : RequestHandler<GetTourLogsRequest, IEnumerable<TourLogDto>>(ctx)
+        : RequestHandler<GetTourLogsRequest, IEnumerable<TourLogDto>>()
     {
         public override async Task<IEnumerable<TourLogDto>> Handle(GetTourLogsRequest request)
         {

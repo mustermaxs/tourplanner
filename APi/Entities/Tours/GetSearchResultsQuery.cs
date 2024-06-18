@@ -12,10 +12,10 @@ namespace Tourplanner.Entities.Tours
     ) : IRequest;
 
     public class GetSearchResultsQueryHandler(
-        TourContext ctx,
+        TourContext dbContext,
         ITourRepository tourRepository,
         ITourLogRepository tourLogRepository)
-        : RequestHandler<GetSearchResultsQuery, GlobalSearchResultsDto>(ctx)
+        : RequestHandler<GetSearchResultsQuery, GlobalSearchResultsDto>()
     {
         public override async Task<GlobalSearchResultsDto> Handle(GetSearchResultsQuery query)
         {

@@ -11,13 +11,12 @@ namespace Tourplanner.Entities.Tours
     public record GetTourByIdRequest(int Id) : IRequest;
 
     public class GetTourByIdRequestHandler(
-        TourContext ctx,
         ITourRepository tourRepository,
         ITourLogRepository tourLogRepository,
         IRatingService ratingService,
         IChildFriendlinessService childFriendlinessService,
         IMapRepository mapRepository)
-        : RequestHandler<GetTourByIdRequest, TourDto>(ctx)
+        : RequestHandler<GetTourByIdRequest, TourDto>()
     {
         public override async Task<TourDto> Handle(GetTourByIdRequest request)
         {

@@ -10,8 +10,7 @@ namespace Tourplanner.Entities
 
 
     public class GetGeoAutoCompleteQueryHandler(
-        TourContext ctx,
-        IOpenRouteService openRouteService) : RequestHandler<GetGeoAutoCompleteQuery, OrsBaseDto>(ctx)
+        IOpenRouteService openRouteService) : RequestHandler<GetGeoAutoCompleteQuery, OrsBaseDto>()
     {
         public override async Task<OrsBaseDto> Handle(GetGeoAutoCompleteQuery request)
         {

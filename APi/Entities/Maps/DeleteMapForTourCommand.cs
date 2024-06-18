@@ -12,9 +12,8 @@ namespace Api.Entities.Maps
     public record DeleteMapForTourCommand(int TourId) : IRequest;
 
     public class DeleteMapForTourCommandHandler(
-        TourContext ctx,
         IMapRepository mapRepository,
-        ITileRepository tileRepository) : RequestHandler<DeleteMapForTourCommand, Task>(ctx)
+        ITileRepository tileRepository) : RequestHandler<DeleteMapForTourCommand, Task>()
     {
         public override async Task<Task> Handle(DeleteMapForTourCommand request)
         {

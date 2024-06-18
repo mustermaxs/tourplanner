@@ -14,10 +14,9 @@ namespace Tourplanner.Entities.Tours
     }
 
     public class GetToursRequestHandler(
-        TourContext ctx,
         ITourRepository tourRepository,
         IChildFriendlinessService childFriendlinessService)
-        : RequestHandler<GetToursRequest, IEnumerable<TourDto>>(ctx)
+        : RequestHandler<GetToursRequest, IEnumerable<TourDto>>()
     {
         
         public override async Task<IEnumerable<TourDto>> Handle(GetToursRequest request)

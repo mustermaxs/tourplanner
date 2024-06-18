@@ -1,15 +1,6 @@
 using System.Reflection;
 using Api.Services.Logging;
-using Tourplanner.Entities.Tours;
-using Microsoft.EntityFrameworkCore;
-using Tourplanner.DTOs;
-using Tourplanner.Entities;
-using Tourplanner.Entities.TourLogs;
-using Tourplanner.Entities.TourLogs.Commands;
-using Tourplanner.Infrastructure;
 using LoggerFactory = Api.Services.Logging.LoggerFactory;
-using Tourplanner.Entities.Tours.Commands;
-using Tourplanner.Exceptions;
 
 
 namespace Tourplanner;
@@ -19,14 +10,12 @@ using Tourplanner.Infrastructure;
 public abstract class IMediator
 {
     protected static Dictionary<string, Type> _CommandCommandHandlerMapping = new Dictionary<string, Type>();
-    protected DbContext _dbContext;
     private readonly IServiceProvider _serviceProvider;
     protected ILoggerWrapper Logger = LoggerFactory.GetLogger();
 
 
-    protected IMediator(DbContext dbContext, IServiceProvider serviceProvider)
+    protected IMediator(IServiceProvider serviceProvider)
     {
-        _dbContext = dbContext;
         _serviceProvider = serviceProvider;
     }
 
@@ -103,7 +92,7 @@ public abstract class IMediator
 
 public class Mediator : IMediator
 {
-    public Mediator(DbContext context, IServiceProvider serviceProvider) : base(context, serviceProvider)
+    public Mediator(IServiceProvider serviceProvider) : base(serviceProvider)
     {
     }
 }

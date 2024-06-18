@@ -9,9 +9,8 @@ namespace Tourplanner.Entities.Maps
     public record GetMapForTourRequest(int TourId) : IRequest;
 
     public class GetMapForTourRequestHandler(
-        TourContext ctx,
         IMapRepository mapRepository,
-        ITileRepository tileRepository) : RequestHandler<GetMapForTourRequest, MapDto>(ctx)
+        ITileRepository tileRepository) : RequestHandler<GetMapForTourRequest, MapDto>()
     {
         public override async Task<MapDto> Handle(GetMapForTourRequest forTourRequest)
         {

@@ -16,11 +16,10 @@ namespace Tourplanner.Entities.TourLogs.Commands
     ) : IRequest;
     
     public class CreateTourLogCommandHandler(
-        TourContext ctx,
         ITourLogRepository tourLogRepository,
         ITourRepository tourRepository,
         IChildFriendlinessService childFriendlinessService,
-        IRatingService ratingService) : RequestHandler<CreateTourLogCommand, Task>(ctx)
+        IRatingService ratingService) : RequestHandler<CreateTourLogCommand, Task>()
     {
         public override async Task<Task> Handle(CreateTourLogCommand request)
         {

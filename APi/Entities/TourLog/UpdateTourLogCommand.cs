@@ -15,9 +15,8 @@ namespace Tourplanner.Entities.TourLogs.Commands
     ) : IRequest;
     
     public class UpdateTourLogCommandHandler(
-        TourContext ctx,
         ITourLogRepository tourLogRepository)
-    : RequestHandler<UpdateTourLogCommand, Task>(ctx)
+    : RequestHandler<UpdateTourLogCommand, Task>()
     {
         public override async Task<Task> Handle(UpdateTourLogCommand request)
         {

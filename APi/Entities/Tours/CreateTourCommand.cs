@@ -19,10 +19,9 @@ namespace Tourplanner.Entities.Tours
     ): IRequest;
 
     public class CreateTourCommandHandler(
-        TourContext ctx,
         ITourRepository tourRepository,
         IChildFriendlinessService childFriendlinessService,
-        IOpenRouteService openRouteService) : RequestHandler<CreateTourCommand, int>(ctx)
+        IOpenRouteService openRouteService) : RequestHandler<CreateTourCommand, int>()
     {
         public override async Task<int> Handle(CreateTourCommand request)
         {

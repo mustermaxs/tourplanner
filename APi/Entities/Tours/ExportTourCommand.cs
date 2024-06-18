@@ -11,8 +11,7 @@ namespace Tourplanner.Entities.Tours
 
 
     public class ExportTourCommandHandler(
-        TourContext ctx,
-        ITourRepository tourRepository) : RequestHandler<ExportTourCommand, TourDto>(ctx)
+        ITourRepository tourRepository) : RequestHandler<ExportTourCommand, TourDto>()
     {
         public override async Task<TourDto> Handle(ExportTourCommand command)
         {

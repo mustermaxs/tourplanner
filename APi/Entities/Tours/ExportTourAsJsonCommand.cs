@@ -9,8 +9,8 @@ namespace Tourplanner.Entities.Tours
 {
     public record ExportTourAsJsonCommand(int TourId) : IRequest;
 
-    public class ExportTourAsJsonCommandHandler(TourContext ctx, ITourRepository tourRepository)
-        : RequestHandler<ExportTourAsJsonCommand, FileContentResult>(ctx)
+    public class ExportTourAsJsonCommandHandler(ITourRepository tourRepository)
+        : RequestHandler<ExportTourAsJsonCommand, FileContentResult>()
     {
         public override async Task<FileContentResult> Handle(ExportTourAsJsonCommand request)
         {

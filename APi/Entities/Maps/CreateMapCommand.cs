@@ -13,13 +13,12 @@ namespace Tourplanner.Entities.Maps
     TransportType TransportType) : IRequest;
 
     public class CreateMapCommandHandler(
-        TourContext ctx,
         IMapRepository mapRepository,
         IImageService imageService,
         ITileCalculator tileCalculator,
         IOpenRouteService openRouteService,
         ITileRepository tileRepository)
-        : RequestHandler<CreateMapCommand, int>(ctx)
+        : RequestHandler<CreateMapCommand, int>()
     {
 
         public override async Task<int> Handle(CreateMapCommand request)    // TODO tiles Erzeugung etc in service auslagern, wird auch in UpdateMapCommand benötigt

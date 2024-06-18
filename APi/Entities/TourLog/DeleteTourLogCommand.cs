@@ -7,9 +7,8 @@ namespace Tourplanner.Entities.TourLogs
     public record DeleteTourLogCommand(int TourLogId) : IRequest;
     
     public class DeleteTourLogCommandHandler(
-        TourContext ctx,
         ITourLogRepository tourLogRepository)
-    : RequestHandler<DeleteTourLogCommand, Task>(ctx)
+    : RequestHandler<DeleteTourLogCommand, Task>()
     {
         public override async Task<Task> Handle(DeleteTourLogCommand request)
         {

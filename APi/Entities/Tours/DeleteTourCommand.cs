@@ -8,9 +8,8 @@ using Tourplanner.Infrastructure;
 public record DeleteTourCommand(int Id) : IRequest;
 
 public class DeleteTourCommandHandler(
-    TourContext ctx,
     ITourRepository tourRepository)
-    : RequestHandler<DeleteTourCommand, Task>(ctx)
+    : RequestHandler<DeleteTourCommand, Task>()
 {
     public override async Task<Task> Handle(DeleteTourCommand command)
     {

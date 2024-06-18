@@ -18,11 +18,10 @@ namespace Tourplanner.Entities.Tours
     ) : IRequest;
 
     public class UpdateTourCommandHandler(
-        TourContext ctx,
         ITourRepository tourRepository,
         IRatingService ratingService,
         IChildFriendlinessService childFriendlinessService)
-        : RequestHandler<UpdateTourCommand, Task>(ctx)
+        : RequestHandler<UpdateTourCommand, Task>()
     {
         public override async Task<Task> Handle(UpdateTourCommand command)
         {

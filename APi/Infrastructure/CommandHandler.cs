@@ -11,12 +11,8 @@ namespace Tourplanner.Infrastructure
     public abstract class RequestHandler<TRequest, TResponse> : ICommandHandler
         where TRequest : IRequest
     {
-        protected TourContext dbContext;
 
-        public RequestHandler(TourContext context)
-        {
-            dbContext = context;
-        }
+        public RequestHandler() {}
 
         public abstract Task<TResponse> Handle(TRequest request);
     }
