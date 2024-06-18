@@ -3,6 +3,7 @@ using Client.Dao;
 using Client.Exceptions;
 using Client.Models;
 using Client.Services;
+using Microsoft.AspNetCore.Components;
 
 namespace Client.ViewModels;
 
@@ -15,7 +16,7 @@ public class TourDetailsPageViewModel : BaseViewModel
     private IReportService _reportService;
     public MapViewModel MapVM { get; set; }
     private IMapDao _mapDao;
-    private readonly IHttpService _httpService;
+    private NavigationManager _navigationManager;
     private readonly TourImportExportService _tourImportExportService;
 
 
@@ -26,15 +27,16 @@ public class TourDetailsPageViewModel : BaseViewModel
         IReportService reportService,
         IMapDao mapDao,
         IHttpService httpService,
-        TourImportExportService tourImportExportService)
+        TourImportExportService tourImportExportService,
+        NavigationManager navigationManager)
     {
         _tourDao = tourDao;
         _tourLogDao = TourLogDao;
         _popupViewModel = popupViewModel;
         _reportService = reportService;
         _mapDao = mapDao;
-        _httpService = httpService;
         _tourImportExportService = tourImportExportService;
+        _navigationManager = navigationManager;
     }
 
     public Tour Tour { get; set; } = new Tour();
@@ -44,10 +46,16 @@ public class TourDetailsPageViewModel : BaseViewModel
     public override async Task InitializeAsync(Action notifySateChanged)
     {
         await base.InitializeAsync(notifySateChanged);
-        TourLogs = (List<TourLog>)await _tourLogDao.ReadMultiple(tourId);
         Tour = new Tour();
         Tour.Id = tourId;
+
+    try {
         Tour = await _tourDao.Read(tourId);
+    } catch (Exception) {
+        _navigationManager.NavigateTo("/notfound");
+    }
+
+        TourLogs = (List<TourLog>)await _tourLogDao.ReadMultiple(tourId);
 
         MapVM = new MapViewModel(_mapDao, tourId);
 

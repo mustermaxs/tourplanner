@@ -3,7 +3,6 @@ using Client.Utils;
 using System.Text.Json;
 using System.Net.Http.Json;
 using Client.Exceptions;
-using Client.Pages;
 
 public interface IHttpService
 {

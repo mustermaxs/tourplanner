@@ -18,7 +18,6 @@ public class TourAddPageViewModel : BaseViewModel
     private readonly IHttpService _httpService;
     private readonly IGeoService _geoService;
     private readonly NavigationManager _navigationManager;
-    public List<string> ARSCH { get; set; } = new List<string> { "FICK DICH" };
     public IBrowserFile? ImportTourFile { get; set; }
     public Tour Tour { get; set; } = new Tour();
     private string test { get; set; }
