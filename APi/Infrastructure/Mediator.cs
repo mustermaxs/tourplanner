@@ -18,35 +18,54 @@ public abstract class IMediator
     {
         _serviceProvider = serviceProvider;
     }
-
+    
     public async Task<dynamic?> Send(IRequest request)
+    {
+        var commandHandlerType = GetCommandHandlerType(request);
+        var commandHandler = GetCommandHandler(commandHandlerType);
+        var handleMethod = GetHandleMethod(commandHandlerType);
+    
+        var commandResult = await ExecuteHandleMethod(commandHandler, handleMethod, request);
+        return commandResult;
+    }
+
+    public Type GetCommandHandlerType(IRequest request)
     {
         var commandName = request.GetType().Name;
         if (!_CommandCommandHandlerMapping.TryGetValue(commandName, out Type? commandHandlerType))
         {
             throw new Exception($"Command {commandName} unknown");
         }
+        return commandHandlerType;
+    }
 
-        var requestType =
-            commandHandlerType.GetMethod("Handle")!
-                .GetParameters()[0]
-                .ParameterType;
-        var responseType = commandHandlerType.GetMethod("Handle")!
-            .ReturnType;
-
+    public object GetCommandHandler(Type commandHandlerType)
+    {
         var commandHandler = _serviceProvider.GetServices(typeof(ICommandHandler))
             .First(h => h?.GetType().Name == commandHandlerType.Name);
+        if (commandHandler == null)
+        {
+            throw new Exception($"Handler not found for command handler type {commandHandlerType.Name}");
+        }
+        return commandHandler;
+    }
 
+    public MethodInfo GetHandleMethod(Type commandHandlerType)
+    {
         var handleMethod = commandHandlerType.GetMethod("Handle");
-        var commandResultTask = (Task)handleMethod!.Invoke(commandHandler, new object[] { request });
+        if (handleMethod == null)
+        {
+            throw new Exception($"Handle method not found for command handler type {commandHandlerType.Name}");
+        }
+        return handleMethod;
+    }
 
+    private async Task<dynamic?> ExecuteHandleMethod(object commandHandler, MethodInfo handleMethod, IRequest request)
+    {
+        var commandResultTask = (Task)handleMethod.Invoke(commandHandler, new object[] { request });
         await commandResultTask.ConfigureAwait(false);
 
-        var commandResult = commandResultTask
-            .GetType()
-            .GetProperty("Result")
-            ?.GetValue(commandResultTask);
-
+        var commandResult = commandResultTask.GetType().GetProperty("Result")?.GetValue(commandResultTask);
         return commandResult;
     }
 
