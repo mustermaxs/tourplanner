@@ -12,8 +12,6 @@ public enum TransportType
     Walking,
     // [EnumMember(Value = "Hiking")]
     Hiking,
-    // [EnumMember(Value = "Crawling")]
-    Crawling,
     // [EnumMember(Value = "Wheelchair")]
     Wheelchair,
 }

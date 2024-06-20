@@ -3,6 +3,7 @@
 @inject NavigationManager NavManager
 @inject TourDetailsPageViewModel TourVM
 @using Client.Components
+@using Client.Models
 @using Client.ViewModels
 @inject IJSRuntime JS
 @using Client.Services.FormattingUtils
@@ -86,7 +87,7 @@ else
             <td class="icon-td">
                 <div style="width: 1.7rem">
                     <div class="icon-wrapper">
-                        <Icon Img="transporttype" AltText="#transport-type"></Icon>
+                        <Icon Img="@TransportTypeIcon" AltText="#transport-type"></Icon>
                     </div>
                 </div>
             </td>
@@ -135,20 +136,21 @@ else
     <ButtonGroup Layout="ButtonGroup.Position.Center">
         <Button Img="add" OnClickCallback="@AddLog" Label="Add Log"/>
         <Button Img="log" Label="Report" OnClickCallback="TourVM.DownloadReportAsync"/>
-        <Button Img="importtour" Label="Export as JSON" OnClickCallback="TourVM.ExportTourAsJson" />
+        <Button Img="importtour" Label="Export as JSON" OnClickCallback="TourVM.ExportTourAsJson"/>
     </ButtonGroup>
-    
+
     @if (TourVM.TourLogs.Count > 0)
     {
-    <div class="d-flex justify-content-between align-items-center">
-        <h2>Logs</h2>
-    </div>
+        <div class="d-flex justify-content-between align-items-center">
+            <h2>Logs</h2>
+        </div>
         <TourLogsTable TourLogs="@TourVM.TourLogs"></TourLogsTable>
     }
 }
 
 @code {
     [Parameter] public string? TourId { get; set; }
+    public string TransportTypeIcon { get; set; } = "car";
 
     protected override async Task OnInitializedAsync()
     {
@@ -161,23 +163,42 @@ else
         {
             NavManager.NavigateTo("/notfound");
         }
-
     }
 
-
-    private void EditTour()
+    protected override void OnParametersSet()
     {
-        NavManager.NavigateTo($"/edit/{TourId}");
+        TransportTypeIcon = GetTransportTypeIcon();
+        StateHasChanged();
+    }
+    private string GetTransportTypeIcon()
+    {
+        var iconName = TourVM.Tour.TransportType switch
+        {
+            TransportType.Car => "car",
+            TransportType.Walking => "walk",
+            TransportType.Bicycle => "bicycle",
+            TransportType.Wheelchair => "wheelchair",
+            TransportType.Hiking => "hiking",
+            _ => "car"
+        };
+        return iconName;
     }
 
-    private void AddLog()
-    {
-        NavManager.NavigateTo($"/tour/{TourId}/add-log");
+
+        private void EditTour()
+        {
+            NavManager.NavigateTo($"/edit/{TourId}");
+        }
+
+        private void AddLog()
+        {
+            NavManager.NavigateTo($"/tour/{TourId}/add-log");
+        }
+
+        private async void DeleteTour()
+        {
+            await TourVM.DeleteTour();
+            NavManager.NavigateTo("/tours");
+        }
     }
 
-    private async void DeleteTour()
-    {
-        await TourVM.DeleteTour();
-        NavManager.NavigateTo("/tours");
-    }
-}

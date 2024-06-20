@@ -56,6 +56,9 @@
     <data name="transporttype" type="System.String">
         <value>bicycle.png</value>
     </data>
+    <data name="bicycle" type="System.String">
+        <value>bicycle.png</value>
+    </data>
     <data name="start" type="System.String">
         <value>star.png</value>
     </data>
@@ -71,8 +74,23 @@
     <data name="importtour" type="System.String">
         <value>jsonimport.png</value>
     </data>
+    <data name="wheelchair" type="System.String">
+        <value>wheelchair.png</value>
+    </data>
+    <data name="hiking" type="System.String">
+        <value>mountaineer.png</value>
+    </data>
     <data name="upload" type="System.String">
         <value>upload.png</value>
+    </data>
+    <data name="public_transport" type="System.String">
+        <value>bus.png</value>
+    </data>
+    <data name="car" type="System.String">
+        <value>3d-car.png</value>
+    </data>
+    <data name="walking" type="System.String">
+        <value>walking.png</value>
     </data>
     <data name="primary" type="System.String">
         <value>#5E38AA</value>

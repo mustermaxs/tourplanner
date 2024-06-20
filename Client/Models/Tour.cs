@@ -3,12 +3,18 @@ using Client.Dtos;
 
 namespace Client.Models
 {
-    public enum TransportType
+    public enum TransportType 
     {
-        Car,
+        // [EnumMember(Value = "Bicycle")]
         Bicycle,
+        // [EnumMember(Value = "Car")]
+        Car,
+        // [EnumMember(Value = "Walking")]
         Walking,
-        PublicTransport
+        // [EnumMember(Value = "Hiking")]
+        Hiking,
+        // [EnumMember(Value = "Wheelchair")]
+        Wheelchair,
     }
 
     public class Tour

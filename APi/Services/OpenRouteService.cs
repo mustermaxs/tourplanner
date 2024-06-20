@@ -58,7 +58,7 @@ namespace Tourplanner.Services
                 TransportType.Bicycle => "cycling-regular",
                 TransportType.Walking => "foot-walking",
                 TransportType.Hiking => "foot-hiking",
-                TransportType.Crawling => "wheelchair",  // TODO Updated to Wheelchair
+                TransportType.Wheelchair => "wheelchair",  // TODO Updated to Wheelchair
                 _ => "driving-car"
             };
             // TODO write helper method to build uri

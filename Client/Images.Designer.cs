@@ -105,6 +105,12 @@ namespace Client {
             }
         }
         
+        internal static string bicycle {
+            get {
+                return ResourceManager.GetString("bicycle", resourceCulture);
+            }
+        }
+        
         internal static string start {
             get {
                 return ResourceManager.GetString("start", resourceCulture);
@@ -135,9 +141,39 @@ namespace Client {
             }
         }
         
+        internal static string wheelchair {
+            get {
+                return ResourceManager.GetString("wheelchair", resourceCulture);
+            }
+        }
+        
+        internal static string hiking {
+            get {
+                return ResourceManager.GetString("hiking", resourceCulture);
+            }
+        }
+        
         internal static string upload {
             get {
                 return ResourceManager.GetString("upload", resourceCulture);
+            }
+        }
+        
+        internal static string public_transport {
+            get {
+                return ResourceManager.GetString("public_transport", resourceCulture);
+            }
+        }
+        
+        internal static string car {
+            get {
+                return ResourceManager.GetString("car", resourceCulture);
+            }
+        }
+        
+        internal static string walking {
+            get {
+                return ResourceManager.GetString("walking", resourceCulture);
             }
         }
         
