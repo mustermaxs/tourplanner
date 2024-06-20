@@ -62,6 +62,6 @@
     border: 0.5px solid darkgray;
 }
 
-.tp-button + .tp-button {
-    margin: 0px 20px;
+.tp-button {
+    margin: 0px 10px;
 }
