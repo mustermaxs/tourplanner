@@ -39,7 +39,7 @@ else
 
                 <AutoComplete
                     InitialValue="@EditTourVM.Tour.From"
-                    OnInput="async (val) => { await EditTourVM.GetSuggestions(val); EditTourVM.Tour.From = val; }"
+                    OnInput="async (val) => { await EditTourVM.GetSuggestion(val); EditTourVM.Tour.From = val; }"
                     Options="() => EditTourVM.Suggestions ?? new List<string>()"
                     Label="Enter starting location" Id="from">
                 </AutoComplete>
@@ -48,7 +48,7 @@ else
                 <label for="to">To</label>
                 <AutoComplete
                     InitialValue="@EditTourVM.Tour.To"
-                    OnInput="async (val) => { await EditTourVM.GetSuggestions(val); EditTourVM.Tour.To = val; }"
+                    OnInput="async (val) => { await EditTourVM.GetSuggestion(val); EditTourVM.Tour.To = val; }"
                     Options="() => EditTourVM.Suggestions ?? new List<string>()"
                     Label="Enter destination" Id="to">
                 </AutoComplete>

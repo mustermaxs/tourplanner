@@ -16,6 +16,7 @@ public class TourEditPageViewModel : BaseViewModel
     private readonly NavigationManager _navigationManager;
     private IGeoService _geoService;
     public List<string> Suggestions { get; private set; } = new List<string>();
+    public HashSet<string> AllSuggestions { get; set; } = new HashSet<string>();
 
     public TourEditPageViewModel(NavigationManager navigationManager, ITourDao tourDao, PopupViewModel popupViewModel,
         IGeoService geoService) : base()
@@ -33,8 +34,8 @@ public class TourEditPageViewModel : BaseViewModel
         try
         {
             _notifyStateChanged.Invoke();
-            var from = (await _geoService.SearchLocation(Tour.From)).Features.FirstOrDefault()?.PropertiesDto;
-            var to = (await _geoService.SearchLocation(Tour.To)).Features.FirstOrDefault().PropertiesDto;
+            var from = AllSuggestions.TryGetValue(Tour.From, out string _);
+            var to = AllSuggestions.TryGetValue(Tour.To, out string _);
             var tourSpecification = new AddTourSpecification(from, to);
 
             if (tourSpecification.IsSatisfiedBy(Tour))
@@ -88,31 +89,17 @@ public class TourEditPageViewModel : BaseViewModel
         }
     }
 
-    public async Task GetSuggestions(string userInput)
+    public async Task GetSuggestion(string userInput)
     {
         if (string.IsNullOrEmpty(userInput))
-        {
-            Suggestions = new List<string>();
-        }
+            return;
+        var locations = await Debouncer.Debounce<string, OrsBaseDto>(_geoService.SearchLocation, userInput, 1000);
 
-        try
+        if (locations != null && locations.Features.Any())
         {
-            var locations = await Debouncer.Debounce<string, OrsBaseDto>(_geoService.SearchLocation, userInput, 1000);
-
-            if (locations is not null && locations.Features is not null)
-            {
-                Suggestions = locations.Features.Select(f => f.PropertiesDto.Label).ToList();
-                _notifyStateChanged.Invoke();
-            }
-        }
-        catch (HttpRequestException e)
-        {
-            Console.WriteLine($"Request error: {e.Message}");
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine($"Unexpected error: {e.Message}");
-            throw;
+            Suggestions = locations.Features.Select(f => f.PropertiesDto.Label).ToList();
+            Suggestions.ForEach(s => AllSuggestions.Add(s));
+            _notifyStateChanged.Invoke();
         }
     }
 }

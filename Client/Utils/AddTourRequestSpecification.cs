@@ -7,19 +7,19 @@ using Client.Utils.Specifications;
 public class AddTourSpecification : CompositeSpecification<Tour>
 {
     private readonly Tour _tour;
-    private readonly OrsPropertiesDto? _from;
-    private readonly OrsPropertiesDto? _to;
+    private readonly bool _from;
+    private readonly bool _to;
 
-    public AddTourSpecification(OrsPropertiesDto? from, OrsPropertiesDto? to)
+    public AddTourSpecification(bool fromExistsInSuggestionList, bool toExistsInSuggestionList)
     {
-        _from = from;
-        _to = to;
+        _from = fromExistsInSuggestionList;
+        _to = toExistsInSuggestionList;
     }
     public override bool IsSatisfiedBy(Tour tour)
     {
         return (
-            (_from != null) &&
-            (_to != null) &&
+            (_from ) &&
+            (_to) &&
             !string.IsNullOrEmpty(tour.Description) && tour.Description.Length < 500 &&
             !string.IsNullOrEmpty(tour.From) && tour.From.Length < 150 &&
             !string.IsNullOrEmpty(tour.To) && tour.To.Length < 150 &&

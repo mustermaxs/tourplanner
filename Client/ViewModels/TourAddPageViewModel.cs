@@ -22,6 +22,10 @@ public class TourAddPageViewModel : BaseViewModel
     public Tour Tour { get; set; } = new Tour();
     private string test { get; set; }
 
+    public HashSet<string> AllSuggestions { get; set; } = new HashSet<string>();
+    private bool IsFileUpload { get; set; } = false;
+
+
     public string Test
     {
         get => test;
@@ -45,31 +49,41 @@ public class TourAddPageViewModel : BaseViewModel
         _geoService = geoService;
     }
 
+    public override async Task InitializeAsync(Action notifySateChanged)
+    {
+        Tour = new Tour();
+        IsFileUpload = false;
+        base.InitializeAsync(notifySateChanged);
+    }
+
     public async Task AddTour()
     {
         try
         {
             _notifyStateChanged.Invoke();
-            var from = (await _geoService.SearchLocation(Tour.From)).Features.FirstOrDefault()?.PropertiesDto;
-            var to = (await _geoService.SearchLocation(Tour.To)).Features.FirstOrDefault().PropertiesDto;
-            var tourSpecification = new AddTourSpecification(from, to);
+            
+            if (!IsFileUpload)
+            {
+                var from = AllSuggestions.TryGetValue(Tour.From, out string _);
+                var to = AllSuggestions.TryGetValue(Tour.To, out string _);
+                var tourSpecification = new AddTourSpecification(from, to);
 
-            if (tourSpecification.IsSatisfiedBy(Tour))
-            {
-                Tour.Start = (await _geoService.SearchLocation(Tour.From)).Features.FirstOrDefault()?.GeometryDto
-                    .Coordinates;
-                Tour.Destination = (await _geoService.SearchLocation(Tour.To)).Features.FirstOrDefault()?.GeometryDto
-                    .Coordinates;
-                await _tourDao.Create(Tour);
-                _popupVm.Open("", "Created new tour.", PopupStyle.Normal);
-            }
-            else
-            {
-                Console.WriteLine($"Error adding tour. Input doesn't satisfy specification.");
-                throw new InvalidUserInputException("Failed to add tour.");
+                if (!tourSpecification.IsSatisfiedBy(Tour))
+                {
+                    Console.WriteLine($"Error adding tour. Input doesn't satisfy specification.");
+                    throw new InvalidUserInputException("Failed to add tour.");
+                }
             }
 
-            Tour = new Tour();
+            Tour.Start = (await _geoService.SearchLocation(Tour.From)).Features.FirstOrDefault()?.GeometryDto
+                .Coordinates;
+            Tour.Destination = (await _geoService.SearchLocation(Tour.To)).Features.FirstOrDefault()?.GeometryDto
+                .Coordinates;
+
+
+            await _tourDao.Create(Tour);
+
+            _popupVm.Open("", "Created new tour.", PopupStyle.Normal);
             _navigationManager.NavigateTo("/tours");
         }
         catch (Exception ex)
@@ -81,16 +95,15 @@ public class TourAddPageViewModel : BaseViewModel
 
     public async Task GetSuggestion(string userInput)
     {
-       
+        if (string.IsNullOrEmpty(userInput))
+            return;
         var locations = await Debouncer.Debounce<string, OrsBaseDto>(_geoService.SearchLocation, userInput, 1000);
 
         if (locations != null && locations.Features.Any())
         {
             Suggestions = locations.Features.Select(f => f.PropertiesDto.Label).ToList();
+            Suggestions.ForEach(s => AllSuggestions.Add(s));
             _notifyStateChanged.Invoke();
-        }
-        else
-        {
         }
     }
 
@@ -119,6 +132,7 @@ public class TourAddPageViewModel : BaseViewModel
     public async Task UploadTour()
     {
         IsImportFromFileModalOpen = false;
+        IsFileUpload = true;
         await AddTour();
         _popupVm.Open("Success", "Uploaded Tour", PopupStyle.Normal);
     }

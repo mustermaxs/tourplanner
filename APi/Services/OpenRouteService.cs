@@ -1,32 +1,36 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
+using Api.Services.Logging;
 using Microsoft.VisualStudio.TextTemplating;
 using Tourplanner.DTOs;
 using Tourplanner.Entities.Tours;
 using Tourplanner.Entities;
 using Tourplanner.Models;
+using Api.Services.Logging;
+using Tourplanner.Exceptions;
+using LoggerFactory = Api.Services.Logging.LoggerFactory;
 
 namespace Tourplanner.Services
 {
     public class GetGeoAutoCompleteSuggestionDto
     {
         public Dictionary<string, string> Properties { get; set; }
-
     }
 
     public interface IOpenRouteService
     {
         public Task<OrsBaseDto> GetAutoCompleteSuggestions(string query);
         public Task<Summary> RouteInfo(Coordinates from, Coordinates to, TransportType transportType);
-
     }
+
     public class OpenRouteService : IOpenRouteService
     {
         private readonly IHttpService _httpService;
         private readonly IConfiguration _configuration;
         private readonly string _baseUrl;
         private readonly string? _routeInfoUrl;
+        protected ILoggerWrapper Logger = LoggerFactory.GetLogger();
 
 
         private string _autoCompleteUri { get; set; }
@@ -50,6 +54,13 @@ namespace Tourplanner.Services
 
         private string CoordinateToString(double coordinate) => coordinate.ToString().Replace(",", ".");
 
+        private string BuildRouteInfoUrl(
+            string profile,
+            Coordinates from,
+            Coordinates to,
+            TransportType transportType) =>
+            $"{_baseUrl}{_routeInfoUrl}{profile}?api_key={_apiKey}&start={CoordinateToString(from.Latitude)},{CoordinateToString(from.Longitude)}&end={CoordinateToString(to.Latitude)},{CoordinateToString(to.Longitude)}";
+
         public async Task<Summary> RouteInfo(Coordinates from, Coordinates to, TransportType transportType)
         {
             string profile = transportType switch
@@ -58,16 +69,15 @@ namespace Tourplanner.Services
                 TransportType.Bicycle => "cycling-regular",
                 TransportType.Walking => "foot-walking",
                 TransportType.Hiking => "foot-hiking",
-                TransportType.Wheelchair => "wheelchair",  // TODO Updated to Wheelchair
+                TransportType.Wheelchair => "wheelchair",
                 _ => "driving-car"
             };
-            // TODO write helper method to build uri
-            var json = await _httpService.Get<string>(
-                $"{_baseUrl}{_routeInfoUrl}{profile}?api_key={_apiKey}&start={CoordinateToString(from.Latitude)},{CoordinateToString(from.Longitude)}&end={CoordinateToString(to.Latitude)},{CoordinateToString(to.Longitude)}");
 
-            // https://api.openrouteservice.org /v2/directions/driving-car? api_key = your-api-key& start = 8.681495,49.41461& end = 8.687872,49.420318
-            using (JsonDocument doc = JsonDocument.Parse(json))
+            try
             {
+                var json = await _httpService.Get<string>(BuildRouteInfoUrl(profile, from, to, transportType));
+
+                using JsonDocument doc = JsonDocument.Parse(json);
                 JsonElement root = doc.RootElement;
 
                 // Extract the bounding box
@@ -77,6 +87,7 @@ namespace Tourplanner.Services
                 {
                     bbox[i] = bboxElement[i].GetDouble();
                 }
+
                 Console.WriteLine("Bounding Box: " + string.Join(", ", bbox));
 
                 // Get the first feature
@@ -95,6 +106,11 @@ namespace Tourplanner.Services
                     distance,
                     duration
                 );
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"Error while getting route info from OpenRouteService. {ex}");
+                throw new DataAccessLayerException(ex.Message, ex);
             }
         }
     }
