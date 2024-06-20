@@ -20,6 +20,7 @@ public class UpdateTourDto
         To = to;
         Start = start;
         Destination = destination;
+        TransportType = transportType;
     }
 
     public string Name { get; set; }

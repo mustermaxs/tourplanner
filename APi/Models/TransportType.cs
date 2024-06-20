@@ -5,7 +5,7 @@ namespace Tourplanner.Models;
 public enum TransportType 
 {
     // [EnumMember(Value = "Bicycle")]
-    Bicycle,
+    Bicycle = 0,
     // [EnumMember(Value = "Car")]
     Car,
     // [EnumMember(Value = "Walking")]
