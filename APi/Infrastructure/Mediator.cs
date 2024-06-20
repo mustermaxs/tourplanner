@@ -19,15 +19,23 @@ public abstract class IMediator
     {
         _serviceProvider = serviceProvider;
     }
-    
+
     public async Task<dynamic?> Send(IRequest request)
     {
-        var commandHandlerType = GetCommandHandlerType(request);
-        var commandHandler = GetCommandHandler(commandHandlerType);
-        var handleMethod = GetHandleMethod(commandHandlerType);
-    
-        var commandResult = await ExecuteHandleMethod(commandHandler, handleMethod, request);
-        return commandResult;
+        try
+        {
+            var commandHandlerType = GetCommandHandlerType(request);
+            var commandHandler = GetCommandHandler(commandHandlerType);
+            var handleMethod = GetHandleMethod(commandHandlerType);
+
+            var commandResult = await ExecuteHandleMethod(commandHandler, handleMethod, request);
+            return commandResult;
+        }
+        catch (Exception e)
+        {
+            Logger.Fatal($"[Mediator] Exception: {e.Message}");
+            throw;
+        }
     }
 
     public Type GetCommandHandlerType(IRequest request)
@@ -38,6 +46,7 @@ public abstract class IMediator
             Logger.Fatal($"[Mediator] Command {commandName} unknown");
             throw new InfrastructureException($"[Mediator] Command {commandName} unknown");
         }
+
         return commandHandlerType;
     }
 
@@ -48,19 +57,31 @@ public abstract class IMediator
         if (commandHandler == null)
         {
             Logger.Fatal($"[Mediator] Handler not found for command handler type {commandHandlerType.Name}");
-            throw new InfrastructureException($"[Mediator] Handler not found for command handler type {commandHandlerType.Name}");
+            throw new InfrastructureException(
+                $"[Mediator] Handler not found for command handler type {commandHandlerType.Name}");
         }
+
         return commandHandler;
     }
 
     public MethodInfo GetHandleMethod(Type commandHandlerType)
     {
-        var handleMethod = commandHandlerType.GetMethod("Handle");
-        if (handleMethod == null)
+        try
         {
-            throw new InfrastructureException($"[Mediator] Handle method not found for command handler type {commandHandlerType.Name}");
+            var handleMethod = commandHandlerType.GetMethod("Handle");
+            if (handleMethod == null)
+            {
+                throw new InfrastructureException(
+                    $"[Mediator] Handle method not found for command handler type {commandHandlerType.Name}");
+            }
+
+            return handleMethod;
         }
-        return handleMethod;
+        catch (Exception ex)
+        {
+            Logger.Fatal(ex.Message);
+            throw;
+        }
     }
 
     private async Task<dynamic?> ExecuteHandleMethod(object commandHandler, MethodInfo handleMethod, IRequest request)
