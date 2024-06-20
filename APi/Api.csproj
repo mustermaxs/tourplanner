@@ -29,4 +29,8 @@
     <Folder Include="Tiles\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Assets\9-278-177.png" />
+  </ItemGroup>
+
 </Project>
