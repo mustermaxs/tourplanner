@@ -30,7 +30,7 @@ namespace Tourplanner.Entities.Tours
         public override async Task<int> Handle(CreateTourCommand request)
         {
             Tour tour = null;
-            unitOfWork.BeginTransactionAsync();
+            await unitOfWork.BeginTransactionAsync();
             try
             {
                 var tourRouteInfo =
@@ -62,7 +62,7 @@ namespace Tourplanner.Entities.Tours
             {
                 // TODO add logger
                 await tourRepository.Delete(tour);
-                await unitOfWork.RollbackAsync();
+                await unitOfWork.RollbackAsync(ex);
                 throw ex;
             }
         }

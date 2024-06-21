@@ -86,13 +86,13 @@ internal class Program
         services.AddTransient<IServiceProvider, ServiceProvider>();
         services.AddTransient<IMediator, Mediator>();
         IMediator.DiscoverPublishers(Assembly.GetExecutingAssembly());
-        services.AddTransient<IRatingService, RatingService>();
-        services.AddTransient<IChildFriendlinessService, ChildFriendlinessService>();
-        services.AddTransient<IReportService, ReportService>();
+        services.AddScoped<IRatingService, RatingService>();
+        services.AddScoped<IChildFriendlinessService, ChildFriendlinessService>();
+        services.AddScoped<IReportService, ReportService>();
         services.AddScoped<ITourLogRepository, TourLogRepository>();
         services.AddScoped<ITourRepository, TourRepository>();
-        services.AddTransient<IOpenRouteService, OpenRouteService>();
-        services.AddTransient<IImageService, ImageService>();
+        services.AddScoped<IOpenRouteService, OpenRouteService>();
+        services.AddScoped<IImageService, ImageService>();
         services.AddScoped<ITileCalculator, TileCalculator>();
         services.AddScoped<ITileRepository, TileRepository>();
         services.AddScoped<IMapRepository, MapRepository>();

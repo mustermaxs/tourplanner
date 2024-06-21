@@ -15,7 +15,7 @@ public class DeleteTourCommandHandler(
 {
     public override async Task<Task> Handle(DeleteTourCommand command)
     {
-        unitOfWork.BeginTransactionAsync();
+        await unitOfWork.BeginTransactionAsync();
         try
         {
             var tour = await tourRepository.Get(command.Id);

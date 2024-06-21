@@ -1,4 +1,6 @@
-﻿using Tourplanner.Db;
+﻿using Api.Entities.Maps;
+using Tourplanner.Db;
+using Tourplanner.Entities.Maps;
 using Tourplanner.Exceptions;
 using Tourplanner.Infrastructure;
 using Tourplanner.Models;
@@ -22,12 +24,13 @@ namespace Tourplanner.Entities.Tours
         ITourRepository tourRepository,
         IRatingService ratingService,
         IChildFriendlinessService childFriendlinessService,
-        IUnitOfWork unitOfWork)
+        IUnitOfWork unitOfWork,
+        IMediator mediator)
         : RequestHandler<UpdateTourCommand, Task>()
     {
         public override async Task<Task> Handle(UpdateTourCommand command)
         {
-            unitOfWork.BeginTransactionAsync();
+            await unitOfWork.BeginTransactionAsync();
             try
             {
                 var entityToUpdate = await tourRepository.GetTourWithLogs(command.Id);
@@ -46,13 +49,19 @@ namespace Tourplanner.Entities.Tours
                 entityToUpdate.TransportType = command.TransportType;
 
                 await unitOfWork.TourRepository.UpdateAsync(entityToUpdate);
-                unitOfWork.CommitAsync();
+                var deleteMapCommand = new DeleteMapForTourCommand(command.Id);
+                await mediator.Send(deleteMapCommand);
+                var createMapCommand = new CreateMapCommand(command.Id, command.Start, command.Destination,
+                    command.TransportType); 
+                await mediator.Send(createMapCommand);
+                
+                await unitOfWork.CommitAsync();
                 return Task.CompletedTask;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                await unitOfWork.RollbackAsync();
+                await unitOfWork.RollbackAsync(e);
                 throw;
             }
         }

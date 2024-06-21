@@ -15,6 +15,7 @@ namespace Tourplanner.Db
         public ITourLogRepository TourLogRepository { get; }
         Task CommitAsync();
         Task RollbackAsync();
+        Task RollbackAsync(Exception ex);
         public Task BeginTransactionAsync();
     }
 
@@ -27,7 +28,7 @@ namespace Tourplanner.Db
         private ITileRepository? _tileRepository;
         private ITourLogRepository? _tourLogRepository;
         protected readonly ILoggerWrapper Logger = LoggerFactory.GetLogger();
-        private IDbContextTransaction? _transaction;
+        private IDbContextTransaction? _transaction = null;
 
         public UnitOfWork(TourContext tourContext, IImageService imageService)
         {
@@ -41,7 +42,7 @@ namespace Tourplanner.Db
 
         public async Task BeginTransactionAsync()
         {
-            _transaction = await _tourContext.Database.BeginTransactionAsync();
+            _transaction ??= await _tourContext.Database.BeginTransactionAsync();
         }
         public async Task CommitAsync()
         {
@@ -70,6 +71,12 @@ namespace Tourplanner.Db
         public async Task RollbackAsync()
         {
             Logger.Error("Rolling back transaction");
+            await _tourContext.DisposeAsync();
+        }
+        
+        public async Task RollbackAsync(Exception ex)
+        {
+            Logger.Error($"Rolling back transaction. Exception {ex.Message}");
             await _tourContext.DisposeAsync();
         }
 

@@ -87,14 +87,8 @@ namespace Api.Controllers
                     updateTourDto.Start,
                     updateTourDto.Destination
                 );
-                await mediator.Send(updateTourCommand);
-                var deleteMapCommand = new DeleteMapForTourCommand(tourid);
-                await mediator.Send(deleteMapCommand);
-                var createMapCommand = new CreateMapCommand(tourid, updateTourDto.Start, updateTourDto.Destination,
-                    updateTourDto.TransportType);
-                await mediator.Send(createMapCommand);
-
-                return Ok();
+                
+                return await ResponseAsync(updateTourCommand);
             }
             catch (Exception e)
             {

@@ -17,19 +17,16 @@ namespace Api.Entities.Maps
     {
         public override async Task<Task> Handle(DeleteMapForTourCommand request)
         {
-            unitOfWork.BeginTransactionAsync();
             try
             {
                 var map = await unitOfWork.MapRepository.GetMapByTourId(request.TourId);
                 if (map is null) throw new ResourceNotFoundException("Map not found");
 
                 await unitOfWork.MapRepository.Delete(map);
-                await unitOfWork.CommitAsync();
                 return Task.CompletedTask;
             }
             catch (Exception ex)
             {
-                await unitOfWork.RollbackAsync();
                 throw;
             }
         }
