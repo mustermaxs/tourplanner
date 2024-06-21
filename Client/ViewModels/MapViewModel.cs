@@ -1,4 +1,5 @@
 ﻿using Client.Dao;
+using Client.Exceptions;
 using Client.Models;
 
 namespace Client.ViewModels;
@@ -20,9 +21,17 @@ public class MapViewModel : BaseViewModel
 
     public override async Task InitializeAsync(Action notifyStateChanged)
     {
-        Map = await _mapDao.Read(_tourId);
-        ArrangeImages();
-        notifyStateChanged.Invoke();
+        try
+        {
+            Console.WriteLine("GET MAP");
+            Map = await _mapDao.Read(_tourId);
+            ArrangeImages();
+            notifyStateChanged.Invoke();
+        }
+        catch (Exception e)
+        {
+            throw new UserActionException("Failed to fetch tour");
+        }
     }
 
     private void ArrangeImages()

@@ -1,3 +1,4 @@
+using Tourplanner.Db;
 using Tourplanner.Exceptions;
 using Tourplanner.Repositories;
 
@@ -8,19 +9,30 @@ using Tourplanner.Infrastructure;
 public record DeleteTourCommand(int Id) : IRequest;
 
 public class DeleteTourCommandHandler(
+    IUnitOfWork unitOfWork,
     ITourRepository tourRepository)
     : RequestHandler<DeleteTourCommand, Task>()
 {
     public override async Task<Task> Handle(DeleteTourCommand command)
     {
-        var tour = await tourRepository.Get(command.Id);
-
-        if (tour is null)
+        unitOfWork.BeginTransactionAsync();
+        try
         {
-            throw new ResourceNotFoundException($"Tour {command.Id} could not be found");
+            var tour = await tourRepository.Get(command.Id);
+
+            if (tour is null)
+            {
+                throw new ResourceNotFoundException($"Tour {command.Id} could not be found");
+            }
+
+            await unitOfWork.TourRepository.Delete(tour);
+            await unitOfWork.CommitAsync();
+            return Task.CompletedTask;
         }
-        
-        await tourRepository.Delete(tour);
-        return Task.CompletedTask;
+        catch (Exception e)
+        {
+            unitOfWork.RollbackAsync();
+            throw;
+        }
     }
 }

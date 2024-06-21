@@ -3,6 +3,7 @@ namespace Tourplanner.Services
     using Tourplanner.Exceptions;
     using System.IO;
     using Microsoft.AspNetCore.Mvc;
+    using Api.Services.Logging;
 
     public interface IImageService
     {
@@ -30,8 +31,10 @@ namespace Tourplanner.Services
     {
         private HttpClient httpClient;
         private string baseDir;
+        protected ILoggerWrapper Logger = LoggerFactory.GetLogger();
 
-        public ImageService(IHttpClientFactory httpClientFactory, IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
+        public ImageService(IHttpClientFactory httpClientFactory, IConfiguration configuration,
+            IWebHostEnvironment webHostEnvironment)
         {
             httpClient = httpClientFactory.CreateClient("TourPlannerClient");
             // baseDir = configuration["Tiles:BaseDir"];
@@ -40,26 +43,36 @@ namespace Tourplanner.Services
 
         public async Task<string> FetchImageFromUrl(string savePath, TileConfig tileConfig)
         {
-            var filePath = Path.Combine(baseDir, savePath, CreateImageName(tileConfig));
+            var tileUrl = $"https://tile.openstreetmap.org/{tileConfig.Zoom}/{tileConfig.X}/{tileConfig.Y}.png";
 
-            HttpResponseMessage response =
-                await httpClient.GetAsync(
-                    $"https://tile.openstreetmap.org/{tileConfig.Zoom}/{tileConfig.X}/{tileConfig.Y}.png");
+            try
+            {
+                var filePath = Path.Combine(baseDir, savePath, CreateImageName(tileConfig));
 
-            if (!response.IsSuccessStatusCode) throw new ResourceNotFoundException("Failed to fetch image");
+                HttpResponseMessage response =
+                    await httpClient.GetAsync(
+                        $"https://tile.openstreetmap.org/{tileConfig.Zoom}/{tileConfig.X}/{tileConfig.Y}.png");
 
-            byte[] image = await response.Content.ReadAsByteArrayAsync();
+                if (!response.IsSuccessStatusCode) throw new ResourceNotFoundException("Failed to fetch image");
+
+                byte[] image = await response.Content.ReadAsByteArrayAsync();
 
 
-            await File.WriteAllBytesAsync(filePath, image);
+                await File.WriteAllBytesAsync(filePath, image);
 
-            return Path.Combine(savePath, CreateImageName(tileConfig));
+                return Path.Combine(savePath, CreateImageName(tileConfig));
+            }
+            catch (Exception e)
+            {
+                Logger.Warn($"Failed to fetch image. TileConfig: {tileConfig}. Url: {tileUrl}");
+                throw new DataAccessLayerException("Failed to fetch image");
+            }
         }
 
         public async Task<List<string>> FetchImages(string savePath, List<TileConfig> tileConfigs)
         {
             var newTiles = RemoveAlreadyExistingImages(in tileConfigs, savePath);
-            
+
             // if they already exist don't download them again and return the paths to the already existing ones
             if (!newTiles.Any())
                 return tileConfigs.Select(t => Path.Combine(savePath, CreateImageName(t))).ToList();
@@ -88,6 +101,7 @@ namespace Tourplanner.Services
         protected string CreateImageName(TileConfig tileconfig) =>
             $"{tileconfig.Zoom}-{tileconfig.X}-{tileconfig.Y}.png";
 
-            protected string GetAbsoluteImgPath(string fileName, TileConfig tileConfig) => (Path.Combine(baseDir, fileName, CreateImageName(tileConfig)));
+        protected string GetAbsoluteImgPath(string fileName, TileConfig tileConfig) =>
+            (Path.Combine(baseDir, fileName, CreateImageName(tileConfig)));
     }
 }

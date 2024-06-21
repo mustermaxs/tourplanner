@@ -1,4 +1,5 @@
 ﻿using Tourplanner;
+using Tourplanner.Db;
 using Tourplanner.DTOs;
 using Tourplanner.Entities;
 using Tourplanner.Entities.Tours;
@@ -12,17 +13,25 @@ namespace Api.Entities.Maps
     public record DeleteMapForTourCommand(int TourId) : IRequest;
 
     public class DeleteMapForTourCommandHandler(
-        IMapRepository mapRepository,
-        ITileRepository tileRepository) : RequestHandler<DeleteMapForTourCommand, Task>()
+        IUnitOfWork unitOfWork) : RequestHandler<DeleteMapForTourCommand, Task>()
     {
         public override async Task<Task> Handle(DeleteMapForTourCommand request)
         {
-            var map = await mapRepository.GetMapByTourId(request.TourId);
-            if (map is null) throw new ResourceNotFoundException("Map not found");
+            unitOfWork.BeginTransactionAsync();
+            try
+            {
+                var map = await unitOfWork.MapRepository.GetMapByTourId(request.TourId);
+                if (map is null) throw new ResourceNotFoundException("Map not found");
 
-            await mapRepository.Delete(map);
-            
-            return Task.CompletedTask;
+                await unitOfWork.MapRepository.Delete(map);
+                await unitOfWork.CommitAsync();
+                return Task.CompletedTask;
+            }
+            catch (Exception ex)
+            {
+                await unitOfWork.RollbackAsync();
+                throw;
+            }
         }
     }
 }

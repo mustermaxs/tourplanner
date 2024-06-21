@@ -64,7 +64,7 @@ namespace UnitTests.Services;
             await _migrationService.ImportTour(data);
 
             // Assert
-            _tourRepositoryMock.Verify(repo => repo.CreateReturnId(It.IsAny<Tour>()), Times.Once);
+            _tourRepositoryMock.Verify(repo => repo.Create(It.IsAny<Tour>()), Times.Once);
         }
 
         [Test]

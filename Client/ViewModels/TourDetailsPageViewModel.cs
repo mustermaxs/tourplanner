@@ -49,17 +49,18 @@ public class TourDetailsPageViewModel : BaseViewModel
         Tour = new Tour();
         Tour.Id = tourId;
 
-    try {
-        Tour = await _tourDao.Read(tourId);
-    } catch (Exception) {
-        _navigationManager.NavigateTo("/notfound");
-    }
-
-        TourLogs = (List<TourLog>)await _tourLogDao.ReadMultiple(tourId);
-
-        MapVM = new MapViewModel(_mapDao, tourId);
-
-        _notifyStateChanged.Invoke();
+        try
+        {
+            Tour = await _tourDao.Read(tourId);
+            TourLogs = (List<TourLog>)await _tourLogDao.ReadMultiple(tourId);
+            MapVM = new MapViewModel(_mapDao, tourId);
+            MapVM.InitializeAsync(_notifyStateChanged);
+            _notifyStateChanged.Invoke();
+        }
+        catch (Exception)
+        {
+            _navigationManager.NavigateTo("/notfound");
+        }
     }
 
 

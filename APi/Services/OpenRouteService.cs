@@ -75,7 +75,8 @@ namespace Tourplanner.Services
 
             try
             {
-                var json = await _httpService.Get<string>(BuildRouteInfoUrl(profile, from, to, transportType));
+                var json = await _httpService.Get<string>(
+                    $"{_baseUrl}{_routeInfoUrl}{profile}?api_key={_apiKey}&start={CoordinateToString(from.Latitude)},{CoordinateToString(from.Longitude)}&end={CoordinateToString(to.Latitude)},{CoordinateToString(to.Longitude)}");
 
                 using JsonDocument doc = JsonDocument.Parse(json);
                 JsonElement root = doc.RootElement;

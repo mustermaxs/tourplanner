@@ -42,11 +42,11 @@ else
 
     [Parameter] public MapViewModel? ViewModel { get; set; }
 
-    protected override async Task OnParametersSetAsync()
-    {
-        if (ViewModel != null)
-        {
-            await ViewModel.InitializeAsync(StateHasChanged);
-        }
-    }
+    // protected override async Task OnParametersSetAsync()
+    // {
+    //     if (ViewModel != null)
+    //     {
+    //         await ViewModel.InitializeAsync(StateHasChanged);
+    //     }
+    // }
 }

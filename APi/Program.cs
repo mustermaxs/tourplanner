@@ -18,6 +18,7 @@ using Tourplanner.Entities.Tours;
 using Tourplanner.Entities.TourLogs;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Tourplanner.Db;
 using Tourplanner.Entities.Maps;
 
 namespace Tourplanner;
@@ -92,9 +93,10 @@ internal class Program
         services.AddScoped<ITourRepository, TourRepository>();
         services.AddTransient<IOpenRouteService, OpenRouteService>();
         services.AddTransient<IImageService, ImageService>();
-        services.AddTransient<ITileCalculator, TileCalculator>();
-        services.AddTransient<ITileRepository, TileRepository>();
-        services.AddTransient<IMapRepository, MapRepository>();
+        services.AddScoped<ITileCalculator, TileCalculator>();
+        services.AddScoped<ITileRepository, TileRepository>();
+        services.AddScoped<IMapRepository, MapRepository>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         services.AddScoped<ICommandHandler, GetToursRequestHandler>();
         services.AddScoped<ICommandHandler, GetTourByIdRequestHandler>();

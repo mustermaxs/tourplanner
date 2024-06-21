@@ -1,4 +1,5 @@
-﻿using Tourplanner.Exceptions;
+﻿using Tourplanner.Db;
+using Tourplanner.Exceptions;
 using Tourplanner.Infrastructure;
 using Tourplanner.Repositories;
 
@@ -15,29 +16,38 @@ namespace Tourplanner.Entities.TourLogs.Commands
     ) : IRequest;
     
     public class UpdateTourLogCommandHandler(
-        ITourLogRepository tourLogRepository)
+        IUnitOfWork unitOfWork)
     : RequestHandler<UpdateTourLogCommand, Task>()
     {
         public override async Task<Task> Handle(UpdateTourLogCommand request)
         {
-            var tourLog = await tourLogRepository.Get(request.TourLogId);
-
-            if (tourLog is null)
+            await unitOfWork.BeginTransactionAsync();
+            try
             {
-                throw new ResourceNotFoundException($"Tour log entry {request.TourLogId} doesn't seem to exist");
+                var tourLog = await unitOfWork.TourLogRepository.Get(request.TourLogId);
+
+                if (tourLog is null)
+                {
+                    throw new ResourceNotFoundException($"Tour log entry {request.TourLogId} doesn't seem to exist");
+                }
+
+                tourLog.DateTime = request.DateTime;
+                tourLog.Comment = request.Comment;
+                tourLog.Difficulty = request.Difficulty;
+                tourLog.Rating = request.Rating;
+                tourLog.TourLogId = request.TourLogId;
+                tourLog.Duration = request.Duration;
+                tourLog.Distance = request.Distance;
+
+                await unitOfWork.TourLogRepository.UpdateAsync(tourLog);
+                await unitOfWork.CommitAsync();
+                return Task.CompletedTask;
             }
-            
-            tourLog.DateTime = request.DateTime;
-            tourLog.Comment = request.Comment;
-            tourLog.Difficulty = request.Difficulty;
-            tourLog.Rating = request.Rating;
-            tourLog.TourLogId = request.TourLogId;
-            tourLog.Duration = request.Duration;
-            tourLog.Distance = request.Distance;
-
-            await tourLogRepository.UpdateAsync(tourLog);
-
-            return Task.CompletedTask;
+            catch (Exception ex)
+            {
+                await unitOfWork.RollbackAsync();
+                throw;
+            }
         }
     }
 }

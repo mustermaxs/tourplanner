@@ -1,4 +1,5 @@
-﻿using Tourplanner.Exceptions;
+﻿using Tourplanner.Db;
+using Tourplanner.Exceptions;
 using Tourplanner.Infrastructure;
 using Tourplanner.Models;
 using Tourplanner.Repositories;
@@ -20,29 +21,40 @@ namespace Tourplanner.Entities.Tours
     public class UpdateTourCommandHandler(
         ITourRepository tourRepository,
         IRatingService ratingService,
-        IChildFriendlinessService childFriendlinessService)
+        IChildFriendlinessService childFriendlinessService,
+        IUnitOfWork unitOfWork)
         : RequestHandler<UpdateTourCommand, Task>()
     {
         public override async Task<Task> Handle(UpdateTourCommand command)
         {
-            var entityToUpdate = await tourRepository.GetTourWithLogs(command.Id);
-
-            if (entityToUpdate is null)
+            unitOfWork.BeginTransactionAsync();
+            try
             {
-                throw new ResourceNotFoundException($"Tour '{command.Name}', #{command.Id} could not be found");
+                var entityToUpdate = await tourRepository.GetTourWithLogs(command.Id);
+
+                if (entityToUpdate is null)
+                {
+                    throw new ResourceNotFoundException($"Tour '{command.Name}', #{command.Id} could not be found");
+                }
+
+                entityToUpdate.Name = command.Name;
+                entityToUpdate.Description = command.Description;
+                entityToUpdate.From = command.From;
+                entityToUpdate.To = command.To;
+                entityToUpdate.Popularity = ratingService.Calculate(entityToUpdate.TourLogs);
+                entityToUpdate.ChildFriendliness = await childFriendlinessService.Calculate(entityToUpdate.Id);
+                entityToUpdate.TransportType = command.TransportType;
+
+                await unitOfWork.TourRepository.UpdateAsync(entityToUpdate);
+                unitOfWork.CommitAsync();
+                return Task.CompletedTask;
             }
-
-            entityToUpdate.Name = command.Name;
-            entityToUpdate.Description = command.Description;
-            entityToUpdate.From = command.From;
-            entityToUpdate.To = command.To;
-            entityToUpdate.Popularity = ratingService.Calculate(entityToUpdate.TourLogs);
-            entityToUpdate.ChildFriendliness = await childFriendlinessService.Calculate(entityToUpdate.Id);
-            entityToUpdate.TransportType = command.TransportType;
-
-            await tourRepository.UpdateAsync(entityToUpdate);
-            return Task.CompletedTask;
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                await unitOfWork.RollbackAsync();
+                throw;
+            }
         }
     }
 }
-
