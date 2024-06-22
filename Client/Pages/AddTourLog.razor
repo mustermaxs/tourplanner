@@ -19,31 +19,31 @@ else
 {
     <h5>Tour: @AddLogVM.TourLog.Tour.Name</h5>
 
-    <div class="row">
-        <div class="col mt-3">
-            <label for="date">Date</label>
-            <input type="datetime-local" class="form-control" id="date" @bind="AddLogVM.TourLog.DateTime">
-        </div>
-        <div class="col mt-3">
-            <label for="difficulty">Difficulty</label>
-            <input type="number" max="10" step="1" min="0" class="form-control" id="difficulty" @bind="AddLogVM.TourLog.Difficulty">
-        </div>
-        <div class="col mt-3">
+    <div class="row mt-3">
+        <div class="col-md-6">
             <label for="rating">Rating</label>
-            <input type="number" max="10" step="1" min="0" class="form-control" id="rating" @bind="AddLogVM.TourLog.Rating">
+            <input type="number" max="10" class="form-control" id="rating" @bind="AddLogVM.TourLog.Rating">
         </div>
-        <div class="col mt-3">
-            <label for="rating">Distance</label>
-            <input type="number" step="1" min="0" class="form-control" placeholder="Distance in km" id="rating" @bind="AddLogVM.TourLog.Distance">
+        <div class="col-md-6">
+           <label for="difficulty">Difficulty</label>
+            <input type="number" max="10" class="form-control" id="difficulty" @bind="AddLogVM.TourLog.Difficulty">
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-md-6">
+            <label for="rating">Distance (km)</label>
+            <input type="number" min="0" step="0.1" class="form-control" id="rating" @bind="AddLogVM.TourLog.Distance">
+        </div>
+        <div class="col-md-6">
+            <label for="rating">Duration</label>
+            <input type="number" min="0" class="form-control" id="duration" @bind="AddLogVM.TourLog.Duration">
         </div>
     </div>
 
-        <div class="row">
-            <div class="form-group mt-3">
-                <label for="comment">Comment</label>
-                <textarea maxlength="500" class="form-control" id="comment" rows="3" @bind="AddLogVM.TourLog.Comment"></textarea>
-            </div>
-        </div>
+    <div class="form-group mt-3">
+        <label for="comment">Comment</label>
+        <textarea class="form-control" id="comment" rows="3" @bind="AddLogVM.TourLog.Comment"></textarea>
+    </div>
 
     <ButtonGroup Layout="ButtonGroup.Position.Center">
         <Button ButtonType="Primary" mt="4" Label="Add" Img="map" OnClickCallback="AddLogVM.AddLog"/>

@@ -11,6 +11,7 @@ public class TourLogSpecification: CompositeSpecification<TourLog>
             log.Difficulty is >= 0 and <= 10 &&
             log.Rating is >= 0 and <= 10  &&
             log.Distance >= 0 &&
+            log.Duration >= 0 &&
             !string.IsNullOrEmpty(log.Comment)
         );
     }

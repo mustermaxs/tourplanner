@@ -17,5 +17,4 @@ public class UpdateTourLogDto(
     public float Distance { get; private set; } = distance;
     public float Duration { get; private set; } = duration;
     
-    // TODO add total time
 }

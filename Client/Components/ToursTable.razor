@@ -25,7 +25,7 @@
                 <td>@tour.TransportType</td>
                 <td>@tour.From</td>
                 <td>@tour.To</td>
-                <td>@tour.Popularity</td>
+                <td>@Math.Floor(tour.Popularity) / 10</td>
             </tr>
         }
         </tbody>
