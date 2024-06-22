@@ -9,7 +9,7 @@ using NUnit.Framework;
 using Tourplanner.Exceptions;
 using Tourplanner.Services;
 
-namespace UnitTests.Controllers
+namespace Tourplanner.UnitTests.Controllers
 {
     [TestFixture]
     public class MigrationControllerTests

@@ -9,7 +9,7 @@ using Tourplanner.Repositories;
 using Tourplanner.Services;
 using Tourplanner.Exceptions;
 
-namespace UnitTests.Services;
+namespace Tourplanner.UnitTests.Services;
 
 [TestFixture]
     public class ChildFriendlinessServiceTests

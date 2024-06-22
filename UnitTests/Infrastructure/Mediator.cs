@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using Tourplanner.Infrastructure;
+using Tourplanner.Exceptions;
 
-namespace Tourplanner.Tests
+namespace Tourplanner.UnitTests.Infrastructure
 {
     public class TestRequest : IRequest { }
 
@@ -76,8 +77,8 @@ namespace Tourplanner.Tests
         [Test]
         public void Send_ShouldThrowExceptionWhenSendingUnknownCommand()
         {
-            var ex = Assert.ThrowsAsync<Exception>(async () => await _mediator.Send(_mockRequest.Object));
-            Assert.That(ex.Message, Is.EqualTo("Command IRequestProxy unknown"));
+            var ex = Assert.ThrowsAsync<InfrastructureException>(async () => await _mediator.Send(_mockRequest.Object));
+            Assert.That(ex.Message, Is.EqualTo("[Mediator] Command IRequestProxy unknown"));
         }   
     
 

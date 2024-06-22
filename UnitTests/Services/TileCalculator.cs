@@ -3,7 +3,7 @@ using Tourplanner.Services;
 using Tourplanner.Entities;
 using System.Collections.Generic;
 
-namespace Tourplanner.Tests
+namespace Tourplanner.UnitTests.Services
 {
     [TestFixture]
     public class TileCalculatorTests

@@ -1,6 +1,6 @@
 using Tourplanner.Services.Search;
 
-namespace UnitTests.Services;
+namespace Tourplanner.UnitTests.Services;
 
 [TestFixture]
 [TestOf(typeof(StringSearchService))]
