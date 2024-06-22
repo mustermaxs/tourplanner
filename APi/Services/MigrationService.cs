@@ -55,7 +55,7 @@ namespace Tourplanner.Services
 
             if (tour != null)
             {
-                await _tourRepository.CreateReturnId(tour);
+                await _tourRepository.Create(tour);
             }
         }
     }

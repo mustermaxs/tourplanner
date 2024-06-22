@@ -36,6 +36,7 @@ public class ToursPageViewModel : BaseViewModel
     {
         try
         {
+            Console.WriteLine("GET TOURS");
             Tours = await _tourDao.ReadMultiple();
             _notifyStateChanged.Invoke();
         }

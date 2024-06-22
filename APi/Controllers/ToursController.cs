@@ -51,8 +51,6 @@ namespace Api.Controllers
         [HttpPost]
         public async Task<ActionResult<IResponse>> CreateTour([FromBody] CreateTourDto createTourDto)
         {
-            try
-            {
                 var createTourCommand = new CreateTourCommand(
                     createTourDto.Name,
                     createTourDto.Description,
@@ -62,18 +60,7 @@ namespace Api.Controllers
                     createTourDto.Start,
                     createTourDto.Destination
                 );
-
-                var tourId = Convert.ToInt32(await mediator.Send(createTourCommand));
-                var createMapCommand = new CreateMapCommand(tourId, createTourDto.Start, createTourDto.Destination,
-                    createTourDto.TransportType);
-                await mediator.Send(createMapCommand);
-
-                return Ok();
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+                return await ResponseAsync(createTourCommand);
         }
 
 
@@ -84,7 +71,7 @@ namespace Api.Controllers
             return await ResponseAsync(command);
         }
 
-        [HttpPut("{tourid}")]
+        [HttpPut("{tourid}")]   // TODO put this in a single command, use mediator in it to pass it to following commands, pass same unit of work to all commands
         public async Task<ActionResult<IResponse>> UpdateTour([FromBody] UpdateTourDto updateTourDto,
             [FromRoute] int tourid)
         {
@@ -100,14 +87,8 @@ namespace Api.Controllers
                     updateTourDto.Start,
                     updateTourDto.Destination
                 );
-                await mediator.Send(updateTourCommand);
-                var deleteMapCommand = new DeleteMapForTourCommand(tourid);
-                await mediator.Send(deleteMapCommand);
-                var createMapCommand = new CreateMapCommand(tourid, updateTourDto.Start, updateTourDto.Destination,
-                    updateTourDto.TransportType);
-                await mediator.Send(createMapCommand);
-
-                return Ok();
+                
+                return await ResponseAsync(updateTourCommand);
             }
             catch (Exception e)
             {

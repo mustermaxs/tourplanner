@@ -24,6 +24,7 @@ public abstract class IMediator
     {
         try
         {
+            Logger.Info($"Request {request.GetType().Name} - {request.ToString()}");
             var commandHandlerType = GetCommandHandlerType(request);
             var commandHandler = GetCommandHandler(commandHandlerType);
             var handleMethod = GetHandleMethod(commandHandlerType);

@@ -1,3 +1,5 @@
+using Tourplanner.Db;
+
 namespace Tourplanner.Entities.Maps
 {
     using Tourplanner.DTOs;
@@ -13,11 +15,10 @@ namespace Tourplanner.Entities.Maps
     TransportType TransportType) : IRequest;
 
     public class CreateMapCommandHandler(
-        IMapRepository mapRepository,
+        IUnitOfWork unitOfWork,
         IImageService imageService,
         ITileCalculator tileCalculator,
-        IOpenRouteService openRouteService,
-        ITileRepository tileRepository)
+        IOpenRouteService openRouteService)
         : RequestHandler<CreateMapCommand, int>()
     {
 
@@ -58,11 +59,11 @@ namespace Tourplanner.Entities.Maps
                 Bbox = bbox
             };
 
-            var mapId = await mapRepository.CreateReturnId(map);
-            var createTilesTask = tiles.Select(async t => await tileRepository.Create(t));
+            await unitOfWork.MapRepository.Create(map);
+            var createTilesTask = tiles.Select(async t => await unitOfWork.TileRepository.Create(t));
             await Task.WhenAll(createTilesTask);
 
-            return mapId;
+            return map.Id;
         }
     }
 }

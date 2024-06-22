@@ -10,21 +10,6 @@ public class TourRepository : Repository<Tour>, ITourRepository
     {
     }
 
-    public async Task<int> CreateReturnId(Tour tour)
-    {
-        try
-        {
-            await dbSet.AddAsync(tour);
-            await SaveAsync();
-            return tour.Id;
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw new DataAccessLayerException("Failed to create tour", e);
-        }
-    }
-
     public async Task<Tour?> GetTourWithLogs(int tourId)
     {
         try
@@ -55,7 +40,6 @@ public class TourRepository : Repository<Tour>, ITourRepository
 
 public interface ITourRepository : IRepository<Tour>
 {
-    public Task<int> CreateReturnId(Tour tour);
     public Task<Tour?> GetTourWithLogs(int tourId);
     public Task<IEnumerable<Tour>> GetToursWithLogs();
 }

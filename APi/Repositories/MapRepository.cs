@@ -7,7 +7,6 @@ namespace Tourplanner.Repositories
 {
     public interface IMapRepository : IRepository<Map>
     {
-        public Task<int> CreateReturnId(Map map);
         public Task<Map?> GetMapWithTilesForTour(int tourId);
         public Task<Map?> GetMapByTourId(int tourId);
     }
@@ -21,20 +20,6 @@ namespace Tourplanner.Repositories
             _imageService = imageService;
         }
 
-        public async Task<int> CreateReturnId(Map map)
-        {
-            try
-            {
-                await dbSet.AddAsync(map);
-                await SaveAsync();
-                return map.Id;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw new DataAccessLayerException("Failed to create map", e);
-            }
-        }
 
         public async Task<Map?> GetMapWithTilesForTour(int tourId)
         {
