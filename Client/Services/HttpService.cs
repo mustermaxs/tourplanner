@@ -56,7 +56,14 @@ public class HttpService : IHttpService
 
     public async Task<HttpResponseMessage> Put<TDto>(TDto dto, string url)
     {
-        return await client.PutAsJsonAsync(baseUrl + url, dto);
+        if((await client.PutAsJsonAsync(baseUrl + url, dto)).StatusCode != System.Net.HttpStatusCode.OK)
+        {
+            throw new ServiceLayerException("HttpService: Failed to put data");
+        }
+        else
+        {
+            return await client.PutAsJsonAsync(baseUrl + url, dto);
+        }
     }
 
     public async Task<HttpResponseMessage> Delete(string url)

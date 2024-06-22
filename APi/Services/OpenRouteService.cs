@@ -102,6 +102,9 @@ namespace Tourplanner.Services
                 float distance = (float)segments.GetProperty("distance").GetDouble();
                 float duration = (float)segments.GetProperty("duration").GetDouble();
 
+                Console.WriteLine("Distance: " + distance);
+                Console.WriteLine("Duration: " + duration);
+
                 return new Summary(
                     new Bbox(bbox[0], bbox[1], bbox[2], bbox[3]),
                     distance,

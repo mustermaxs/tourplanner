@@ -25,6 +25,7 @@ namespace Tourplanner.Entities.Tours
         IRatingService ratingService,
         IChildFriendlinessService childFriendlinessService,
         IUnitOfWork unitOfWork,
+        IOpenRouteService openRouteService,
         IMediator mediator)
         : RequestHandler<UpdateTourCommand, Task>()
     {
@@ -33,6 +34,9 @@ namespace Tourplanner.Entities.Tours
             await unitOfWork.BeginTransactionAsync();
             try
             {
+
+                var routeSummary = await openRouteService.RouteInfo(command.Start, command.Destination, command.TransportType);
+
                 var entityToUpdate = await tourRepository.GetTourWithLogs(command.Id);
 
                 if (entityToUpdate is null)
@@ -47,12 +51,13 @@ namespace Tourplanner.Entities.Tours
                 entityToUpdate.Popularity = ratingService.Calculate(entityToUpdate.TourLogs);
                 entityToUpdate.ChildFriendliness = await childFriendlinessService.Calculate(entityToUpdate.Id);
                 entityToUpdate.TransportType = command.TransportType;
+                entityToUpdate.EstimatedTime = routeSummary.Duration;
+                entityToUpdate.Distance = routeSummary.Distance;
 
                 await unitOfWork.TourRepository.UpdateAsync(entityToUpdate);
                 var deleteMapCommand = new DeleteMapForTourCommand(command.Id);
                 await mediator.Send(deleteMapCommand);
-                var createMapCommand = new CreateMapCommand(command.Id, command.Start, command.Destination,
-                    command.TransportType); 
+                var createMapCommand = new CreateMapCommand(command.Id, routeSummary, command.TransportType); 
                 await mediator.Send(createMapCommand);
                 
                 await unitOfWork.CommitAsync();

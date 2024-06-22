@@ -80,6 +80,8 @@ public class TourDetailsPageViewModel : BaseViewModel
     {
         try
         {
+            //confirm popup
+            
             await _tourDao.Delete(Tour);
 
             foreach (var log in TourLogs)

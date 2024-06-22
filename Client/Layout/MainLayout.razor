@@ -27,7 +27,6 @@
             </ul>
            <div class="d-flex" role="search">
                 <input aria-label="Search" @bind="SearchValue" class="form-control me-2" @onkeyup="(ev) => Enter(ev)" placeholder="Search" type="search">
-                @* <button class="btn btn-primary" @onclick="() => TriggerSearch()">Search</button> *@
                 <button class="btn btn-primary" @onclick="() => TriggerSearch()">Search</button>
             </div>
         </div>
@@ -56,7 +55,7 @@
     {
         if(string.IsNullOrWhiteSpace(SearchValue))
             return;
-        NavManager.NavigateTo($"/search?q={SearchValue}");
+        NavManager.NavigateTo($"/search?q={SearchValue}", true);
 
         return;
     }

@@ -18,6 +18,9 @@ public class TourEditPageViewModel : BaseViewModel
     public List<string> Suggestions { get; private set; } = new List<string>();
     public HashSet<string> AllSuggestions { get; set; } = new HashSet<string>();
 
+    public bool StartChanged = false;
+    public bool DestinationChanged = false;
+
     public TourEditPageViewModel(NavigationManager navigationManager, ITourDao tourDao, PopupViewModel popupViewModel,
         IGeoService geoService) : base()
     {
@@ -34,8 +37,13 @@ public class TourEditPageViewModel : BaseViewModel
         try
         {
             _notifyStateChanged.Invoke();
-            var from = AllSuggestions.TryGetValue(Tour.From, out string _);
-            var to = AllSuggestions.TryGetValue(Tour.To, out string _);
+
+            Console.WriteLine("StartChanged: " + StartChanged);
+            Console.WriteLine("DestinationChanged: " + DestinationChanged);
+
+            var from = StartChanged ? AllSuggestions.TryGetValue(Tour.From, out string _) : true;
+            var to = DestinationChanged ? AllSuggestions.TryGetValue(Tour.To, out string _) : true;
+
             var tourSpecification = new AddTourSpecification(from, to);
 
             if (tourSpecification.IsSatisfiedBy(Tour))
@@ -45,6 +53,7 @@ public class TourEditPageViewModel : BaseViewModel
                 Tour.Destination = (await _geoService.SearchLocation(Tour.To)).Features.FirstOrDefault()?.GeometryDto
                     .Coordinates;
                 await _tourDao.Update(Tour);
+
                 _navigationManager.NavigateTo($"/tours/{Tour.Id}");
                 _popupViewModel.Open("Success", "Updated tour!", PopupStyle.Normal);
             }
@@ -91,8 +100,15 @@ public class TourEditPageViewModel : BaseViewModel
 
     public async Task GetSuggestion(string userInput)
     {
+    
+        Console.Write("GetSuggestion: " + userInput);
+
         if (string.IsNullOrEmpty(userInput))
             return;
+
+        if(AllSuggestions.Contains(userInput))
+            return;
+
         var locations = await Debouncer.Debounce<string, OrsBaseDto>(_geoService.SearchLocation, userInput, 1000);
 
         if (locations != null && locations.Features.Any())

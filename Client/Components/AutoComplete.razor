@@ -3,7 +3,7 @@
     <label for="autocomplete">@Label</label>
 }
 
-<input @bind="_userInput" list="@($"{Id}_list")" type="text" class="form-control" id="@Id" @oninput="OnInputChanged" placeholder="@Placeholder">
+<input autocomplete="off" @bind="_userInput" list="@($"{Id}_list")" type="text" class="form-control" id="@Id" @oninput="OnInputChanged" placeholder="@Placeholder">
 @if (_options != null && _options.Any())
 {
     <datalist id="@($"{Id}_list")">
@@ -42,6 +42,7 @@
         await OnInput.InvokeAsync(_userInput);
         _options = Options?.Invoke() ?? Enumerable.Empty<string>();
         StateHasChanged();
+        Console.WriteLine(_userInput);
     }
 
 }

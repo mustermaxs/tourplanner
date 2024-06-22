@@ -9,10 +9,7 @@ namespace Tourplanner.Entities.Maps
     using Tourplanner.Services;
     using Tourplanner.Entities.Tours;
 
-    public record CreateMapCommand(int TourId,
-    Coordinates From,
-    Coordinates To,
-    TransportType TransportType) : IRequest;
+    public record CreateMapCommand(int TourId, Summary routeSummary, TransportType TransportType) : IRequest;
 
     public class CreateMapCommandHandler(
         IUnitOfWork unitOfWork,
@@ -24,8 +21,8 @@ namespace Tourplanner.Entities.Maps
 
         public override async Task<int> Handle(CreateMapCommand request)    // TODO tiles Erzeugung etc in service auslagern, wird auch in UpdateMapCommand benötigt
         {
-            var routeSummary = await openRouteService.RouteInfo(request.From, request.To, request.TransportType);
-            var bboxValues = routeSummary.Bbox;
+
+            var bboxValues = request.routeSummary.Bbox;
             var bbox = new Bbox(bboxValues.MinX, bboxValues.MinY, bboxValues.MaxX, bboxValues.MaxY);
             List<TileConfig> tileConfigs = new List<TileConfig>();
             
