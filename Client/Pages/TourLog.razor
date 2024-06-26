@@ -3,6 +3,7 @@
 @inject TourLogPageViewModel EditLogVM
 @inject NavigationManager NavManager
 @using Client.Components
+@using Client.Utils.Specifications
 @using Client.ViewModels
 
 <PageTitle>Edit Tour Log</PageTitle>
@@ -30,6 +31,7 @@ else
         <div class="col-md-6">
             <label for="rating">Rating</label>
             <input type="number" max="10" class="form-control" id="rating" @bind="EditLogVM.TourLog.Rating">
+            <TpInput TypeParam="float" InputType="number"  Max="10" Min="0" Placeholder="0-10" Specification="new ValueInRangeSpecification<float>(0, 10)"></TpInput>
         </div>
          <div class="col-md-6">
             <label for="difficulty">Difficulty</label>

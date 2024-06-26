@@ -31,5 +31,6 @@ builder.Services.AddScoped<TourLogPageViewModel>();
 builder.Services.AddScoped<TourLogAddPageViewModel>();
 builder.Services.AddScoped<PopupViewModel>();
 builder.Services.AddScoped<SearchPageViewModel>();
+builder.Services.AddScoped<TpInputViewModel>();
 
 await builder.Build().RunAsync();

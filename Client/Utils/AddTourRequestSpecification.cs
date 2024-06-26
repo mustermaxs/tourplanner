@@ -17,15 +17,6 @@ public class AddTourSpecification : CompositeSpecification<Tour>
     }
     public override bool IsSatisfiedBy(Tour tour)
     {
-
-    //log the values of the fields
-    Console.WriteLine($"_from: {_from}");
-    Console.WriteLine($"_to: {_to}");
-    Console.WriteLine($"Description: {tour.Description}");
-    Console.WriteLine($"From: {tour.From}");
-    Console.WriteLine($"To: {tour.To}");
-    Console.WriteLine($"Name: {tour.Name}");
-
         return (
             (_from ) &&
             (_to) &&

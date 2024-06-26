@@ -1,0 +1,90 @@
+@using Client.Exceptions
+@using Client.Utils.Specifications
+@using Client.ViewModels
+@inject TpInputViewModel TpInputVM
+@typeparam TypeParam
+
+<div class="input-wrapper">
+    @if (TpInputVM.InputIsValid)
+    {
+        <span class="invalid-input-message">{@InvalidInputMessage}</span>
+    }
+    <div>
+        @switch (InputType)
+        {
+            case "text":
+                <input class="form-control @GetClasses()" @bind="@TpInputVM.UserInput" type="@InputType" id="@Id" @oninput="OnInputChanged" placeholder="@Placeholder"/>
+                break;
+            case "number":
+                <input Classes="@Classes" class="form-control @GetClasses()" @bind="@TpInputVM.UserInput" min="@Min" max="@Max" step="@Step" type="@InputType" id="@Id" @oninput="OnInputChanged" placeholder="@Placeholder"/>
+                break;
+            case "date":
+                <input Classes="@Classes" class="form-control @GetClasses()" @bind="@TpInputVM.UserInput" type="@InputType" id="@Id" @oninput="OnInputChanged" placeholder="@Placeholder"/>
+                break;
+            default:
+                <input Classes="@Classes" class="form-control @GetClasses()" @bind="@TpInputVM.UserInput" type="text" id="@Id" @oninput="OnInputChanged" placeholder="@Placeholder"/>
+                break;
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter] public EventCallback<string> OnInput { get; set; }
+    [Parameter] public string InputType { get; set; } = "text";
+    [Parameter] public float Min { get; set; } = float.MinValue;
+    [Parameter] public float Max { get; set; } = float.MaxValue;
+    [Parameter] public float Step { get; set; } = 1;
+    [Parameter] public string Id { get; set; } = "";
+    [Parameter] public string Placeholder { get; set; } = "";
+    [Parameter] public List<string>? Classes { get; set; } = new List<string>();
+    [Parameter] public ISpecification<TypeParam>? Specification { get; set; }
+    [Parameter] public bool VerifyOnInput { get; set; } = false;
+    [Parameter] public string? InvalidInputMessage { get; set; } = "Input is invalid";
+
+    private string _userInput = string.Empty;
+    private List<string> _classes = new List<string>();
+
+    private string GetClasses() => String.Join(" ", _classes);
+
+    public void AddToCssClassList(string cssClass)
+    {
+        _classes.Add(cssClass);
+        StateHasChanged();
+    }
+
+    public void RemoveFromCssClassList(string cssClass)
+    {
+        _classes.Remove(cssClass);
+        StateHasChanged();
+    }
+
+    public void OnShowError(string? message)
+    {
+        AddToCssClassList("invalid-input");
+    }
+
+    public void OnHideError()
+    {
+        RemoveFromCssClassList("invalid-input");
+    }
+
+    private async Task OnInputChanged(ChangeEventArgs e)
+    {
+        TpInputVM.UserInput = e.Value?.ToString();
+        await OnInput.InvokeAsync(TpInputVM.UserInput);
+        StateHasChanged();
+    }
+
+    protected override void OnParametersSet()
+    {
+        TpInputVM.InvalidInputMessage = InvalidInputMessage;
+        TpInputVM.InputType = InputType;
+        Classes?.ForEach(AddToCssClassList);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await TpInputVM.InitializeAsync(StateHasChanged);
+    }
+
+}
