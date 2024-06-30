@@ -31,7 +31,7 @@ public class DeleteTourCommandHandler(
         }
         catch (Exception e)
         {
-            unitOfWork.RollbackAsync();
+            await unitOfWork.RollbackAsync();
             throw;
         }
     }

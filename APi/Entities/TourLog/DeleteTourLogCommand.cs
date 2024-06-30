@@ -17,7 +17,7 @@ namespace Tourplanner.Entities.TourLogs
             try
             {
                 var tourLog = await tourLogRepository.Get(request.TourLogId);
-                unitOfWork.BeginTransactionAsync();
+                await unitOfWork.BeginTransactionAsync();
 
                 if (tourLog is null)
                 {
