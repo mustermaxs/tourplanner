@@ -23,7 +23,7 @@ namespace Tourplanner.Entities.TourLogs.Commands
     {
         public override async Task<Task> Handle(CreateTourLogCommand request)
         {
-            unitOfWork.BeginTransactionAsync();
+            await unitOfWork.BeginTransactionAsync();
             try
             {
                 var tourLog = new TourLog();
@@ -46,7 +46,7 @@ namespace Tourplanner.Entities.TourLogs.Commands
             }
             catch (Exception e)
             {
-                unitOfWork.RollbackAsync();
+                await unitOfWork.RollbackAsync();
                 throw;
             }
         }

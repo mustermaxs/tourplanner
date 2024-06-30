@@ -2,6 +2,7 @@
 using Tourplanner.Exceptions;
 using Tourplanner.Infrastructure;
 using Tourplanner.Repositories;
+using Tourplanner.Services;
 
 namespace Tourplanner.Entities.TourLogs
 {
@@ -9,7 +10,8 @@ namespace Tourplanner.Entities.TourLogs
     
     public class DeleteTourLogCommandHandler(
         IUnitOfWork unitOfWork,
-        ITourLogRepository tourLogRepository)
+        ITourLogRepository tourLogRepository,
+        IRatingService ratingService)
     : RequestHandler<DeleteTourLogCommand, Task>()
     {
         public override async Task<Task> Handle(DeleteTourLogCommand request)
@@ -17,7 +19,7 @@ namespace Tourplanner.Entities.TourLogs
             try
             {
                 var tourLog = await tourLogRepository.Get(request.TourLogId);
-                unitOfWork.BeginTransactionAsync();
+                await unitOfWork.BeginTransactionAsync();
 
                 if (tourLog is null)
                 {
@@ -25,6 +27,10 @@ namespace Tourplanner.Entities.TourLogs
                 }
             
                 await unitOfWork.TourLogRepository.Delete(tourLog);
+                var tour = await unitOfWork.TourRepository.Get(tourLog.TourId);
+                var tourLogs = await unitOfWork.TourLogRepository.GetTourLogsForTour(tourLog.TourId);
+                tour.Popularity = ratingService.Calculate(tourLogs);
+                unitOfWork.TourRepository.UpdateAsync(tour);
                 await unitOfWork.CommitAsync();
                 return Task.CompletedTask;
             }
