@@ -36,12 +36,20 @@ namespace Tourplanner.Entities.TourLogs.Commands
                 tourLog.Distance = request.Distance;
                 await unitOfWork.TourLogRepository.Create(tourLog);
 
-                var tour = await unitOfWork.TourRepository.Get(request.TourId);
-                tour.Popularity =
-                    ratingService.Calculate(await unitOfWork.TourLogRepository.GetTourLogsForTour(request.TourId));
-                tour.ChildFriendliness = await childFriendlinessService.Calculate(tour.Id);
-                await unitOfWork.TourRepository.UpdateAsync(tour);
                 await unitOfWork.CommitAsync();
+
+                await unitOfWork.BeginTransactionAsync();
+
+                var tour = await unitOfWork.TourRepository.Get(request.TourId);
+
+                tour.Popularity = ratingService.Calculate(await unitOfWork.TourLogRepository.GetTourLogsForTour(request.TourId));
+
+                tour.ChildFriendliness = await childFriendlinessService.Calculate(tour.Id);
+
+                await unitOfWork.TourRepository.UpdateAsync(tour);
+
+                await unitOfWork.CommitAsync();
+
                 return Task.CompletedTask;
             }
             catch (Exception e)
