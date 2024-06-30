@@ -2,6 +2,7 @@
 using Tourplanner.Exceptions;
 using Tourplanner.Infrastructure;
 using Tourplanner.Repositories;
+using Tourplanner.Services;
 
 namespace Tourplanner.Entities.TourLogs.Commands
 {
@@ -16,7 +17,8 @@ namespace Tourplanner.Entities.TourLogs.Commands
     ) : IRequest;
     
     public class UpdateTourLogCommandHandler(
-        IUnitOfWork unitOfWork)
+        IUnitOfWork unitOfWork,
+        IRatingService ratingService)
     : RequestHandler<UpdateTourLogCommand, Task>()
     {
         public override async Task<Task> Handle(UpdateTourLogCommand request)
@@ -38,8 +40,13 @@ namespace Tourplanner.Entities.TourLogs.Commands
                 tourLog.TourLogId = request.TourLogId;
                 tourLog.Duration = request.Duration;
                 tourLog.Distance = request.Distance;
-
                 await unitOfWork.TourLogRepository.UpdateAsync(tourLog);
+                
+                var tour = await unitOfWork.TourRepository.Get(tourLog.TourId);
+                var logs = await unitOfWork.TourLogRepository.GetTourLogsForTour(tourLog.TourId);
+                tour.Popularity = ratingService.Calculate(logs);
+                
+                await unitOfWork.TourRepository.UpdateAsync(tour);
                 await unitOfWork.CommitAsync();
                 return Task.CompletedTask;
             }
